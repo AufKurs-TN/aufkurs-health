@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auf Kurs - Mein Fortschrittsjournal</title>
+    <style>
+        :root {
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-success: #2ECC71;
+  --color-error: #E74C3C;
+  --color-warning: #F39C12;
+  --color-info: #3498DB;
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-size-base: 14px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --radius-base: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(167, 169, 169, 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-border: rgba(119, 124, 124, 0.3);
+    --color-card-border: rgba(119, 124, 124, 0.2);
+  }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--space-20);
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: var(--space-24);
+    padding: var(--space-24);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-card-border);
+}
+
+.app-header h1 {
+    margin: 0 0 var(--space-8) 0;
+    color: var(--color-primary);
+    font-size: 28px;
+}
+
+.app-header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+}
+
+.tab-navigation {
+    display: flex;
+    gap: var(--space-8);
+    margin-bottom: var(--space-24);
+    border-bottom: 2px solid var(--color-border);
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+    padding: var(--space-12) var(--space-24);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+}
+
+.tab-button:hover {
+    color: var(--color-text);
+    background: rgba(var(--color-teal-500-rgb), 0.05);
+    cursor: pointer;
+}
+
+.tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    background: rgba(var(--color-teal-500-rgb), 0.1);
+    cursor: pointer;
+}
+
+.tab-content {
+    display: none;
+    position: relative;
+    z-index: 50;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-section {
+    background: var(--color-surface);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-card-border);
+    margin-bottom: var(--space-20);
+}
+
+.form-section h3 {
+    margin: 0 0 var(--space-16) 0;
+    color: var(--color-text);
+    font-size: 18px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-16);
+}
+
+.form-group {
+    margin-bottom: var(--space-16);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--space-8);
+    font-weight: 500;
+    color: var(--color-text);
+    font-size: 13px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--space-12);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    font-size: 14px;
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: 2px solid var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn {
+    padding: var(--space-12) var(--space-24);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+    background: var(--color-warning);
+    color: white;
+}
+
+.btn-secondary:hover {
+    opacity: 0.9;
+}
+
+.alert {
+    padding: var(--space-16);
+    border-radius: var(--radius-base);
+    margin-bottom: var(--space-16);
+    font-size: 14px;
+}
+
+.alert-success {
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid var(--color-success);
+    color: var(--color-success);
+}
+
+.alert-error {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+.analysis-section {
+    background: var(--color-surface);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-card-border);
+    margin-bottom: var(--space-24);
+}
+
+.analysis-section h2 {
+    margin: 0 0 var(--space-8) 0;
+    color: var(--color-primary);
+    font-size: 24px;
+}
+
+.analysis-section h3 {
+    margin: var(--space-24) 0 var(--space-12) 0;
+    color: var(--color-text);
+    font-size: 18px;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: var(--space-8);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-16) 0;
+}
+
+.data-table th,
+.data-table td {
+    padding: var(--space-12);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.data-table th {
+    background: var(--color-background);
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.data-table tr:hover {
+    background: rgba(var(--color-teal-500-rgb), 0.03);
+}
+
+.score-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.score-excellent {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--color-success);
+}
+
+.score-good {
+    background: rgba(52, 152, 219, 0.15);
+    color: var(--color-info);
+}
+
+.score-medium {
+    background: rgba(243, 156, 18, 0.15);
+    color: var(--color-warning);
+}
+
+.score-poor {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--color-error);
+}
+
+.chart-container {
+    margin: var(--space-24) 0;
+    padding: var(--space-20);
+    background: var(--color-background);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--color-border);
+}
+
+.chart-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
+}
+
+.chart-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+}
+
+.chart-checkbox input {
+    width: auto;
+}
+
+.chart-canvas {
+    width: 100%;
+    height: 400px;
+}
+
+.level-table {
+    margin: var(--space-16) 0;
+}
+
+.level-current {
+    background: rgba(var(--color-teal-500-rgb), 0.1);
+    font-weight: 600;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-16) 0;
+}
+
+.stat-card {
+    padding: var(--space-16);
+    background: var(--color-background);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--color-border);
+}
+
+.stat-card .label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-8);
+}
+
+.stat-card .value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.motivation-box {
+    background: linear-gradient(135deg, rgba(var(--color-teal-500-rgb), 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
+    padding: var(--space-24);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-success);
+    margin: var(--space-24) 0;
+    text-align: center;
+}
+
+.motivation-box p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+.summary-footer {
+    margin-top: var(--space-24);
+    padding: var(--space-20);
+    background: var(--color-background);
+    border-radius: var(--radius-base);
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.btn-delete {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-error);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.btn-delete:hover {
+    background: rgba(231, 76, 60, 0.1);
+    border-color: var(--color-error);
+}
+
+.btn-delete:active {
+    background: rgba(231, 76, 60, 0.2);
+}
+
+.hidden {
+    display: none;
+}
+
+.intensity-option:hover {
+    border-color: var(--color-primary) !important;
+    background: rgba(var(--color-teal-500-rgb), 0.05);
+}
+
+.intensity-option input:checked {
+    accent-color: var(--color-primary);
+}
+
+.intensity-option:has(input:checked) {
+    border-color: var(--color-primary) !important;
+    background: rgba(var(--color-teal-500-rgb), 0.1);
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: var(--space-12);
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-navigation {
+        overflow-x: auto;
+    }
+    
+    .chart-canvas {
+        height: 300px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); flex-wrap: wrap;">
+                <div style="flex: 1;">
+                    <h1>🎯 Auf Kurs - Mein Fortschrittsjournal</h1>
+                    <p>Professionelles Gesundheits-Tracking-System | Start: 01.11.2025</p>
+                </div>
+                <div id="syncStatus" style="padding: var(--space-12); border-radius: var(--radius-base); background: var(--color-background); border: 1px solid var(--color-border); min-width: 200px; text-align: center;">
+                    <div style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">Sync-Status</div>
+                    <div id="syncStatusText" style="font-weight: 600; font-size: 14px; color: var(--color-text);">⏳ Verbinde...</div>
+                    <div id="syncStatusTime" style="font-size: 12px; color: var(--color-text-secondary); margin-top: var(--space-4);"></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="tab-navigation">
+            <button class="tab-button active" data-tab="eintrag">📝 Eintrag</button>
+            <button class="tab-button" data-tab="tagesanalyse">📅 Tagesanalyse</button>
+            <button class="tab-button" data-tab="wochenanalyse">📊 Wochenanalyse</button>
+            <button class="tab-button" data-tab="monatsanalyse">📈 Monatsanalyse</button>
+            <button class="tab-button" data-tab="bonusprogramm">🎯 Bonusprogramm</button>
+        </nav>
+
+        <!-- Eintrag Tab -->
+        <div id="tab-eintrag" class="tab-content active">
+            <div id="alertContainer"></div>
+            
+            <div class="form-section">
+                <h3>Kategorie auswählen</h3>
+                <div class="form-group">
+                    <select id="categorySelect">
+                        <option value="">-- Bitte wählen --</option>
+                        <option value="ernaehrung">🥘 Ernährung</option>
+                        <option value="trinken">💧 Trinken</option>
+                        <option value="sport">⚽ Sport</option>
+                        <option value="schlaf">😴 Schlaf</option>
+                        <option value="rauchstatus">🚭 Rauchstatus</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Ernährung Form -->
+            <div id="form-ernaehrung" class="form-section hidden">
+                <h3>🥘 Ernährung erfassen</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Datum*</label>
+                        <input type="date" id="ern-datum" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Zeit*</label>
+                        <input type="time" id="ern-zeit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ort*</label>
+                        <select id="ern-ort" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="Arbeit">Arbeit</option>
+                            <option value="Freizeit">Freizeit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gericht*</label>
+                        <input type="text" id="ern-gericht" placeholder="z.B. Kebap Huhn" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Portion (g)*</label>
+                        <input type="number" id="ern-portion" placeholder="z.B. 450" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kalorien (kcal)*</label>
+                        <input type="number" id="ern-kcal" placeholder="z.B. 550" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fett (g)*</label>
+                        <input type="number" step="0.1" id="ern-fett" placeholder="z.B. 18" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kohlenhydrate (g)*</label>
+                        <input type="number" step="0.1" id="ern-kh" placeholder="z.B. 60" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Eiweiß (g)*</label>
+                        <input type="number" step="0.1" id="ern-eiweiss" placeholder="z.B. 35" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preis (€)*</label>
+                        <input type="number" step="0.1" id="ern-preis" placeholder="z.B. 8.30" required>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveEntry('ernaehrung')">💾 Speichern</button>
+            </div>
+
+            <!-- Trinken Form -->
+            <div id="form-trinken" class="form-section hidden">
+                <h3>💧 Trinken erfassen</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Datum*</label>
+                        <input type="date" id="trink-datum" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Zeit*</label>
+                        <input type="time" id="trink-zeit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Getränk*</label>
+                        <input type="text" id="trink-getraenk" placeholder="z.B. Wasser" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategorie*</label>
+                        <select id="trink-kategorie" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="Wasser">Wasser</option>
+                            <option value="Kaffee">Kaffee (schwarz)</option>
+                            <option value="Cola">Cola</option>
+                            <option value="Bier">Bier (0,5l)</option>
+                            <option value="Eistee">Eistee Zero</option>
+                            <option value="Saft">Orangensaft</option>
+                            <option value="Wasser_Zitrone">Wasser mit Zitrone</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Menge (Liter)*</label>
+                        <input type="number" step="0.1" id="trink-menge" placeholder="z.B. 0.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Zucker (g)</label>
+                        <input type="number" step="0.1" id="trink-zucker" placeholder="Auto-berechnet">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveEntry('trinken')">💾 Speichern</button>
+            </div>
+
+            <!-- Sport Form -->
+            <div id="form-sport" class="form-section hidden">
+                <h3>⚽ Sport erfassen</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Datum*</label>
+                        <input type="date" id="sport-datum" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Aktivität*</label>
+                        <select id="sport-aktivitaet">
+                            <option value="">-- Bitte wählen (oder nur Schritte/Liegezeit) --</option>
+                            <option value="Joggen">Joggen</option>
+                            <option value="Krafttraining">Krafttraining</option>
+                            <option value="Holz Schlichten">Holz Schlichten</option>
+                            <option value="Gartenarbeit">Gartenarbeit</option>
+                            <option value="Cardio (HIIT)">Cardio (HIIT)</option>
+                            <option value="Liegestütze/Kniebeugen">Liegestütze/Kniebeugen</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="Spinning">Spinning</option>
+                            <option value="Schwimmen">Schwimmen</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Dauer (Minuten)</label>
+                        <input type="number" id="sport-dauer" placeholder="z.B. 30">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label style="margin-bottom: var(--space-12); font-size: 15px; font-weight: 600;">Intensität (WIE ANSTRENGEND WAR ES?)</label>
+                        <div style="display: flex; flex-direction: column; gap: var(--space-12);">
+                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
+                                <input type="radio" name="sport-intensitaet" value="leicht" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Leicht</div>
+                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "ruhiger Spaziergang", "normales Tempo" → Score: 1,5-2,5/10</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
+                                <input type="radio" name="sport-intensitaet" value="moderat" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Moderat</div>
+                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "anstrengend aber machbar", "habe geschwitzt" → Score: 4,0-5,5/10</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
+                                <input type="radio" name="sport-intensitaet" value="schwer" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;">⦿ Schwer</div>
+                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "komplett kaputt", "bin erschöpft" → Score: 6,5-7,5/10 ⭐</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
+                                <input type="radio" name="sport-intensitaet" value="extrem" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Extrem</div>
+                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "am Ende meiner Kräfte", "maximal ausgepowert" → Score: 8,0-9,0/10</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Schritte heute (NEUER EINTRAG)</label>
+                        <input type="number" id="sport-schritte" placeholder="z.B. 10000 → +6,0 Pkt">
+                        <small style="color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; display: block;">Pro 500 Schritte = +0,3 Punkte | Beispiel: 10000 Schritte = +6,0 Pkt</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Liegezeit / TV (Minuten, NEUER EINTRAG)</label>
+                        <input type="number" id="sport-liegezeit" placeholder="z.B. 120 (für 2h) → -1,2 Pkt">
+                        <small style="color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; display: block;">Pro 30 Min = -0,3 Punkte | Beispiel: 120min = -1,2 Pkt</small>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Kommentar (optional)</label>
+                        <textarea id="sport-kommentar" rows="2" placeholder="z.B. 'War total k.o. danach'" style="resize: vertical;"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveEntry('sport')">💾 Speichern</button>
+            </div>
+
+            <!-- Schlaf Form -->
+            <div id="form-schlaf" class="form-section hidden">
+                <h3>😴 Schlaf erfassen</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Datum (Aufwachen)*</label>
+                        <input type="date" id="schlaf-datum" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dauer (Stunden)*</label>
+                        <input type="number" step="0.5" id="schlaf-dauer" placeholder="z.B. 8.5" required>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveEntry('schlaf')">💾 Speichern</button>
+            </div>
+
+            <!-- Rauchstatus Form -->
+            <div id="form-rauchstatus" class="form-section hidden">
+                <h3>🚭 Rauchstatus erfassen</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Datum*</label>
+                        <input type="date" id="rauch-datum" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rauchfrei heute?*</label>
+                        <select id="rauch-status" required>
+                            <option value="">-- Bitte wählen --</option>
+                            <option value="ja">✅ Ja, rauchfrei</option>
+                            <option value="nein">❌ Nein, geraucht</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveEntry('rauchstatus')">💾 Speichern</button>
+            </div>
+        </div>
+
+        <!-- Tagesanalyse Tab -->
+        <div id="tab-tagesanalyse" class="tab-content">
+            <div id="tagesanalyseContent"></div>
+        </div>
+
+        <!-- Wochenanalyse Tab -->
+        <div id="tab-wochenanalyse" class="tab-content">
+            <div id="wochenanalyseContent">
+                <div class="analysis-section">
+                    <p style="text-align: center; padding: 40px; color: var(--color-text-secondary);">
+                        <span style="font-size: 18px; font-weight: 600;">⏳ Lade Wochenanalyse...</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monatsanalyse Tab -->
+        <div id="tab-monatsanalyse" class="tab-content">
+            <div id="monatsanalyseContent"></div>
+        </div>
+
+        <!-- Bonus Tab -->
+        <div id="tab-bonusprogramm" class="tab-content">
+            <div id="bonusContent"></div>
+        </div>
+    </div>
+
+     <!-- Firebase SDK - COMPAT Version -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    
+    <!-- Chart.js & App -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
