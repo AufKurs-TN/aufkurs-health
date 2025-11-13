@@ -19,27 +19,6 @@
     color: #000000 !important;
     font-weight: 600 !important;
 }
-      @media (max-width: 768px) {
-    .tab-content {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        width: 100% !important;
-    }
-    
-    table.data-table {
-        width: 100% !important;
-        min-width: 600px !important;
-        font-size: 9px !important;
-        border-collapse: collapse !important;
-    }
-    
-    table.data-table th,
-    table.data-table td {
-        padding: 4px !important;
-        font-size: 9px !important;
-        white-space: nowrap !important;
-    }
-}
         :root {
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
@@ -516,6 +495,27 @@ table.data-table * {
     font-weight: 600 !important;
     opacity: 1 !important;
 }
+.tab-content table.data-table tbody {
+    display: block !important;
+}
+
+.tab-content table.data-table tr {
+    display: block !important;
+    margin-bottom: 12px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    background: #f9f9f9 !important;
+}
+
+.tab-content table.data-table td {
+    display: block !important;
+    width: 100% !important;
+    padding: 4px 0 !important;
+    margin-bottom: 2px !important;
+    font-size: 9px !important;
+    border: none !important;
+}
 
  </style>
 </head>
@@ -830,6 +830,7 @@ table.data-table * {
 
 </body>
 </html>
+
 
 
 
