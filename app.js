@@ -2497,10 +2497,10 @@ function renderBonus() {
         
         html += `
            <tr class="${rowClass}">
-                <td style="color: #000000 !important; font-weight: 600 !important;">${level.level}</td>
-                <td style="color: #000000 !important; font-weight: 600 !important;">${level.name}</td>
-                <td style="color: #000000 !important; font-weight: 600 !important;">${level.min} - ${level.max}</td>
-                <td style="color: #000000 !important; font-weight: 600 !important;">${status}</td>
+                <td style="color: #000000; font-weight: 600; background: #ffffff; padding: 8px !important;">${level.level}</td>
+                <td style="color: #000000; font-weight: 600; background: #ffffff; padding: 8px !important;">${level.name}</td>
+                <td style="color: #000000; font-weight: 600; background: #ffffff; padding: 8px !important;">${level.min} - ${level.max}</td>
+                <td style="color: #000000; font-weight: 600; background: #ffffff; padding: 8px !important;">${status}</td>
             </tr>
         `;
     });
