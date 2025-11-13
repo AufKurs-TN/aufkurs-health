@@ -155,7 +155,7 @@ window.addEventListener('online', () => {
     updateSyncStatus('syncing', 'Synchronisiere...');
     
     // Sync local data to cloud
-    saveToCloud(appState.entries).then(() => {
+    saveAppStateToCloud(appState.entries).then(() => {
         showNotification('✓ Mit Cloud verbunden und synchronisiert', 'success');
     });
 });
@@ -330,7 +330,7 @@ async function initializeData() {
     // Save initial data to cloud
     if (isCloudSyncEnabled) {
         console.log('Saving initial data to cloud...');
-        await saveToCloud(appState.entries);
+        await saveAppStateToCloud(appState.entries);
         
         // Setup real-time sync listener
         setupRealtimeSync();
@@ -461,7 +461,7 @@ function deleteEntry(entryId) {
         recalculateBonusPoints();
         
         // Save to cloud
-        saveToCloud(appState.entries).catch(error => {
+        saveAppStateToCloud(appState.entries).catch(error => {
             console.error('Failed to sync deletion to cloud:', error);
         });
         
