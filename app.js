@@ -1,6 +1,6 @@
 // ============ FIREBASE CLOUD SYNC CONFIGURATION ============
 const firebaseConfig = {
-  apiKey: "AIzaSyB1utZ6U_GBYg21RNsbqe-tr2QyYcI5D0k",
+  apiKey: "AIzaSyDMqsC-KGuSMzmMNinyfVYDH-80s3Z70mk",
   authDomain: "auf-kurs---health.firebaseapp.com",
   projectId: "auf-kurs---health",
   storageBucket: "auf-kurs---health.firebasestorage.app",
