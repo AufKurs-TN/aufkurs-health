@@ -177,7 +177,7 @@ async function initializeData() {
     console.log('Initializing app data...');
     
     // Try to load from cloud first
-    const cloudEntries = await loadFromCloud();
+    const cloudEntries = await loadAppStateFromCloud();
     
     if (cloudEntries && cloudEntries.length > 0) {
         console.log('Using cloud data:', cloudEntries.length, 'entries');
