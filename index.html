@@ -19,6 +19,33 @@
     color: #000000 !important;
     font-weight: 600 !important;
 }
+        @media (max-width: 768px) {
+    table.data-table {
+        width: 100% !important;
+        font-size: 12px !important;
+        overflow-x: auto !important;
+    }
+    table.data-table th,
+    table.data-table td {
+        padding: 6px !important;
+        font-size: 11px !important;
+    }
+    .tab-content {
+        overflow-x: auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    table.data-table {
+        width: 100% !important;
+        font-size: 10px !important;
+    }
+    table.data-table th,
+    table.data-table td {
+        padding: 4px !important;
+        font-size: 9px !important;
+    }
+}
         :root {
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
@@ -809,6 +836,7 @@ table.data-table * {
 
 </body>
 </html>
+
 
 
 
