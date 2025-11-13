@@ -1471,13 +1471,14 @@ let html = `
         <h4 style="margin-top: 20px; color: #0066cc;">Level-Übersicht</h4>
         <table style="width: 100%; border-collapse: collapse; background: white; margin-top: 10px;">
             <thead>
-                <tr style="background: #e6f2ff;">
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">LEVEL</th>
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">TITELNAME</th>
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">PUNKTBEREICH</th>
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">MOTIVATIONSSATZ</th>
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">DEIN STATUS</th>
-                    <th style="padding: 12px; border: 1px solid #ccc; text-align: center;">STATUS</th>
+               <tr style="background: #e6f2ff;">
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left; color: #000000 !important; font-weight: 600 !important;">LEVEL</th>
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left; color: #000000 !important; font-weight: 600 !important;">TITELNAME</th>
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left; color: #000000 !important; font-weight: 600 !important;">PUNKTBEREICH</th>
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left; color: #000000 !important; font-weight: 600 !important;">MOTIVATIONSSATZ</th>
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: left; color: #000000 !important; font-weight: 600 !important;">DEIN FORTSCHRITT</th>
+                    <th style="padding: 12px; border: 1px solid #ccc; text-align: center; color: #000000 !important; font-weight: 600 !important;">STATUS</th>
+
                 </tr>
             </thead>
             <tbody>
