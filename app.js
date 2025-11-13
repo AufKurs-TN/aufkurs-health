@@ -2496,11 +2496,11 @@ function renderBonus() {
         const status = isCurrent ? '🔵 AKTUELL' : appState.bonusPoints > level.max ? '✅ Erreicht' : '';
         
         html += `
-            <tr class="${rowClass}">
-                <td>${level.level}</td>
-                <td>${level.name}</td>
-                <td>${level.min} - ${level.max}</td>
-                <td>${status}</td>
+           <tr class="${rowClass}">
+                <td style="color: #000000; font-weight: 600;">${level.level}</td>
+                <td style="color: #000000; font-weight: 600;">${level.name}</td>
+                <td style="color: #000000; font-weight: 600;">${level.min} - ${level.max}</td>
+                <td style="color: #000000; font-weight: 600;">${status}</td>
             </tr>
         `;
     });
