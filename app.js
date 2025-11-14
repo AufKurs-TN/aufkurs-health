@@ -97,6 +97,16 @@ async function loginUser() {
         errorDiv.innerText = '⏳ Anmelden...';
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         console.log('✅ Benutzer angemeldet:', userCredential.user.uid);
+        
+        // 🆕 Session Persistence NACH erfolgreicher Anmeldung!
+        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(() => {
+                console.log('✅ Session Persistence aktiviert');
+            })
+            .catch((error) => {
+                console.error('❌ Persistence Fehler:', error);
+            });
+        
         localStorage.setItem('userId', userCredential.user.uid);
         
         // 🆕 Cloud Sync starten!
@@ -116,6 +126,7 @@ async function loginUser() {
         }
     }
 }
+
 // Helper Functions BEFORE appState!
 function getTodayDate() {
     const today = new Date();
