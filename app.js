@@ -2473,7 +2473,7 @@ function renderWochenanalyseOLD() {
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
       
-    html += <div class="motivation-box"> <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p> </div>;
+    html += `<div class="motivation-box"> <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p> </div>`;
     
     html += `<div class="summary-footer">
         <strong>Seit Start (1. Nov 2025):</strong><br>
