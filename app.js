@@ -2474,8 +2474,7 @@ function renderWochenanalyseOLD() {
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
       
-  const level = getCurrentLevel(parseFloat(appState.bonusPoints) || 0);
-    html += `<p style="font-size: 16px; color: #333; font-style: italic; margin: 20px 0; padding: 15px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #0066cc;">"${level.motivationssatz}"</p>`;
+    html += <div class="motivation-box"> <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p> </div>;
     
     html += `<div class="summary-footer">
         <strong>Seit Start (1. Nov 2025):</strong><br>
