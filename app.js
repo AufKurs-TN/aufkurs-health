@@ -8,6 +8,15 @@ const firebaseConfig = {
   appId: "1:809268235109:web:e726a268d6e376800d2f8c"
 };
 
+// 🆕 Session Persistence aktivieren (Benutzer bleibt angemeldet)
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+        console.log('✅ Session Persistence aktiviert');
+    })
+    .catch((error) => {
+        console.error('❌ Persistence Fehler:', error);
+    });
+
 // Initialize Firebase
 let firebaseApp = null;
 let db = null;
