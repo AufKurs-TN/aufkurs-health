@@ -1576,10 +1576,10 @@ let html = `
             
         <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border: 2px solid gold;">
     <h3 style="color: #0066cc;">Aktuelle Gesamtpunkte</h3>
-    <p style="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
+    ="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
     <div style="margin-top: 15px;">
-        <p style="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
-        <p style="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
+        ="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
+        ="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
     </div>
 </div>
             
@@ -1593,7 +1593,7 @@ let html = `
 <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> <span style="color: #000000 !important;">${schlafStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
 </div>
 
- const basePunkte = getBasePunktsByPeriod();
+const basePunkte = getBasePunktsByPeriod();
 
     html += `<h4 style="margin-top: 20px; color: #0066cc;">📊 Basis-Punkte Übersicht</h4>
 <div style="background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%); padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #0066cc;">
