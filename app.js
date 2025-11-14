@@ -3946,4 +3946,186 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+       }, error => {
+            console.error('❌ Sync error:', error);
+            updateSyncStatus('error', 'Synchronisierungsfehler');
+        });
+}
+
+// ============ END CLOUD SYNC FUNCTIONS ============
+
+
+// ==========================================
+// 🗑️ EINTRÄGE LÖSCHEN - NEUE FUNKTIONEN
+// ==========================================
+
+// Render delete entries view
+function renderDeleteEntries() {
+    const entries = [...appState.entries].sort((a, b) => {
+        // Sort by date DESC, then by time DESC
+        if (b.datum !== a.datum) {
+            return b.datum.localeCompare(a.datum);
+        }
+        const timeA = a.zeit || '0000';
+        const timeB = b.zeit || '0000';
+        return timeB.localeCompare(timeA);
+    });
+
+    let html = '';
+    
+    if (entries.length === 0) {
+        html = '<p style="text-align: center; padding: var(--space-24); color: var(--color-text-secondary);">Keine Einträge vorhanden.</p>';
+    } else {
+        html += `<div style="font-weight: 600; margin-bottom: var(--space-16);">Gesamt: <span style="color: var(--color-primary)">${entries.length}</span> Einträge</div>`;
+        
+        html += '<table class="data-table">';
+        html += '<thead><tr><th style="width: 50px;"><input type="checkbox" id="selectAllCheckbox" onchange="toggleAllEntries(this.checked)"></th><th>Datum</th><th>Zeit</th><th>Typ</th><th>Details</th><th>Score</th></tr></thead>';
+        html += '<tbody>';
+
+        entries.forEach(entry => {
+            const typeIcons = {
+                ernaehrung: '🥘',
+                trinken: '💧',
+                sport: '⚽',
+                schlaf: '😴',
+                rauchstatus: '🚭'
+            };
+            
+            const typeNames = {
+                ernaehrung: 'Ernährung',
+                trinken: 'Trinken',
+                sport: 'Sport',
+                schlaf: 'Schlaf',
+                rauchstatus: 'Rauchstatus'
+            };
+
+            const icon = typeIcons[entry.type] || '📝';
+            const typeName = typeNames[entry.type] || entry.type;
+            
+            let details = '';
+            let score = '-';
+            
+            if (entry.type === 'ernaehrung') {
+                details = `${entry.gericht} (${entry.portion}g, ${entry.kcal} kcal)`;
+                score = entry.ldlScore ? entry.ldlScore.toFixed(1) + '/10' : '-';
+            } else if (entry.type === 'trinken') {
+                details = `${entry.getraenk} (${entry.menge}l)`;
+                score = entry.trinkScore ? entry.trinkScore.toFixed(1) + '/10' : '-';
+            } else if (entry.type === 'sport') {
+                details = entry.aktivitaet || 'Schritte/Liegezeit';
+                if (entry.dauer) details += ` (${entry.dauer} min)`;
+                score = calculateSportScore(entry).toFixed(1) + '/10';
+            } else if (entry.type === 'schlaf') {
+                details = `${entry.dauer}h Schlaf`;
+                score = calculateSchlafScore(entry.dauer).toFixed(1) + '/10';
+            } else if (entry.type === 'rauchstatus') {
+                details = entry.status === 'ja' ? '✅ Rauchfrei' : '❌ Geraucht';
+                score = entry.status === 'ja' ? '10/10' : '2/10';
+            }
+
+            html += `<tr>
+                <td><input type="checkbox" class="entry-checkbox" data-entry-id="${entry.id}"></td>
+                <td>${formatDate(entry.datum)}</td>
+                <td>${entry.zeit || '-'}</td>
+                <td>${icon} ${typeName}</td>
+                <td>${details}</td>
+                <td>${score}</td>
+            </tr>`;
+        });
+
+        html += '</tbody></table>';
+    }
+
+    document.getElementById('deleteEntriesList').innerHTML = html;
+}
+
+// Toggle all checkboxes
+function toggleAllEntries(checked) {
+    document.querySelectorAll('.entry-checkbox').forEach(cb => {
+        cb.checked = checked;
+    });
+}
+
+// Select all entries
+function selectAllEntries() {
+    document.getElementById('selectAllCheckbox').checked = true;
+    toggleAllEntries(true);
+}
+
+// Deselect all entries
+function deselectAllEntries() {
+    document.getElementById('selectAllCheckbox').checked = false;
+    toggleAllEntries(false);
+}
+
+// Delete selected entries
+function deleteSelectedEntries() {
+    const checkboxes = document.querySelectorAll('.entry-checkbox:checked');
+    const idsToDelete = Array.from(checkboxes).map(cb => cb.getAttribute('data-entry-id'));
+    
+    if (idsToDelete.length === 0) {
+        showNotification('Keine Einträge ausgewählt!', 'error');
+        return;
+    }
+
+    // Confirm deletion
+    const confirmMsg = `Wirklich ${idsToDelete.length} Eintrag/Einträge löschen?`;
+    if (!confirm(confirmMsg)) {
+        return;
+    }
+
+    // Delete entries
+    appState.entries = appState.entries.filter(e => !idsToDelete.includes(e.id));
+    
+    // Recalculate bonus points
+    recalculateBonusPoints();
+    
+    // 🔥 CLOUD SYNC
+    saveAppStateToCloud();
+    
+    // Refresh view
+    renderDeleteEntries();
+    
+    showNotification(`${idsToDelete.length} Eintrag/Einträge gelöscht!`, 'success');
+}
+
+// Initialize delete tab when switched to
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener for tab switches
+    const deleteTabButton = document.querySelector('[data-tab="loeschen"]');
+    if (deleteTabButton) {
+        deleteTabButton.addEventListener('click', function() {
+            setTimeout(() => renderDeleteEntries(), 100);
+        });
+    }
+});
+// ============ AUTO-LOGIN NACH RELOAD ============
+
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+        console.log('✓ Session Persistence aktiviert');
+        
+        // Prüfe ob Benutzer schon angemeldet ist
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log('✅ Auto-Login: Benutzer gefunden!', user.email);
+                
+                // Zeige App, verstecke Login
+                document.getElementById('authPage').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                
+                // Lade Daten und starte App
+                loadAppStateFromCloud();
+                initializeApp();
+                
+            } else {
+                console.log('🔓 Keine Session - Login erforderlich');
+                document.getElementById('authPage').style.display = 'block';
+                document.getElementById('appContent').style.display = 'none';
+            }
+        });
+    })
+    .catch((error) => {
+        console.error('❌ Persistence Error:', error);
+    });
 
