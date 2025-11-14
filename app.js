@@ -1548,12 +1548,12 @@ let html = `
 </div>
 
 
- <h4 style="margin-top: 20px; color: #0066cc;">🎯 Nächste Meilensteine</h4>
-            <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
-                ${nextMilestones.map(m => `
-                    <p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff9800;">
-                        <strong>${m.category}:</strong> ${m.current}/${m.next} (noch ${m.daysLeft} Tage)
-                    </p>
+<h4 style="margin-top: 20px; color: #000000;">🎯 Nächste Meilensteine</h4>
+<div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
+    ${nextMilestones.map(m => `
+        <p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff9800;">
+            <strong style="color: #000000 !important;">${m.category}:</strong> <span style="color: #000000 !important;">${m.current}/${m.next} (noch ${m.daysLeft} Tage)</span>
+        </p>
                 `).join('')}
             </div>
     `;
@@ -1561,9 +1561,10 @@ let html = `
     if (personalizedBonus.length > 0) {
         html += `
             <div style="background: #fffacd; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                <h4 style="color: #ff6600;">Dein kompletter Status (alle Kategorien):</h4>
-                ${personalizedBonus.map(b => `<p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff6600;">→ ${b}</p>`).join('')}
-            </div>
+    <h4 style="color: #0066cc;">Dein kompletter Status (alle Kategorien):</h4>
+    ${personalizedBonus.map(b => `<p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff6600;"><strong style="color: #000000 !important;">→ ${b}</strong></p>`).join('')}
+</div>
+
         `;
     }
 
