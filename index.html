@@ -300,7 +300,14 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-        
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;  /* ← Mobile: 1 Spalte statt 3 */
+    }
+    .chart-canvas {
+        height: 300px;               /* ← Mobile: kleinere Charts */
+    }
+}        
 .data-table tr:hover {
     background: rgba(var(--color-teal-500-rgb), 0.03);
 }
@@ -779,6 +786,7 @@ body {
 
 </body>
 </html>
+
 
 
 
