@@ -2408,24 +2408,8 @@ function renderWochenanalyseOLD() {
         <li>Wähle fettärmere Gerichte (z.B. Salate mit Hähnchen) → +1 Pkt Ernährung, -200 kcal</li>
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
-    
-    // 11. MOTIVATION & BONUS
-    html += `<h3>🎯 11. MOTIVATION &amp; BONUSPROGRAMM</h3>`;
-html += `<p><strong>Gesamtpunkte:</strong> ${appState.bonusPoints.toFixed(1)}</p>`;
-const level = getCurrentLevel(appState.bonusPoints);
-if (!level) {
-    level = { level: 1, title: 'Einstieg', motivationssatz: 'Jeder Anfang ist schwer - du packst das!' };
-}
-
-html += `<p><strong>Level:</strong> ${level.level} - ${level.title}</p>`;
-html += `<p style="font-style: italic;">"${level.motivationssatz}"</p>`;
-html += `<p><strong>Aktueller Status:</strong> ${getShortBonusStatus()}</p>`;
-html += `<p><em>→ Für die detaillierte Übersicht klick auf "Bonusprogramm"</em></p>`;
-
-    
-    html += `<p><em><strong>Hinweis:</strong> Das System ist hart kalibriert. 1000 Punkte (MAX-Level) sollten mit Disziplin in 7-12 Monaten erreichbar sein. Die meisten Punkte gibt es für die schwierigsten Aufgaben: Rauchfrei bleiben, gesunde Ernährung und regelmäßiger Sport!</em></p>`;
-    
-    // 11. MOTIVATION
+      
+  // 11. MOTIVATION
     html += `<div class="motivation-box">
         <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p>
     </div>`;
