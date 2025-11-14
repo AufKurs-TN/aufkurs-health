@@ -3793,8 +3793,9 @@ function setupRealtimeSync(uid) {
                 renderWochenanalyse();
                 updateSyncStatus('connected', 'Synchronisiert');
             }
-       
+        });
 }
+
 
 // ============ END CLOUD SYNC FUNCTIONS ============
 
