@@ -1508,7 +1508,7 @@ let html = `
                 <td style="padding: 12px; border: 1px solid #ccc; font-style: italic; color: #333;">"${l.motivationssatz}"</td>
                 <td style="padding: 12px; border: 1px solid #ccc; color: #ff6600; font-weight: bold;">${statusSatz}</td>
                 <td style="padding: 12px; border: 1px solid #ccc; text-align: center; color: #000000 !important; font-weight: 600 !important;">
-        ${isActive ? 'AKTUELL' : ''}
+        ${isActive ? '">${points}' : ''}
                 </td>
             </tr>
         `;
