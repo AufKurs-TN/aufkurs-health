@@ -90,6 +90,11 @@ async function loginUser() {
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         console.log('✅ Benutzer angemeldet:', userCredential.user.uid);
         localStorage.setItem('userId', userCredential.user.uid);
+        
+        // 🆕 Cloud Sync starten nach Login!
+        setupRealtimeSync(userCredential.user.uid);
+        loadAppStateFromCloud();
+        
         document.getElementById('authPage').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
     } catch (error) {
