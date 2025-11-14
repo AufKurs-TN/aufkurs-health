@@ -3944,7 +3944,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-}
 
 // ============ END CLOUD SYNC FUNCTIONS ============
 
