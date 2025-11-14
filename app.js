@@ -1518,25 +1518,15 @@ let html = `
                 </tbody>
             </table>
             
-            <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border: 2px solid gold;">
-                <h3 style="color: #0066cc;">Aktuelle Gesamtpunkte</h3>
-                ="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
-                <div style="margin-top: 15px;">
-                    ="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
-                    <p style="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
-                </div>
-            </div>
-            
-<h4 style="margin-top: 20px; color: #0066cc;">🔥 Aktuelle Streaks</h4>
-<div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Rauchfrei:</strong> <span style="color: #000000 !important;">${rauchStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(rauchStreak * 3.5)} Pkt</span> 🚭</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Sport:</strong> <span style="color: #000000 !important;">${sportStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(sportStreak * 2)} Pkt</span> 💪</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Ernährung:</strong> <span style="color: #000000 !important;">${ernStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(ernStreak * 1.5)} Pkt</span> 🍎</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Trinken:</strong> <span style="color: #000000 !important;">${trinkStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(trinkStreak * 0.5)} Pkt</span> 💧</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> <span style="color: #000000 !important;">${schlafStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
+        <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border: 2px solid gold;">
+    <h3 style="color: #0066cc;">Aktuelle Gesamtpunkte</h3>
+    <p style="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
+    <div style="margin-top: 15px;">
+        <p style="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
+        <p style="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
+    </div>
 </div>
-
-
+            
             
 <h4 style="margin-top: 20px; color: #0066cc;">🔥 Aktuelle Streaks</h4>
 <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
