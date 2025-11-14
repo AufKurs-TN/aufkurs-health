@@ -3940,7 +3940,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// INIT - Starte Cloud Sync sofort!
-window.addEventListener('DOMContentLoaded', () => {
-    initializeCloudSync();
-});
