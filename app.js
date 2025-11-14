@@ -2907,7 +2907,9 @@ function renderWochenanalyse() {
     
     // Initialize viewedKw if not set
     if (!appState.viewedKw) {
-        appState.viewedKw = getKWofDate(appState.currentDate);
+        // AUTO: Set to current week
+    const today = new Date();
+    appState.viewedKw = getKWofDate(today);;
         console.log('viewedKw initialisiert zu:', appState.viewedKw);
     }
     
@@ -3424,141 +3426,6 @@ function renderWochenanalyse() {
     html += `<li>Netto: Ø ${((totalKcalIn - totalKcalOut) / 7).toFixed(0)} kcal/Tag</li>`;
     html += `</ul>`;
     
-    // 11. BONUSPROGRAMM
-    html += `<h3>1️⃣1️⃣ 🎯 MOTIVATION &amp; BONUSPROGRAMM</h3>`;
-    
-    const weekBonusData = calculateExtendedWeekBonus(weekObj.startStr, weekObj.endStr);
-    const bonusDetails = weekBonusData.details;
-    
-    // Calculate bonus points for this week and previous weeks
-    const allWeeks = Object.keys(WEEKS_HARDCODED).sort();
-    const currentWeekIdx = allWeeks.indexOf(weekObj.kw);
-    
-    let bonusThisWeek = 0;
-    let bonusPrevious = 0;
-    
-    allWeeks.forEach((kw, idx) => {
-        const week = WEEKS_HARDCODED[kw];
-        const startStr = week.start.toISOString().split('T')[0];
-        const endStr = week.end.toISOString().split('T')[0];
-        const weekBonusData = calculateExtendedWeekBonus(startStr, endStr);
-        
-        if (idx === currentWeekIdx) {
-            bonusThisWeek = weekBonusData.bonus;
-        } else if (idx < currentWeekIdx) {
-            bonusPrevious += weekBonusData.bonus;
-        }
-    });
-    
-    const totalBonus = bonusThisWeek + bonusPrevious;
-    
-    html += `<div style="background: var(--color-bg-1); padding: var(--space-20); border-radius: var(--radius-lg); border: 2px solid var(--color-primary); margin-bottom: var(--space-24);">`;
-    html += `<p style="font-size: 16px; font-weight: 600; margin: 0 0 var(--space-8) 0;">Bonuspunkte (diese Woche): <span style="color: var(--color-primary);">+${bonusThisWeek.toFixed(0)} Pkt</span> ⭐</p>`;
-    html += `<p style="font-size: 16px; margin: 0 0 var(--space-8) 0;">Bonuspunkte (bisher): <span style="color: var(--color-text);">+${bonusPrevious.toFixed(0)} Pkt</span></p>`;
-    html += `<p style="border-top: 2px solid var(--color-border); padding-top: var(--space-12); margin-top: var(--space-12); font-size: 18px; font-weight: 700;">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>`;
-    html += `<p style="font-size: 18px; font-weight: 700; margin: var(--space-8) 0 0 0;">Gesamtbonuspunkte: <span style="color: var(--color-primary); font-size: 22px;">+${totalBonus.toFixed(0)} Pkt</span></p>`;
-    html += `</div>`;
-    
-    html += `<p><strong>Verdiente Boni diese Woche:</strong></p>`;
-    html += `<ul>`;
-    html += `<li>Rauchfreie Tage (${rauchfreiDays}x @ +1): +${rauchfreiDays} Pkt ${rauchfreiDays === 7 ? '⭐' : ''}</li>`;
-    bonusDetails.forEach(detail => {
-        html += `<li>${detail}</li>`;
-    });
-    html += `</ul>`;
-    
-    const levels = [
-        { level: 1, name: 'Einstieg', min: 0, max: 49 },
-        { level: 2, name: 'Aufbau', min: 50, max: 109 },
-        { level: 3, name: 'Fortschritt', min: 110, max: 179 },
-        { level: 4, name: 'Stabilität', min: 180, max: 259 },
-        { level: 5, name: 'Kontrolle', min: 260, max: 349 },
-        { level: 6, name: 'Stärke', min: 350, max: 449 },
-        { level: 7, name: 'Brillianz', min: 450, max: 559 },
-        { level: 8, name: 'Meisterhaft', min: 560, max: 679 },
-        { level: 9, name: 'Champion', min: 680, max: 809 },
-        { level: 10, name: 'Road to Glory', min: 820, max: 999 },
-        { level: 'MAX', name: 'System durchgespielt', min: 1000, max: 999999 }
-    ];
-    
-    html += `<table class="data-table level-table" style="margin-top: var(--space-16);">
-        <thead><tr><th>Level</th><th>Titelname</th><th>Bereich</th><th>Status</th></tr></thead>
-        <tbody>`;
-    
-    let currentLevel = null;
-    let nextLevel = null;
-    levels.forEach((level, idx) => {
-        const isCurrent = totalBonus >= level.min && totalBonus <= level.max;
-        const rowClass = isCurrent ? 'level-current' : '';
-        const status = isCurrent ? `🔵 AKTUELL (${totalBonus.toFixed(0)}/${level.max})` : totalBonus > level.max ? '✅ Erreicht' : '';
-        
-        if (isCurrent) {
-            currentLevel = level;
-            if (idx < levels.length - 1) nextLevel = levels[idx + 1];
-            html += `<tr class="${rowClass}">
-                <td>${level.level}</td>
-                <td>${level.name}</td>
-                <td>${level.min}-${level.max}</td>
-                <td>${status} ✓</td>
-            </tr>`;
-        } else if (totalBonus > level.max || (idx <= 2)) {
-            html += `<tr class="${rowClass}">
-                <td>${level.level}</td>
-                <td>${level.name}</td>
-                <td>${level.min}-${level.max}</td>
-                <td>${status}</td>
-            </tr>`;
-        }
-    });
-    
-    html += `</tbody></table>`;
-    
-    if (nextLevel) {
-        const pointsNeeded = nextLevel.min - totalBonus;
-        html += `<p><strong>Nächster Level:</strong> +${pointsNeeded.toFixed(0)} Pkte bis "${nextLevel.name}" (Level ${nextLevel.level})</p>`;
-    }
-    
-    // Calculate active streaks
-    html += `<h4 style="margin-top: var(--space-24); margin-bottom: var(--space-16);">🏅 MEILENSTEINE &amp; AKTIVE STREAKS</h4>`;
-    html += `<p style="margin-bottom: var(--space-16);">Folgende Streaks sind aktiv und bringen nächste Punkte:</p>`;
-    
-    const activeStreaks = calculateActiveStreaks();
-    
-    if (activeStreaks.length > 0) {
-        activeStreaks.slice(0, 5).forEach((streak, idx) => {
-            const progress = (streak.current / streak.target) * 100;
-            const progressBar = '█'.repeat(Math.floor(progress / 5)) + '░'.repeat(20 - Math.floor(progress / 5));
-            const stars = streak.bonus >= 80 ? '⭐⭐⭐' : streak.bonus >= 35 ? '⭐⭐' : streak.bonus >= 15 ? '⭐' : '';
-            
-            html += `<div style="background: var(--color-surface); padding: var(--space-16); border-radius: var(--radius-base); border: 1px solid var(--color-card-border); margin-bottom: var(--space-12);">`;
-            html += `<div style="font-weight: 600; font-size: 15px; margin-bottom: var(--space-8);">${idx + 1}. ${streak.name}: ${streak.current} von ${streak.target} Tage @ Score 8+</div>`;
-            html += `<div style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: var(--space-8);">Nächster Bonus: <strong style="color: var(--color-primary);">+${streak.bonus} Pkt</strong> bei ${streak.target} Tagen ${stars}</div>`;
-            html += `<div style="color: var(--color-text-secondary); font-size: 13px;">Fortschritt: <span style="font-family: monospace; color: var(--color-text);">${progressBar}</span> (${progress.toFixed(0)}%)</div>`;
-            html += `</div>`;
-        });
-        
-        // Find next big bonus
-        const biggestStreak = activeStreaks[0];
-        const daysRemaining = biggestStreak.target - biggestStreak.current;
-        html += `<div style="border-top: 2px solid var(--color-border); padding-top: var(--space-16); margin-top: var(--space-16); font-weight: 600;">`;
-        html += `<p>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>`;
-        html += `<p style="color: var(--color-primary); font-size: 16px;">Nächster großer Bonus: ${biggestStreak.name} (+${biggestStreak.bonus} Pkt) in ${daysRemaining} Tag${daysRemaining !== 1 ? 'en' : ''}! 🎯</p>`;
-        html += `</div>`;
-    } else {
-        html += `<p style="text-align: center; padding: var(--space-20); color: var(--color-text-secondary);">Keine aktiven Streaks - starte jetzt und sammle Punkte!</p>`;
-    }
-    
-    const daysTo100 = 100 - rauchfreiTage;
-    if (daysTo100 > 0) {
-        html += `<p><strong>Meilenstein:</strong> +${daysTo100} Tage bis 100 Tage rauchfrei!</p>`;
-    }
-    
-    html += `<div class="motivation-box" style="margin-top: var(--space-24);">
-        <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p>
-    </div>`;
-    
-    html += `</div>`;
-    
     document.getElementById('wochenanalyseContent').innerHTML = html;
 }
 
@@ -3595,7 +3462,9 @@ appState.entries.forEach(entry => {
 });
 
 // Initialize viewedKw to current week
-appState.viewedKw = getKWofDate(appState.currentDate);
+// AUTO: Set to current week
+    const today = new Date();
+    appState.viewedKw = getKWofDate(today);;
 
 // Calculate active streaks function
 function calculateActiveStreaks() {
