@@ -1,3 +1,105 @@
+// ===== EMAIL LOGIN / REGISTER FUNKTIONEN =====
+
+function toggleAuthForm() {
+    document.getElementById('loginForm').style.display = 
+        document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
+    document.getElementById('registerForm').style.display = 
+        document.getElementById('registerForm').style.display === 'none' ? 'block' : 'none';
+    document.getElementById('loginError').innerText = '';
+    document.getElementById('registerError').innerText = '';
+}
+
+async function registerUser() {
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const password2 = document.getElementById('registerPassword2').value;
+    const errorDiv = document.getElementById('registerError');
+    
+    errorDiv.innerText = '';
+    if (!email || !password || !password2) {
+        errorDiv.innerText = '❌ Alle Felder ausfüllen!';
+        return;
+    }
+    if (password !== password2) {
+        errorDiv.innerText = '❌ Passwörter stimmen nicht überein!';
+        return;
+    }
+    if (password.length < 6) {
+        errorDiv.innerText = '❌ Passwort muss min. 6 Zeichen sein!';
+        return;
+    }
+    
+    try {
+        errorDiv.innerText = '⏳ Registrierung...';
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        console.log('✅ Benutzer registriert:', userCredential.user.uid);
+        localStorage.setItem('userId', userCredential.user.uid);
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+    } catch (error) {
+        console.error('❌ Fehler:', error.message);
+        if (error.code === 'auth/email-already-in-use') {
+            errorDiv.innerText = '❌ Email existiert bereits!';
+        } else if (error.code === 'auth/invalid-email') {
+            errorDiv.innerText = '❌ Ungültige Email!';
+        } else {
+            errorDiv.innerText = '❌ ' + error.message;
+        }
+    }
+}
+
+async function loginUser() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errorDiv = document.getElementById('loginError');
+    
+    errorDiv.innerText = '';
+    if (!email || !password) {
+        errorDiv.innerText = '❌ Email und Passwort erforderlich!';
+        return;
+    }
+    
+    try {
+        errorDiv.innerText = '⏳ Anmelden...';
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        console.log('✅ Benutzer angemeldet:', userCredential.user.uid);
+        localStorage.setItem('userId', userCredential.user.uid);
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+    } catch (error) {
+        console.error('❌ Fehler:', error.message);
+        if (error.code === 'auth/user-not-found') {
+            errorDiv.innerText = '❌ Benutzer nicht gefunden!';
+        } else if (error.code === 'auth/wrong-password') {
+            errorDiv.innerText = '❌ Falsches Passwort!';
+        } else {
+            errorDiv.innerText = '❌ ' + error.message;
+        }
+    }
+}
+
+function logoutUser() {
+    if (confirm('Möchtest du dich wirklich abmelden?')) {
+        firebase.auth().signOut().then(() => {
+            localStorage.removeItem('userId');
+            location.reload();
+        });
+    }
+}
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log('✅ Benutzer angemeldet:', user.email);
+        localStorage.setItem('userId', user.uid);
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+    } else {
+        console.log('❌ Benutzer nicht angemeldet');
+        document.getElementById('authPage').style.display = 'flex';
+        document.getElementById('appContent').style.display = 'none';
+    }
+});
+
 // ============ FIREBASE CLOUD SYNC CONFIGURATION ============
 const firebaseConfig = {
   apiKey: "AIzaSyBsn4sSre1y9JT4SJDvmTRG6fmQEdVb_3k",
