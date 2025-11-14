@@ -1290,63 +1290,6 @@ function getNextMilestones() {
     return milestones;
 }
 
-function getBasePunktsByPeriod() {
-    const entries = appState.entries || [];
-    const now = new Date();
-    
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - now.getDay());
-    weekStart.setHours(0, 0, 0, 0);
-    
-    const lastWeekStart = new Date(weekStart);
-    lastWeekStart.setDate(weekStart.getDate() - 7);
-    const lastWeekEnd = new Date(weekStart);
-    lastWeekEnd.setDate(weekStart.getDate() - 1);
-    lastWeekEnd.setHours(23, 59, 59, 999);
-    
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    monthStart.setHours(0, 0, 0, 0);
-    
-    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
-    lastMonthEnd.setHours(23, 59, 59, 999);
-    
-    const calcPunkteForEntries = (filterEntries) => {
-        let pts = 0;
-        const sport = filterEntries.filter(e => e.type === 'sport').length;
-        const rauch = filterEntries.filter(e => e.type === 'rauchstatus' && e.rauchScore >= 8).length;
-        const ern = filterEntries.filter(e => e.type === 'ernaehrung').length;
-        const trink = filterEntries.filter(e => e.type === 'trinken').length;
-        const schlaf = filterEntries.filter(e => e.type === 'schlaf').length;
-        
-        pts += sport * 2;
-        pts += rauch * 3.5;
-        pts += ern * 1.5;
-        pts += trink * 0.5;
-        pts += schlaf * 0.25;
-        
-        return Math.round(pts);
-    };
-    
-    const thisWeek = entries.filter(e => new Date(e.date) >= weekStart);
-    const lastWeek = entries.filter(e => {
-        const d = new Date(e.date);
-        return d >= lastWeekStart && d <= lastWeekEnd;
-    });
-    const thisMonth = entries.filter(e => new Date(e.date) >= monthStart);
-    const lastMonth = entries.filter(e => {
-        const d = new Date(e.date);
-        return d >= lastMonthStart && d <= lastMonthEnd;
-    });
-    
-    return {
-        thisWeek: calcPunkteForEntries(thisWeek),
-        lastWeek: calcPunkteForEntries(lastWeek),
-        thisMonth: calcPunkteForEntries(thisMonth),
-        lastMonth: calcPunkteForEntries(lastMonth)
-    };
-}
-
 function getPersonalizedBonus() {
     const entries = appState.entries || [];
     const points = parseFloat(appState.bonusPoints) || 0;
