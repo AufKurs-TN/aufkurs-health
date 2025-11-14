@@ -55,13 +55,19 @@ async function registerUser() {
         return;
     }
     
-    try {
-        errorDiv.innerText = '⏳ Registrierung...';
-        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        console.log('✅ Benutzer registriert:', userCredential.user.uid);
-        localStorage.setItem('userId', userCredential.user.uid);
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('appContent').style.display = 'block';
+try {
+    errorDiv.innerText = '⏳ Registrierung...';
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    console.log('✅ Benutzer registriert:', userCredential.user.uid);
+    localStorage.setItem('userId', userCredential.user.uid);
+    
+    // 🆕 Cloud Sync starten nach Registration!
+    await loadAppStateFromCloud();
+    setupRealtimeSync(userCredential.user.uid);
+    
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+
     } catch (error) {
         console.error('❌ Fehler:', error.message);
         if (error.code === 'auth/email-already-in-use') {
