@@ -3721,27 +3721,6 @@ console.log('  2025-11-17 -> KW', getKWofDate('2025-11-17'), '(erwartet: KW47)')
 
 // ============ CLOUD SYNC SAVE FUNCTIONS ============
 
-// Auto-login mit Anonymous Auth
-async function initializeCloudSync() {
-    if (!isCloudSyncEnabled) {
-        console.log('❌ Firebase not available');
-        return;
-    }
-    
-    try {
-        const result = await firebase.auth().signInAnonymously();
-        console.log('✓ Anonymous login successful:', result.user.uid);
-        
-        // Load appState from Firestore
-        loadAppStateFromCloud();
-        
-        // Listen for real-time changes
-        setupRealtimeSync(result.user.uid);
-    } catch (error) {
-        console.error('❌ Auth error:', error);
-    }
-}
-
 // Save appState to Firestore
 async function saveAppStateToCloud() {
     if (!isCloudSyncEnabled || !firebase.auth().currentUser) return;
