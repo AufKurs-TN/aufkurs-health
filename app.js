@@ -1529,11 +1529,11 @@ let html = `
             
 <h4 style="margin-top: 20px; color: #0066cc;">🔥 Aktuelle Streaks</h4>
 <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Rauchfrei:</strong> ${rauchStreak} Tage → <span style="color: #ff6600; font-weight: bold;">+${Math.round(rauchStreak * 3.5)} Pkt</span> 🚭</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Sport:</strong> ${sportStreak} Tage → <span style="color: #ff6600; font-weight: bold;">+${Math.round(sportStreak * 2)} Pkt</span> 💪</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Ernährung:</strong> ${ernStreak} Tage → <span style="color: #ff6600; font-weight: bold;">+${Math.round(ernStreak * 1.5)} Pkt</span> 🍎</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Trinken:</strong> ${trinkStreak} Tage → <span style="color: #ff6600; font-weight: bold;">+${Math.round(trinkStreak * 0.5)} Pkt</span> 💧</p>
-<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> ${schlafStreak} Tage → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
+<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Rauchfrei:</strong> <span style="color: #000000 !important;">${rauchStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(rauchStreak * 3.5)} Pkt</span> 🚭</p>
+<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Sport:</strong> <span style="color: #000000 !important;">${sportStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(sportStreak * 2)} Pkt</span> 💪</p>
+<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Ernährung:</strong> <span style="color: #000000 !important;">${ernStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(ernStreak * 1.5)} Pkt</span> 🍎</p>
+<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Trinken:</strong> <span style="color: #000000 !important;">${trinkStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(trinkStreak * 0.5)} Pkt</span> 💧</p>
+<p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> <span style="color: #000000 !important;">${schlafStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
 </div>
 
 
