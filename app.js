@@ -1290,6 +1290,62 @@ function getNextMilestones() {
     return milestones;
 }
 
+function getBasePunktsByPeriod() {
+    const entries = appState.entries || [];
+    const now = new Date();
+    
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay());
+    weekStart.setHours(0, 0, 0, 0);
+    
+    const lastWeekStart = new Date(weekStart);
+    lastWeekStart.setDate(weekStart.getDate() - 7);
+    const lastWeekEnd = new Date(weekStart);
+    lastWeekEnd.setDate(weekStart.getDate() - 1);
+    lastWeekEnd.setHours(23, 59, 59, 999);
+    
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    monthStart.setHours(0, 0, 0, 0);
+    
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+    lastMonthEnd.setHours(23, 59, 59, 999);
+    
+    const calcPunkteForEntries = (filterEntries) => {
+        let pts = 0;
+        const sport = filterEntries.filter(e => e.type === 'sport').length;
+        const rauch = filterEntries.filter(e => e.type === 'rauchstatus' && e.rauchScore >= 8).length;
+        const ern = filterEntries.filter(e => e.type === 'ernaehrung').length;
+        const trink = filterEntries.filter(e => e.type === 'trinken').length;
+        const schlaf = filterEntries.filter(e => e.type === 'schlaf').length;
+        
+        pts += sport * 2;
+        pts += rauch * 3.5;
+        pts += ern * 1.5;
+        pts += trink * 0.5;
+        pts += schlaf * 0.25;
+        
+        return Math.round(pts);
+    };
+    
+    const thisWeek = entries.filter(e => new Date(e.date) >= weekStart);
+    const lastWeek = entries.filter(e => {
+        const d = new Date(e.date);
+        return d >= lastWeekStart && d <= lastWeekEnd;
+    });
+    const thisMonth = entries.filter(e => new Date(e.date) >= monthStart);
+    const lastMonth = entries.filter(e => {
+        const d = new Date(e.date);
+        return d >= lastMonthStart && d <= lastMonthEnd;
+    });
+    
+    return {
+        thisWeek: calcPunkteForEntries(thisWeek),
+        lastWeek: calcPunkteForEntries(lastWeek),
+        thisMonth: calcPunkteForEntries(thisMonth),
+        lastMonth: calcPunkteForEntries(lastMonth)
+    };
+}
 
 function getPersonalizedBonus() {
     const entries = appState.entries || [];
@@ -1537,8 +1593,17 @@ let html = `
 <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> <span style="color: #000000 !important;">${schlafStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
 </div>
 
+html += `
+<h4 style="margin-top: 20px; color: #0066cc;">📊 Basis-Punkte Übersicht</h4>
+<div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+    <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Diese Woche:</strong> <span style="color: #ff6600; font-weight: bold;">${basePunkte.thisWeek} Pkt</span></p>
+    <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Letzte Woche:</strong> <span style="color: #ff6600; font-weight: bold;">${basePunkte.lastWeek} Pkt</span></p>
+    <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Diesen Monat:</strong> <span style="color: #ff6600; font-weight: bold;">${basePunkte.thisMonth} Pkt</span></p>
+    <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Letzten Monat:</strong> <span style="color: #ff6600; font-weight: bold;">${basePunkte.lastMonth} Pkt</span></p>
+</div>
+`;
 
-<h4 style="margin-top: 20px; color: #000000;">🎯 Nächste Meilensteine</h4>
+<h4 style="margin-top: 20px; color: #0066cc;">🎯 Nächste Meilensteine</h4>
 <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
     ${nextMilestones.map(m => `
         <p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff9800;">
