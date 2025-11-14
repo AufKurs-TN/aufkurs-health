@@ -1500,7 +1500,9 @@ let html = `
         
         html += `
             <tr style="${rowStyle}">
-                <td style="padding: 12px; border: 1px solid #ccc; color: #000000 !important; font-weight: 600 !important;">${l.level}</td>
+  <td style="padding: 12px; border: 1px solid #ccc; color: #000000 !important; font-weight: 600 !important;">
+    ${l.level}
+</td>
     <td style="padding: 12px; border: 1px solid #ccc; color: #000000 !important; font-weight: 600 !important;">${l.title}</td>
     <td style="padding: 12px; border: 1px solid #ccc; color: #000000 !important; font-weight: 600 !important;">${l.minPts} - ${l.maxPts === 999999 ? '∞' : l.maxPts}</td>
                 <td style="padding: 12px; border: 1px solid #ccc; font-style: italic; color: #333;">"${l.motivationssatz}"</td>
