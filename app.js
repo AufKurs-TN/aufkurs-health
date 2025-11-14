@@ -91,9 +91,9 @@ async function loginUser() {
         console.log('✅ Benutzer angemeldet:', userCredential.user.uid);
         localStorage.setItem('userId', userCredential.user.uid);
         
-        // 🆕 Cloud Sync starten nach Login!
+        // 🆕 Cloud Sync starten!
+        await loadAppStateFromCloud();
         setupRealtimeSync(userCredential.user.uid);
-        loadAppStateFromCloud();
         
         document.getElementById('authPage').style.display = 'none';
         document.getElementById('appContent').style.display = 'block';
@@ -108,28 +108,6 @@ async function loginUser() {
         }
     }
 }
-
-function logoutUser() {
-    if (confirm('Möchtest du dich wirklich abmelden?')) {
-        firebase.auth().signOut().then(() => {
-            localStorage.removeItem('userId');
-            location.reload();
-        });
-    }
-}
-
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        console.log('✅ Benutzer angemeldet:', user.email);
-        localStorage.setItem('userId', user.uid);
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('appContent').style.display = 'block';
-    } else {
-        console.log('❌ Benutzer nicht angemeldet');
-        document.getElementById('authPage').style.display = 'flex';
-        document.getElementById('appContent').style.display = 'none';
-    }
-});
 // Helper Functions BEFORE appState!
 function getTodayDate() {
     const today = new Date();
