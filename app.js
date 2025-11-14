@@ -4115,13 +4115,8 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
                 document.getElementById('appContent').style.display = 'block';
                 
                 // Lade Daten und starte App
-                loadAppStateFromCloud().then(() => {
-    setupRealtimeSync(user.uid);
-    setTimeout(() => {
-        initTabNavigation();
-        renderWochenanalyse();
-    }, 100);
-});
+              loadAppStateFromCloud();
+initializeApp();
                 
             } else {
                 console.log('🔓 Keine Session - Login erforderlich');
