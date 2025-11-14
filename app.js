@@ -1519,12 +1519,13 @@ let html = `
             
         <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border: 2px solid gold;">
     <h3 style="color: #0066cc;">Aktuelle Gesamtpunkte</h3>
-    ="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
+    <p style="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
     <div style="margin-top: 15px;">
-        ="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
-        ="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
+        <p style="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
+        <p style="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
     </div>
 </div>
+
             
             
 <h4 style="margin-top: 20px; color: #0066cc;">🔥 Aktuelle Streaks</h4>
