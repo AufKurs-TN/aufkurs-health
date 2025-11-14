@@ -388,8 +388,8 @@ function deleteEntry(entryId) {
             border: 1px solid var(--color-border);
         ">
             <h2 style="margin-top: 0; color: var(--color-error); font-size: 24px;">⚠️ BESTÄTIGUNG ERFORDERLICH</h2>
-            <p style="font-size: 16px; color: var(--color-text); margin: 16px 0;">Eintrag wirklich löschen?</p>
-            <p style="
+            ="font-size: 16px; color: var(--color-text); margin: 16px 0;">Eintrag wirklich löschen?</p>
+            ="
                 background: var(--color-background);
                 padding: 15px;
                 border-radius: 8px;
@@ -1520,9 +1520,9 @@ let html = `
             
             <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; border: 2px solid gold;">
                 <h3 style="color: #0066cc;">Aktuelle Gesamtpunkte</h3>
-                <p style="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
+                ="font-size: 32px; color: #ff6600; font-weight: bold;">${points}</p>
                 <div style="margin-top: 15px;">
-                    <p style="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
+                    ="font-size: 18px; font-weight: bold; color: #333;">Level: ${level.level} - ${level.title}</p>
                     <p style="font-size: 16px; color: #666; font-style: italic;">"${level.motivationssatz}"</p>
                 </div>
             </div>
@@ -1548,25 +1548,26 @@ let html = `
 </div>
 
 
-           <h4 style="margin-top: 20px; color: #0066cc;">🎯 Nächste Meilensteine</h4>
-<div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
-    ${nextMilestones.map(m => `
-        <p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff9800;">
-            <strong style="color: #000000 !important;">${m.category}:</strong> <span style="color: #000000 !important;">${m.current}/${m.next} (noch ${m.daysLeft} Tage)</span>
-        </p>
-    `).join('')}
-</div>
+ <h4 style="margin-top: 20px; color: #0066cc;">🎯 Nächste Meilensteine</h4>
+            <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                ${nextMilestones.map(m => `
+                    <p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff9800;">
+                        <strong>${m.category}:</strong> ${m.current}/${m.next} (noch ${m.daysLeft} Tage)
+                    </p>
+                `).join('')}
+            </div>
+    `;
+    
+    if (personalizedBonus.length > 0) {
+        html += `
+            <div style="background: #fffacd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <h4 style="color: #ff6600;">Dein kompletter Status (alle Kategorien):</h4>
+                ${personalizedBonus.map(b => `<p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff6600;">→ ${b}</p>`).join('')}
+            </div>
+        `;
+    }
 
-${personalizedBonus.length > 0 ? `
-<div style="background: #fffacd; padding: 15px; border-radius: 8px; margin: 15px 0;">
-    <h4 style="color: #ff6600;">Dein kompletter Status (alle Kategorien):</h4>
-    ${personalizedBonus.map(b => `<p style="margin: 8px 0; padding: 8px; background: white; border-radius: 4px; border-left: 4px solid #ff6600;"><strong style="color: #000000 !important;">→ ${b}</strong></p>`).join('')}
-</div>
-` : ''}
-
-   
-
-    html += `
+       html += `
         </div>
     `;
     
