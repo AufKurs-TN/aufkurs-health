@@ -2408,7 +2408,7 @@ function renderWochenanalyseOLD() {
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
       
-    
+    document.getElementById('wochenanalyseContent').innerHTML = html;
    
     document.getElementById('monatsanalyseContent').innerHTML = html;
 }
