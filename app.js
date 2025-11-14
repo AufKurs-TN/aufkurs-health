@@ -3793,11 +3793,8 @@ function setupRealtimeSync(uid) {
                 renderWochenanalyse();
                 updateSyncStatus('connected', 'Synchronisiert');
             }
-        }, error => {
-            console.error('❌ Sync error:', error);
-            updateSyncStatus('error', 'Synchronisierungsfehler');
-        });
-}
+    
+        }
 
 // ============ END CLOUD SYNC FUNCTIONS ============
 
