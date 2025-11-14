@@ -2407,9 +2407,57 @@ function renderWochenanalyseOLD() {
         <li>Wähle fettärmere Gerichte (z.B. Salate mit Hähnchen) → +1 Pkt Ernährung, -200 kcal</li>
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
-      
-    document.getElementById('wochenanalyseContent').innerHTML = html;
-   
+       // 11. MOTIVATION & BONUS
+    html += `<h3>🎯 11. MOTIVATION &amp; BONUSPROGRAMM</h3>`;
+html += `<p><strong>Gesamtpunkte:</strong> ${appState.bonusPoints.toFixed(1)}</p>`;
+const level = getCurrentLevel(appState.bonusPoints);
+if (!level) {
+    level = { level: 1, title: 'Einstieg', motivationssatz: 'Jeder Anfang ist schwer - du packst das!' };
+}
+
+html += `<p><strong>Level:</strong> ${level.level} - ${level.title}</p>`;
+html += `<p style="font-style: italic;">"${level.motivationssatz}"</p>`;
+html += `<p><strong>Aktueller Status:</strong> ${getShortBonusStatus()}</p>`;
+html += `<p><em>→ Für die detaillierte Übersicht klick auf "Bonusprogramm"</em></p>`;
+
+    
+    html += `<p><em><strong>Hinweis:</strong> Das System ist hart kalibriert. 1000 Punkte (MAX-Level) sollten mit Disziplin in 7-12 Monaten erreichbar sein. Die meisten Punkte gibt es für die schwierigsten Aufgaben: Rauchfrei bleiben, gesunde Ernährung und regelmäßiger Sport!</em></p>`;
+    
+    // 11. MOTIVATION
+    html += `<div class="motivation-box">
+        <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p>
+    </div>`;
+    
+    html += `<div class="summary-footer">
+        <strong>Seit Start (1. Nov 2025):</strong><br>
+        LDL -11 mg/dl &bull; HDL +4 mg/dl &bull; Rauchfrei ${calculateRauchfreiTage()} Tage
+    </div>`;
+    
+    html += `</div>`;
+    
+    console.log('━━━ HTML-Länge:', html.length, 'Zeichen ━━━');
+    console.log('━━━ Setze wochenanalyseContent.innerHTML ━━━');
+    
+    const container = document.getElementById('wochenanalyseContent');
+    if (!container) {
+        console.error('❌ FEHLER: wochenanalyseContent Container nicht gefunden!');
+        return;
+    }
+    
+    container.innerHTML = html;
+    console.log('✓ Wochenanalyse erfolgreich gerendert!');
+    console.log('━━━ renderWochenanalyse() ENDE ━━━');
+}
+
+function renderMonatsanalyse() {
+    const html = `
+        <div class="analysis-section">
+            <h2>📈 MONATSANALYSE - November 2025</h2>
+            <p>Monatsübersicht mit aggregierten Daten und Trends über alle Wochen...</p>
+            <p><em>Feature in Entwicklung: Zeigt Trends über mehrere Wochen hinweg.</em></p>
+        </div>
+    `;
+       
     document.getElementById('monatsanalyseContent').innerHTML = html;
 }
 
