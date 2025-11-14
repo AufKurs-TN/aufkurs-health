@@ -1,3 +1,29 @@
+// ============ FIREBASE CLOUD SYNC CONFIGURATION ============
+const firebaseConfig = {
+  apiKey: "AIzaSyBsn4sSre1y9JT4SJDvmTRG6fmQEdVb_3k",
+  authDomain: "auf-kurs---health.firebaseapp.com",
+  projectId: "auf-kurs---health",
+  storageBucket: "auf-kurs---health.firebasestorage.app",
+  messagingSenderId: "809268235109",
+  appId: "1:809268235109:web:e726a268d6e376800d2f8c"
+};
+
+// Initialize Firebase
+let firebaseApp = null;
+let db = null;
+let isCloudSyncEnabled = false;
+
+try {
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    isCloudSyncEnabled = true;
+    console.log('✓ Firebase Firestore initialized successfully');
+} catch (error) {
+    console.error('❌ Firebase initialization failed:', error);
+    isCloudSyncEnabled = false;
+}
+// ============ END FIREBASE CONFIGURATION ============
+
 // ===== EMAIL LOGIN / REGISTER FUNKTIONEN =====
 
 function toggleAuthForm() {
@@ -99,33 +125,6 @@ firebase.auth().onAuthStateChanged((user) => {
         document.getElementById('appContent').style.display = 'none';
     }
 });
-
-// ============ FIREBASE CLOUD SYNC CONFIGURATION ============
-const firebaseConfig = {
-  apiKey: "AIzaSyBsn4sSre1y9JT4SJDvmTRG6fmQEdVb_3k",
-  authDomain: "auf-kurs---health.firebaseapp.com",
-  projectId: "auf-kurs---health",
-  storageBucket: "auf-kurs---health.firebasestorage.app",
-  messagingSenderId: "809268235109",
-  appId: "1:809268235109:web:e726a268d6e376800d2f8c"
-};
-
-// Initialize Firebase
-let firebaseApp = null;
-let db = null;
-let isCloudSyncEnabled = false;
-
-try {
-    firebaseApp = firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
-    isCloudSyncEnabled = true;
-    console.log('✓ Firebase Firestore initialized successfully');
-} catch (error) {
-    console.error('❌ Firebase initialization failed:', error);
-    isCloudSyncEnabled = false;
-}
-// ============ END FIREBASE CONFIGURATION ============
-
 // Helper Functions BEFORE appState!
 function getTodayDate() {
     const today = new Date();
