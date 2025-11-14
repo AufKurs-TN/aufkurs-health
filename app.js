@@ -18,15 +18,6 @@ try {
     db = firebase.firestore();
     isCloudSyncEnabled = true;
     console.log('✓ Firebase Firestore initialized successfully');
-    
-    // 🆕 Session Persistence - NACH komplettem Init!
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => {
-            console.log('✅ Session Persistence aktiviert');
-        })
-        .catch((error) => {
-            console.error('❌ Persistence Fehler:', error);
-        });
         
 } catch (error) {
     console.error('❌ Firebase initialization failed:', error);
