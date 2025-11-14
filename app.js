@@ -3943,10 +3943,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-       }, error => {
-            console.error('❌ Sync error:', error);
-            updateSyncStatus('error', 'Synchronisierungsfehler');
-        });
+
 }
 
 // ============ END CLOUD SYNC FUNCTIONS ============
