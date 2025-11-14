@@ -1593,17 +1593,6 @@ let html = `
 <p style="margin: 8px 0;"><strong style="color: #000000 !important;">Schlaf:</strong> <span style="color: #000000 !important;">${schlafStreak} Tage</span> → <span style="color: #ff6600; font-weight: bold;">+${Math.round(schlafStreak * 0.25)} Pkt</span> 😴</p>
 </div>
 
-const basePunkte = getBasePunktsByPeriod();
-
-    html += `<h4 style="margin-top: 20px; color: #0066cc;">📊 Basis-Punkte Übersicht</h4>
-<div style="background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%); padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #0066cc;">
-    <p style="margin: 8px 0;"><strong style="color: #0066cc;">Diese Woche:</strong> <span style="color: #ff6600; font-weight: bold; font-size: 18px;">${basePunkte.thisWeek} Pkt</span></p>
-    <p style="margin: 8px 0;"><strong style="color: #0066cc;">Letzte Woche:</strong> <span style="color: #ff6600; font-weight: bold; font-size: 18px;">${basePunkte.lastWeek} Pkt</span></p>
-    <p style="margin: 8px 0;"><strong style="color: #0066cc;">Diesen Monat:</strong> <span style="color: #ff6600; font-weight: bold; font-size: 18px;">${basePunkte.thisMonth} Pkt</span></p>
-    <p style="margin: 8px 0;"><strong style="color: #0066cc;">Letzten Monat:</strong> <span style="color: #ff6600; font-weight: bold; font-size: 18px;">${basePunkte.lastMonth} Pkt</span></p>
-</div>
-`;
-
 <h4 style="margin-top: 20px; color: #0066cc;">🎯 Nächste Meilensteine</h4>
 <div style="background: #fff9e6; padding: 15px; border-radius: 8px; margin-top: 10px;">
     ${nextMilestones.map(m => `
@@ -2475,7 +2464,6 @@ function renderWochenanalyseOLD() {
         <li>Erhöhe Trinkmenge auf 2,5l täglich → +1 Pkt Trinken</li>
     </ul>`;
       
-    html += `<div class="motivation-box"> <p>🌞 ${getMotivationText(gesamtScore, rauchfreiDays)}</p> </div>`;
     
     html += `<div class="summary-footer">
         <strong>Seit Start (1. Nov 2025):</strong><br>
