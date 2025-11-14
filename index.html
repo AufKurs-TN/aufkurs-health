@@ -6,16 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auf Kurs - Mein Fortschrittsjournal</title>
     <style>
-/* NUR Bonus-Tabelle: schwarze Schrift */
-#bonusContent td {
-    color: #000000 !important;
-    font-weight: 700 !important;
-}
 
-/* Überall sonst: helle/lesbare Schrift */
-em, i, strong {
-    color: #111111 !important;
-}
         :root {
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
@@ -300,14 +291,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;  /* ← Mobile: 1 Spalte statt 3 */
-    }
-    .chart-canvas {
-        height: 300px;               /* ← Mobile: kleinere Charts */
-    }
-}        
+
 .data-table tr:hover {
     background: rgba(var(--color-teal-500-rgb), 0.03);
 }
@@ -786,6 +770,7 @@ body {
 
 </body>
 </html>
+
 
 
 
