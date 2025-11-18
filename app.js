@@ -733,7 +733,7 @@ async function handleAuthSubmit(e) {
     }
   }
 }
-/ Initial auth render - WARTE auf Firebase
+// Initial auth render - WARTE auf Firebase
 function initAuth() {
   if (window.firebaseReady) {
     console.log('✅ Starting auth initialization');
