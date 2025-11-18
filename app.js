@@ -2086,9 +2086,7 @@ function refreshAllViews() {
     if (tabId === 'settings') renderSettingsView();
   }
 }
- 
-  initAuth();
-});
+
 function initializeApp() {
   appState.viewedDate = getCurrentDate();
   appState.viewedWeek = getWeekNumber(getCurrentDate());
