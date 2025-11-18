@@ -1,10 +1,6 @@
-
-// Login
-auth.signInWithEmailAndPassword(email, password)
-  .then(userCredential => {
-    // Login erfolgreich, kann mit Firestore weiterarbeiten
-  })
-  .catch(error => { /* Fehler anzeigen */ });
+// ********************
+// Authentication & Storage (Firebase Backend)
+// ********************
 
 let currentUser = null;
 let weekTrendChart = null;
@@ -34,7 +30,6 @@ const appState = {
   viewedWeek: { year: 2025, week: 47 },
   viewedMonth: { year: 2025, month: 10 }
 };
-
 // Comprehensive Food Database (500+ foods)
 const foodDatabase = [
   // Desserts
