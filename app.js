@@ -703,6 +703,11 @@ function initAuth() {
 
 initAuth();
 
+function clearAppState() {
+  appState.entries = [];
+  appState.cholesterinBaseline = { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
+}
+
 // ✅ NEUE VERSION mit Firebase:
 window.logoutUser = async function() {
   try {
