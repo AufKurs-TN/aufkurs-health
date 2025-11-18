@@ -1,9 +1,11 @@
-// ********************
-// Authentication & Storage (In-Memory Only - no localStorage)
-// ********************
 
-// In-memory user database
-const userDatabase = {};
+// Login
+auth.signInWithEmailAndPassword(email, password)
+  .then(userCredential => {
+    // Login erfolgreich, kann mit Firestore weiterarbeiten
+  })
+  .catch(error => { /* Fehler anzeigen */ });
+
 let currentUser = null;
 let weekTrendChart = null;
 let navItems = null;
@@ -673,41 +675,67 @@ function bindAuthActions() {
   };
 }
 
-function handleAuthSubmit(e) {
+async function handleAuthSubmit(e) {
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
   let errorDiv = document.getElementById('authError');
-
-  if (!email.includes('@') || password.length < 5) {
-    errorDiv.textContent = 'Bitte gültige E-Mail und Passwort (mind. 5 Zeichen) eingeben.';
+  
+  if (!email || !password) {
+    errorDiv.textContent = 'Bitte E-Mail und Passwort eingeben!';
     return;
   }
-  if (authMode === 'register') {
-    const password2 = document.getElementById('authPasswordConfirm').value;
-    if (password !== password2) {
-      errorDiv.textContent = 'Passwörter stimmen nicht überein.';
-      return;
+  
+  try {
+    if (authMode === 'login') {
+      // Firebase Login
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      currentUser = userCredential.user;
+      
+      // Daten aus Firestore laden
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        appState.cholesterinBaseline = userData.baseline || { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
+      }
+      
+      const entriesSnapshot = await db.collection('users').doc(currentUser.uid).collection('entries').get();
+      appState.entries = entriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      setAuthStatus(true);
+    } else {
+      // Firebase Registrierung
+      const passwordConfirm = document.getElementById('authPasswordConfirm').value;
+      if (password !== passwordConfirm) {
+        errorDiv.textContent = 'Passwörter stimmen nicht überein!';
+        return;
+      }
+      
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      currentUser = userCredential.user;
+      
+      // Initiale Benutzerdaten in Firestore speichern
+      await db.collection('users').doc(currentUser.uid).set({
+        email: email,
+        baseline: { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' },
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      appState.entries = [];
+      setAuthStatus(true);
     }
-    if (userDatabase[email]) {
-      errorDiv.textContent = 'Benutzer existiert schon.';
-      return;
+  } catch (error) {
+    console.error('Auth Error:', error);
+    if (error.code === 'auth/user-not-found') {
+      errorDiv.textContent = 'Benutzer nicht gefunden!';
+    } else if (error.code === 'auth/wrong-password') {
+      errorDiv.textContent = 'Falsches Passwort!';
+    } else if (error.code === 'auth/email-already-in-use') {
+      errorDiv.textContent = 'E-Mail existiert bereits!';
+    } else if (error.code === 'auth/weak-password') {
+      errorDiv.textContent = 'Passwort zu schwach (mindestens 6 Zeichen)!';
+    } else {
+      errorDiv.textContent = 'Fehler: ' + error.message;
     }
-    const userObj = { email, password, userId: generateId(), entries: [], baseline: {...appState.cholesterinBaseline} };
-    saveLocalUser(userObj);
-    clearAppState();
-    currentUser = userObj;
-    setAuthStatus(true);
-  } else {
-    const userObj = userDatabase[email];
-    if (!userObj || userObj.password !== password) {
-      errorDiv.textContent = 'Login fehlgeschlagen. Prüfe E-Mail/Passwort.';
-      return;
-    }
-    userObj.lastLogin = true;
-    currentUser = userObj;
-    appState.entries = loadEntriesForUser(userObj.userId);
-    appState.cholesterinBaseline = loadBaselineForUser(userObj.userId);
-    setAuthStatus(true);
   }
 }
 
