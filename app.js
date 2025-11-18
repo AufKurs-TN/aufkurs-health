@@ -734,20 +734,16 @@ async function handleAuthSubmit(e) {
   }
 }
 
-// Initialize - Warte auf DOM UND Firebase
-document.addEventListener('DOMContentLoaded', () => {
-  function initAuth() {
-    if (window.firebaseReady) {
-      console.log('✅ Starting auth initialization');
-      renderAuthForm();
-    } else {
-      console.log('⏳ Waiting for Firebase...');
-      setTimeout(initAuth, 100);
-    }
+// Initial auth render - WARTE auf Firebase
+function initAuth() {
+  if (window.firebaseReady) {
+    console.log('✅ Starting auth initialization');
+    renderAuthForm();
+  } else {
+    console.log('⏳ Waiting for Firebase...');
+    setTimeout(initAuth, 100);
   }
-  
-  initAuth();
-});
+}
 
 initAuth();
 
