@@ -1302,13 +1302,22 @@ function renderLDLChart() {
   const ctx = document.getElementById('ldlChart');
   if (ldlChart) ldlChart.destroy();
   
-  ldlChart = new Chart(ctx, {
+   ldlChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
       datasets: [
         {
-         {
+          label: 'LDL',
+          data: ldlValues,
+          borderColor: '#E74C3C',
+          backgroundColor: 'rgba(231, 76, 60, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#E74C3C'
+        },
+        {
           label: 'Zielwert <100 (Gut)',
           data: Array(labels.length).fill(100),
           borderColor: '#FFD93D',
