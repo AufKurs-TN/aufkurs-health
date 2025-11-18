@@ -748,7 +748,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   initAuth();
 });
-}
 
 initAuth();
 
