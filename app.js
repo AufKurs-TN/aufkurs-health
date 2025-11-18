@@ -2,6 +2,9 @@
 // Authentication & Storage (Firebase Backend)
 // ********************
 
+// ✅ NEU: Registriere Chart.js Annotation Plugin
+Chart.register(ChartAnnotation);
+
 let currentUser = null;
 let weekTrendChart = null;
 let navItems = null;
