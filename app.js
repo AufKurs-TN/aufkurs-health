@@ -703,13 +703,19 @@ function initAuth() {
 
 initAuth();
 
-// LOGOUT
-window.logoutUser = function() {
-  removeLocalUser();
-  clearAppState();
-  currentUser = null;
-  setAuthStatus(false);
+// ✅ NEUE VERSION mit Firebase:
+window.logoutUser = async function() {
+  try {
+    await auth.signOut();
+    clearAppState();
+    currentUser = null;
+    setAuthStatus(false);
+    console.log('✅ Erfolgreich ausgeloggt');
+  } catch (error) {
+    console.error('❌ Logout-Fehler:', error);
+  }
 };
+
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
   logoutBtn.onclick = window.logoutUser;
