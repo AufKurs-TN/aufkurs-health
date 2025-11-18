@@ -1988,9 +1988,8 @@ function renderMonthView() {
   }
   
   calendarContainer.innerHTML = calendarHTML;
-}
 
-document.getElementById('prevMonthBtn').addEventListener('click', () => {
+  document.getElementById('prevMonthBtn').addEventListener('click', () => {
   appState.viewedMonth.month--;
   if (appState.viewedMonth.month < 0) {
     appState.viewedMonth.month = 11;
@@ -2007,6 +2006,7 @@ document.getElementById('nextMonthBtn').addEventListener('click', () => {
   }
   renderMonthView();
 });
+}
 
 function renderSettingsView() {
   document.getElementById('settingsLdl').value = appState.cholesterinBaseline.ldl;
