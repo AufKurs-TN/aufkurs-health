@@ -751,7 +751,6 @@ async function saveUserData() {
     statusEl.textContent = 'Verbunden';
     statusEl.className = 'status status--success';
   }
-}
 
 // Navigation
 function initNavigation() {
