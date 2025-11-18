@@ -596,49 +596,6 @@ function setAuthStatus(authenticated) {
   }
 }
 
-function getLocalUser() {
-  const lastLogin = Object.keys(userDatabase).find(email => userDatabase[email].lastLogin);
-  return lastLogin ? userDatabase[lastLogin] : null;
-}
-
-function saveLocalUser(userObj) {
-  userObj.lastLogin = true;
-  userDatabase[userObj.email] = userObj;
-}
-
-function removeLocalUser() {
-  if (currentUser) {
-    delete userDatabase[currentUser.email].lastLogin;
-  }
-}
-
-function loadEntriesForUser(userId) {
-  const user = Object.values(userDatabase).find(u => u.userId === userId);
-  return user && user.entries ? user.entries : [];
-}
-
-function saveEntriesForUser(userId, entries) {
-  const user = Object.values(userDatabase).find(u => u.userId === userId);
-  if (user) user.entries = entries;
-}
-
-function loadBaselineForUser(userId) {
-  const user = Object.values(userDatabase).find(u => u.userId === userId);
-  return user && user.baseline ? user.baseline : {
-    ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15'
-  };
-}
-
-function saveBaselineForUser(userId, baseline) {
-  const user = Object.values(userDatabase).find(u => u.userId === userId);
-  if (user) user.baseline = baseline;
-}
-
-function clearAppState() {
-  appState.entries = [];
-  appState.cholesterinBaseline = { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
-}
-
 // Handle login
 let authMode = 'login';
 function renderAuthForm() {
