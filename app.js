@@ -739,8 +739,18 @@ async function handleAuthSubmit(e) {
   }
 }
 
-// Initial auth render
-renderAuthForm();
+// Initial auth render - WARTE auf Firebase
+function initAuth() {
+  if (window.firebaseReady) {
+    console.log('✅ Starting auth initialization');
+    renderAuthForm();
+  } else {
+    console.log('⏳ Waiting for Firebase...');
+    setTimeout(initAuth, 100);
+  }
+}
+
+initAuth();
 
 // LOGOUT
 window.logoutUser = function() {
