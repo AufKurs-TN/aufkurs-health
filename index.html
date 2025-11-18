@@ -2,831 +2,499 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⛨ Auf Kurs - Health</title>
-    <style>
-
-        :root {
-  --color-white: rgba(255, 255, 255, 1);
-  --color-black: rgba(0, 0, 0, 1);
-  --color-cream-50: rgba(252, 252, 249, 1);
-  --color-cream-100: rgba(255, 255, 253, 1);
-  --color-gray-200: rgba(245, 245, 245, 1);
-  --color-gray-300: rgba(167, 169, 169, 1);
-  --color-gray-400: rgba(119, 124, 124, 1);
-  --color-slate-500: rgba(98, 108, 113, 1);
-  --color-brown-600: rgba(94, 82, 64, 1);
-  --color-charcoal-700: rgba(31, 33, 33, 1);
-  --color-charcoal-800: rgba(38, 40, 40, 1);
-  --color-slate-900: rgba(19, 52, 59, 1);
-  --color-teal-300: rgba(50, 184, 198, 1);
-  --color-teal-400: rgba(45, 166, 178, 1);
-  --color-teal-500: rgba(33, 128, 141, 1);
-  --color-teal-600: rgba(29, 116, 128, 1);
-  --color-teal-700: rgba(26, 104, 115, 1);
-  --color-brown-600-rgb: 94, 82, 64;
-  --color-teal-500-rgb: 33, 128, 141;
-  --color-slate-900-rgb: 19, 52, 59;
-  --color-background: var(--color-cream-50);
-  --color-surface: var(--color-cream-100);
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-500);
-  --color-primary: var(--color-teal-500);
-  --color-primary-hover: var(--color-teal-600);
-  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
-  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
-  --color-success: #2ECC71;
-  --color-error: #E74C3C;
-  --color-warning: #F39C12;
-  --color-info: #3498DB;
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-size-base: 14px;
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --radius-base: 8px;
-  --radius-lg: 12px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--color-charcoal-700);
-    --color-surface: var(--color-charcoal-800);
-    --color-text: var(--color-gray-200);
-    --color-text-secondary: rgba(167, 169, 169, 0.7);
-    --color-primary: var(--color-teal-300);
-    --color-border: rgba(119, 124, 124, 0.3);
-    --color-card-border: rgba(119, 124, 124, 0.2);
-  }
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    line-height: 1.6;
-}
-
-.app-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: var(--space-20);
-}
-
-.app-header {
-    text-align: center;
-    margin-bottom: var(--space-24);
-    padding: var(--space-24);
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-}
-
-.app-header h1 {
-    margin: 0 0 var(--space-8) 0;
-    color: var(--color-primary);
-    font-size: 28px;
-}
-
-.app-header p {
-    margin: 0;
-    color: var(--color-text-secondary);
-    font-size: 14px;
-}
-
-.tab-navigation {
-    display: flex;
-    gap: var(--space-8);
-    margin-bottom: var(--space-24);
-    border-bottom: 2px solid var(--color-border);
-    flex-wrap: wrap;
-}
-
-.tab-button {
-    position: relative;
-    z-index: 100;
-    pointer-events: auto;
-    padding: var(--space-12) var(--space-24);
-    background: transparent;
-    border: none;
-    border-bottom: 3px solid transparent;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    transition: all 0.2s;
-}
-
-.tab-button:hover {
-    color: var(--color-text);
-    background: rgba(var(--color-teal-500-rgb), 0.05);
-    cursor: pointer;
-}
-
-.tab-button.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-    background: rgba(var(--color-teal-500-rgb), 0.1);
-    cursor: pointer;
-}
-
-.tab-content {
-    display: none;
-    position: relative;
-    z-index: 50;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.form-section {
-    background: var(--color-surface);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    margin-bottom: var(--space-20);
-}
-
-.form-section h3 {
-    margin: 0 0 var(--space-16) 0;
-    color: var(--color-text);
-    font-size: 18px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-16);
-}
-
-.form-group {
-    margin-bottom: var(--space-16);
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: var(--space-8);
-    font-weight: 500;
-    color: var(--color-text);
-    font-size: 13px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: var(--space-12);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
-    font-size: 14px;
-    background: var(--color-background);
-    color: var(--color-text);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: 2px solid var(--color-primary);
-    border-color: var(--color-primary);
-}
-
-.btn {
-    padding: var(--space-12) var(--space-24);
-    border: none;
-    border-radius: var(--radius-base);
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-primary {
-    background: var(--color-primary);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--color-primary-hover);
-}
-
-.btn-secondary {
-    background: var(--color-warning);
-    color: white;
-}
-
-.btn-secondary:hover {
-    opacity: 0.9;
-}
-
-.alert {
-    padding: var(--space-16);
-    border-radius: var(--radius-base);
-    margin-bottom: var(--space-16);
-    font-size: 14px;
-}
-
-.alert-success {
-    background: rgba(46, 204, 113, 0.1);
-    border: 1px solid var(--color-success);
-    color: var(--color-success);
-}
-
-.alert-error {
-    background: rgba(231, 76, 60, 0.1);
-    border: 1px solid var(--color-error);
-    color: var(--color-error);
-}
-
-.analysis-section {
-    background: var(--color-surface);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-card-border);
-    margin-bottom: var(--space-24);
-}
-
-.analysis-section h2 {
-    margin: 0 0 var(--space-8) 0;
-    color: var(--color-primary);
-    font-size: 24px;
-}
-
-.analysis-section h3 {
-    margin: var(--space-24) 0 var(--space-12) 0;
-    color: var(--color-text);
-    font-size: 18px;
-    border-bottom: 2px solid var(--color-border);
-    padding-bottom: var(--space-8);
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: var(--space-16) 0;
-}
-
-.data-table th,
-.data-table td {
-    padding: var(--space-12);
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.data-table th {
-    background: var(--color-background);
-    font-weight: 600;
-    color: var(--color-text);
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.data-table tr:hover {
-    background: rgba(var(--color-teal-500-rgb), 0.03);
-}
-
-.score-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 13px;
-}
-
-.score-excellent {
-    background: rgba(46, 204, 113, 0.15);
-    color: var(--color-success);
-}
-
-.score-good {
-    background: rgba(52, 152, 219, 0.15);
-    color: var(--color-info);
-}
-
-.score-medium {
-    background: rgba(243, 156, 18, 0.15);
-    color: var(--color-warning);
-}
-
-.score-poor {
-    background: rgba(231, 76, 60, 0.15);
-    color: var(--color-error);
-}
-
-.chart-container {
-    margin: var(--space-24) 0;
-    padding: var(--space-20);
-    background: var(--color-background);
-    border-radius: var(--radius-base);
-    border: 1px solid var(--color-border);
-}
-
-.chart-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-16);
-    margin-bottom: var(--space-16);
-}
-
-.chart-checkbox {
-    display: flex;
-    align-items: center;
-    gap: var(--space-8);
-}
-
-.chart-checkbox input {
-    width: auto;
-}
-
-.chart-canvas {
-    width: 100%;
-    height: 400px;
-}
-
-.level-table {
-    margin: var(--space-16) 0;
-}
-
-.level-current {
-    background: rgba(var(--color-teal-500-rgb), 0.1);
-    font-weight: 600;
-}
-
-.stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-16);
-    margin: var(--space-16) 0;
-}
-
-.stat-card {
-    padding: var(--space-16);
-    background: var(--color-background);
-    border-radius: var(--radius-base);
-    border: 1px solid var(--color-border);
-}
-
-.stat-card .label {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--space-8);
-}
-
-.stat-card .value {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--color-text);
-}
-
-.motivation-box {
-    background: linear-gradient(135deg, rgba(var(--color-teal-500-rgb), 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
-    padding: var(--space-24);
-    border-radius: var(--radius-lg);
-    border: 2px solid var(--color-success);
-    margin: var(--space-24) 0;
-    text-align: center;
-}
-
-.motivation-box p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--color-text);
-}
-
-.summary-footer {
-    margin-top: var(--space-24);
-    padding: var(--space-20);
-    background: var(--color-background);
-    border-radius: var(--radius-base);
-    text-align: center;
-    font-size: 14px;
-    color: var(--color-text-secondary);
-}
-
-.btn-delete {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-error);
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
-    font-weight: 600;
-}
-
-.btn-delete:hover {
-    background: rgba(231, 76, 60, 0.1);
-    border-color: var(--color-error);
-}
-
-.btn-delete:active {
-    background: rgba(231, 76, 60, 0.2);
-}
-
-.hidden {
-    display: none;
-}
-
-.intensity-option:hover {
-    border-color: var(--color-primary) !important;
-    background: rgba(var(--color-teal-500-rgb), 0.05);
-}
-
-.intensity-option input:checked {
-    accent-color: var(--color-primary);
-}
-
-.intensity-option:has(input:checked) {
-    border-color: var(--color-primary) !important;
-    background: rgba(var(--color-teal-500-rgb), 0.1);
-}
-
-
- </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gesundheits-Tracker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- AUTH PAGE (NEU!) -->
-    <div id="authPage" style="display: none; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--color-background);">
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 400px; width: 90%;">
-            <h2 style="text-align: center; color: var(--color-teal-600); margin-bottom: 30px;">⛨Auf Kurs - Health</h2>
-            
-            <!-- LOGIN FORM -->
-            <div id="loginForm">
-                <h3 style="text-align: center; margin-bottom: 20px;">Anmelden</h3>
-                <input type="email" id="loginEmail" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                <input type="password" id="loginPassword" placeholder="Passwort" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                <button onclick="loginUser()" style="width: 100%; padding: 12px; margin: 20px 0 10px 0; background: var(--color-teal-600); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Anmelden</button>
-                <p style="text-align: center; color: #666; margin: 10px 0;">Noch kein Konto? <span onclick="toggleAuthForm()" style="color: var(--color-teal-600); cursor: pointer; font-weight: bold;">Registrieren</span></p>
-                <div id="loginError" style="color: red; text-align: center; margin-top: 10px;"></div>
-            </div>
-            
-            <!-- REGISTER FORM (HIDDEN) -->
-            <div id="registerForm" style="display: none;">
-                <h3 style="text-align: center; margin-bottom: 20px;">Registrieren</h3>
-                <input type="email" id="registerEmail" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                <input type="password" id="registerPassword" placeholder="Passwort (min. 6 Zeichen)" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                <input type="password" id="registerPassword2" placeholder="Passwort wiederholen" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                <button onclick="registerUser()" style="width: 100%; padding: 12px; margin: 20px 0 10px 0; background: var(--color-teal-600); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Registrieren</button>
-                <p style="text-align: center; color: #666; margin: 10px 0;">Bereits Kunde? <span onclick="toggleAuthForm()" style="color: var(--color-teal-600); cursor: pointer; font-weight: bold;">Anmelden</span></p>
-                <div id="registerError" style="color: red; text-align: center; margin-top: 10px;"></div>
-            </div>
+  <!-- Login/Register Screen -->
+  <div id="authScreen" class="screen">
+    <div class="auth-container">
+      <h1>🏥 Gesundheits-Tracker</h1>
+      <div id="authForm">
+        <div class="form-group">
+          <input type="email" id="authEmail" class="form-control" placeholder="E-Mail" required>
         </div>
+        <div class="form-group">
+          <input type="password" id="authPassword" class="form-control" placeholder="Passwort" required>
+        </div>
+        <button id="loginBtn" class="btn btn--primary btn--full-width">Anmelden</button>
+        <button id="registerBtn" class="btn btn--secondary btn--full-width" style="margin-top: 10px;">Registrieren</button>
+        <div id="authError" class="error-message"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Screen -->
+  <div id="appScreen" class="screen" style="display: none;">
+    <!-- Header -->
+    <header class="app-header">
+      <h1 id="headerTitle">Heute</h1>
+      <button id="logoutBtn" class="btn btn--sm">Logout</button>
+    </header>
+
+    <!-- Tab Content Container -->
+    <div class="content-wrapper">
+
+
+      <!-- ADD ENTRY TAB -->
+      <div id="addTab" class="tab-content">
+        <div class="add-type-selector">
+          <button class="add-type-btn" data-type="essen">
+            <span class="add-type-emoji">🍽️</span>
+            <span class="add-type-label">Essen</span>
+          </button>
+          <button class="add-type-btn" data-type="sport">
+            <span class="add-type-emoji">🏃</span>
+            <span class="add-type-label">Sport</span>
+          </button>
+          <button class="add-type-btn" data-type="rauchen">
+            <span class="add-type-emoji">🚬</span>
+            <span class="add-type-label">Rauchen</span>
+          </button>
+          <button class="add-type-btn" data-type="trinken">
+            <span class="add-type-emoji">💧</span>
+            <span class="add-type-label">Trinken</span>
+          </button>
+          <button class="add-type-btn" data-type="schlaf">
+            <span class="add-type-emoji">😴</span>
+            <span class="add-type-label">Schlaf</span>
+          </button>
+          <button class="add-type-btn" data-type="bildschirmzeit">
+            <span class="add-type-emoji">📱</span>
+            <span class="add-type-label">Bildschirmzeit</span>
+          </button>
+          <button class="add-type-btn" data-type="gewicht">
+            <span class="add-type-emoji">⚖️</span>
+            <span class="add-type-label">Gewicht</span>
+          </button>
+          <button class="add-type-btn" data-type="stress">
+            <span class="add-type-emoji">⚠️</span>
+            <span class="add-type-label">Stress</span>
+          </button>
+        </div>
+
+        <!-- Essen Form -->
+        <div id="essenForm" class="entry-form" style="display: none;">
+          <h3>🍽️ Essen hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Gericht</label>
+            <input type="text" id="essenName" class="form-control" list="foodList" placeholder="z.B. Brokkoli">
+            <datalist id="foodList"></datalist>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gramm</label>
+            <input type="number" id="essenGramm" class="form-control" value="100" min="1">
+          </div>
+          <div id="essenNutrition" class="nutrition-display"></div>
+          <div id="essenEffect" class="effect-display"></div>
+          <div id="essenScoreDisplay" class="score-preview"></div>
+          <button id="saveEssenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Sport Form -->
+        <div id="sportForm" class="entry-form" style="display: none;">
+          <h3>🏃 Sport hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Aktivität</label>
+            <input type="text" id="sportName" class="form-control" placeholder="z.B. Joggen">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Intensität</label>
+            <select id="sportIntensitaet" class="form-control">
+              <option value="leicht">Leicht</option>
+              <option value="moderat" selected>Moderat</option>
+              <option value="schwer">Schwer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dauer (Minuten)</label>
+            <input type="number" id="sportDauer" class="form-control" value="30" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ruhezeit/Liegezeit (Stunden)</label>
+            <input type="number" id="sportRuhezeit" class="form-control" value="0" min="0" max="24" step="0.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Schritte (heute)</label>
+            <input type="number" id="sportSchritte" class="form-control" value="0" min="0" max="50000" step="100">
+          </div>
+          <div id="sportEffect" class="effect-display"></div>
+          <div id="sportScoreDisplay" class="score-preview"></div>
+          <button id="saveSportBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Rauchen Form -->
+        <div id="rauchenForm" class="entry-form" style="display: none;">
+          <h3>🚬 Rauchstatus hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Anzahl Zigaretten</label>
+            <input type="number" id="rauchenAnzahl" class="form-control" value="1" min="1">
+          </div>
+          <div id="rauchenEffect" class="effect-display"></div>
+          <div id="rauchenScoreDisplay" class="score-preview"></div>
+          <button id="saveRauchenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Trinken Form -->
+        <div id="trinkenForm" class="entry-form" style="display: none;">
+          <h3>💧 Trinken hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Getränk</label>
+            <select id="trinkenType" class="form-control">
+              <option value="wasser">Wasser</option>
+              <option value="orangensaft">Orangensaft</option>
+              <option value="kaffee">Kaffee</option>
+              <option value="tee">Tee</option>
+              <option value="cola">Cola</option>
+              <option value="bier">Bier</option>
+              <option value="wein">Wein</option>
+              <option value="kaffee-mit-zucker">Kaffee mit Zucker</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Menge (ml)</label>
+            <input type="number" id="trinkenMenge" class="form-control" value="250" min="1">
+          </div>
+          <div id="trinkenEffect" class="effect-display"></div>
+          <div id="trinkenScoreDisplay" class="score-preview"></div>
+          <button id="saveTrinkenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Schlaf Form -->
+        <div id="schlafForm" class="entry-form" style="display: none;">
+          <h3>😴 Schlaf hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Stunden: <span id="schlafStundenDisplay">7</span>h</label>
+            <input type="range" id="schlafStunden" class="form-control" min="0" max="12" value="7" step="0.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Qualität</label>
+            <select id="schlafQualitaet" class="form-control">
+              <option value="gut">Gut</option>
+              <option value="normal" selected>Normal</option>
+              <option value="schlecht">Schlecht</option>
+            </select>
+          </div>
+          <div id="schlafEffect" class="effect-display"></div>
+          <div id="schlafScoreDisplay" class="score-preview"></div>
+          <button id="saveSchlafBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Bildschirmzeit Form -->
+        <div id="bildschirmzeitForm" class="entry-form" style="display: none;">
+          <h3>📱 Bildschirmzeit hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Stunden: <span id="bildschirmzeitStundenDisplay">2</span>h</label>
+            <input type="range" id="bildschirmzeitStunden" class="form-control" min="0" max="16" value="2" step="0.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Aktivität</label>
+            <select id="bildschirmzeitAktivitaet" class="form-control">
+              <option value="arbeit">Arbeit</option>
+              <option value="freizeit" selected>Freizeit</option>
+              <option value="gaming">Gaming</option>
+              <option value="social-media">Social Media</option>
+            </select>
+          </div>
+          <div id="bildschirmzeitEffect" class="effect-display"></div>
+          <div id="bildschirmzeitScoreDisplay" class="score-preview"></div>
+          <button id="saveBildschirmzeitBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Gewicht Form -->
+        <div id="gewichtForm" class="entry-form" style="display: none;">
+          <h3>⚖️ Gewicht hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Gewicht (kg)</label>
+            <input type="number" id="gewichtKg" class="form-control" value="75" min="30" max="200" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Zielgewicht (kg)</label>
+            <input type="number" id="gewichtZiel" class="form-control" value="75" min="30" max="200" step="0.1">
+          </div>
+          <div id="gewichtEffect" class="effect-display"></div>
+          <div id="gewichtScoreDisplay" class="score-preview"></div>
+          <button id="saveGewichtBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+
+        <!-- Stress Form -->
+        <div id="stressForm" class="entry-form" style="display: none;">
+          <h3>⚠️ Stress hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Stresslevel: <span id="stressLevelDisplay">5</span>/10</label>
+            <input type="range" id="stressLevel" class="form-control" min="1" max="10" value="5" step="1">
+          </div>
+          <div id="stressEffect" class="effect-display"></div>
+          <div id="stressScoreDisplay" class="score-preview"></div>
+          <button id="saveStressBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
+      </div>
+
+      <!-- DAY VIEW TAB -->
+      <div id="dayTab" class="tab-content">
+        <div class="date-navigation">
+          <button id="prevDayBtn" class="nav-btn">◀</button>
+          <input type="date" id="dayPicker" class="date-picker">
+          <button id="nextDayBtn" class="nav-btn">▶</button>
+        </div>
+        <div class="day-summary">
+          <div class="summary-item">
+            <span class="summary-label">Einträge:</span>
+            <span id="dayEntriesCount" class="summary-value">0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Score:</span>
+            <span id="dayScoreAvg" class="summary-value score-badge">-</span>
+          </div>
+        </div>
+        <div id="dayEntries" class="entries-list"></div>
+      </div>
+
+      <!-- WEEK VIEW TAB -->
+      <div id="weekTab" class="tab-content">
+        <div class="week-navigation">
+          <button id="prevWeekBtn" class="nav-btn">◀</button>
+          <div id="weekInfo" class="week-info">KW47</div>
+          <button id="nextWeekBtn" class="nav-btn">▶</button>
+        </div>
+        <div id="weekDays" class="week-days"></div>
+        <div class="week-summary">
+          <h3>Wochenzusammenfassung</h3>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>Wert</th>
+                <th>Basis</th>
+                <th>Erwartet</th>
+                <th>Trend</th>
+              </tr>
+            </thead>
+            <tbody id="weekSummaryTable">
+              <tr>
+                <td>LDL</td>
+                <td id="weekLdlBase">-</td>
+                <td id="weekLdlExpected">-</td>
+                <td id="weekLdlTrend">-</td>
+              </tr>
+              <tr>
+                <td>HDL</td>
+                <td id="weekHdlBase">-</td>
+                <td id="weekHdlExpected">-</td>
+                <td id="weekHdlTrend">-</td>
+              </tr>
+              <tr>
+                <td>Triglyzeride</td>
+                <td id="weekTrigBase">-</td>
+                <td id="weekTrigExpected">-</td>
+                <td id="weekTrigTrend">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DEVELOPMENT TAB -->
+      <div id="developmentTab" class="tab-content">
+        <div class="smoke-free-counter" id="smokeFreeCounter">Rauchfrei seit: 0 Tage</div>
+        
+        <div class="chart-section">
+          <h3>LDL Entwicklung</h3>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-chart="ldl" data-range="week">Woche</button>
+            <button class="time-btn" data-chart="ldl" data-range="month">Monat</button>
+            <button class="time-btn" data-chart="ldl" data-range="3months">3 Monate</button>
+            <button class="time-btn" data-chart="ldl" data-range="6months">6 Monate</button>
+            <button class="time-btn" data-chart="ldl" data-range="year">1 Jahr</button>
+            <button class="time-btn" data-chart="ldl" data-range="2years">2 Jahre</button>
+            <button class="time-btn" data-chart="ldl" data-range="5years">5 Jahre</button>
+            <button class="time-btn" data-chart="ldl" data-range="all">Beginn</button>
+          </div>
+          <div class="chart-container" style="height: 250px;"><canvas id="ldlChart"></canvas></div>
+        </div>
+
+        <div class="chart-section">
+          <h3>HDL Entwicklung</h3>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-chart="hdl" data-range="week">Woche</button>
+            <button class="time-btn" data-chart="hdl" data-range="month">Monat</button>
+            <button class="time-btn" data-chart="hdl" data-range="3months">3 Monate</button>
+            <button class="time-btn" data-chart="hdl" data-range="6months">6 Monate</button>
+            <button class="time-btn" data-chart="hdl" data-range="year">1 Jahr</button>
+            <button class="time-btn" data-chart="hdl" data-range="2years">2 Jahre</button>
+            <button class="time-btn" data-chart="hdl" data-range="5years">5 Jahre</button>
+            <button class="time-btn" data-chart="hdl" data-range="all">Beginn</button>
+          </div>
+          <div class="chart-container" style="height: 250px;"><canvas id="hdlChart"></canvas></div>
+        </div>
+
+        <div class="chart-section">
+          <h3>Gesamtcholesterin Entwicklung</h3>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-chart="total" data-range="week">Woche</button>
+            <button class="time-btn" data-chart="total" data-range="month">Monat</button>
+            <button class="time-btn" data-chart="total" data-range="3months">3 Monate</button>
+            <button class="time-btn" data-chart="total" data-range="6months">6 Monate</button>
+            <button class="time-btn" data-chart="total" data-range="year">1 Jahr</button>
+            <button class="time-btn" data-chart="total" data-range="2years">2 Jahre</button>
+            <button class="time-btn" data-chart="total" data-range="5years">5 Jahre</button>
+            <button class="time-btn" data-chart="total" data-range="all">Beginn</button>
+          </div>
+          <div class="chart-container" style="height: 250px;"><canvas id="totalChart"></canvas></div>
+        </div>
+
+        <div class="chart-section">
+          <h3>Score Entwicklung</h3>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-chart="score" data-range="week">Woche</button>
+            <button class="time-btn" data-chart="score" data-range="month">Monat</button>
+            <button class="time-btn" data-chart="score" data-range="3months">3 Monate</button>
+            <button class="time-btn" data-chart="score" data-range="6months">6 Monate</button>
+            <button class="time-btn" data-chart="score" data-range="year">1 Jahr</button>
+            <button class="time-btn" data-chart="score" data-range="2years">2 Jahre</button>
+            <button class="time-btn" data-chart="score" data-range="5years">5 Jahre</button>
+            <button class="time-btn" data-chart="score" data-range="all">Beginn</button>
+          </div>
+          <div class="chart-container" style="height: 250px;"><canvas id="scoreChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="settingsTab" class="tab-content">
+        <div class="settings-section">
+          <h3>Cholesterin-Basiswerte</h3>
+          <div class="form-group">
+            <label class="form-label">LDL (mg/dL)</label>
+            <input type="number" id="settingsLdl" class="form-control" placeholder="z.B. 160">
+          </div>
+          <div class="form-group">
+            <label class="form-label">HDL (mg/dL)</label>
+            <input type="number" id="settingsHdl" class="form-control" placeholder="z.B. 35">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Triglyzeride (mg/dL)</label>
+            <input type="number" id="settingsTrig" class="form-control" placeholder="z.B. 180">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Messdatum</label>
+            <input type="date" id="settingsDate" class="form-control">
+          </div>
+          <button id="saveBaselineBtn" class="btn btn--primary btn--full-width">Basiswerte speichern</button>
+        </div>
+
+        <div class="settings-section">
+          <h3>Eigenes Lebensmittel hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" id="customFoodName" class="form-control" placeholder="z.B. Wiener Schnitzel">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kalorien (pro 100g)</label>
+            <input type="number" id="customFoodKcal" class="form-control" placeholder="z.B. 250" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kohlenhydrate (g pro 100g)</label>
+            <input type="number" id="customFoodKh" class="form-control" placeholder="z.B. 30" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gesamtfett (g pro 100g)</label>
+            <input type="number" id="customFoodFett" class="form-control" placeholder="z.B. 15" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gesättigte Fettsäuren (g pro 100g)</label>
+            <input type="number" id="customFoodSaturatedFat" class="form-control" placeholder="z.B. 5" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ungesättigte Fettsäuren (g pro 100g)</label>
+            <input type="number" id="customFoodUnsaturatedFat" class="form-control" placeholder="z.B. 10" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transfette (g pro 100g) - optional</label>
+            <input type="number" id="customFoodTransFat" class="form-control" placeholder="z.B. 0" min="0" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Eiweiß (g pro 100g)</label>
+            <input type="number" id="customFoodEiweiss" class="form-control" placeholder="z.B. 20" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cholesterin (mg pro 100g)</label>
+            <input type="number" id="customFoodChol" class="form-control" placeholder="Automatisch geschätzt" min="0">
+            <small id="cholesterolEstimate" style="color: var(--color-text-secondary); font-size: var(--font-size-sm);"></small>
+          </div>
+          <div id="customFoodLiveEffect" class="effect-display" style="display: none;"></div>
+          <button id="addCustomFoodBtn" class="btn btn--primary btn--full-width">Lebensmittel hinzufügen</button>
+        </div>
+
+        <div class="settings-section">
+          <h3>Lebensmittel-Datenbank</h3>
+          <div class="form-group">
+            <input type="text" id="foodSearch" class="form-control" placeholder="Suchen...">
+          </div>
+          <div class="form-group">
+            <select id="categoryFilter" class="form-control">
+              <option value="">Alle Kategorien</option>
+              <option value="desserts">Desserts</option>
+              <option value="bread">Brot &amp; Backwaren</option>
+              <option value="meat">Fleisch</option>
+              <option value="fish">Fisch</option>
+              <option value="vegetables">Gemüse</option>
+              <option value="fruits">Obst</option>
+              <option value="dairy">Milchprodukte</option>
+              <option value="oils">Öle &amp; Fette</option>
+              <option value="nuts">Nüsse &amp; Samen</option>
+              <option value="grains">Getreide</option>
+              <option value="legumes">Hülsenfrüchte</option>
+              <option value="fastfood">Fast Food</option>
+              <option value="snacks">Snacks</option>
+              <option value="beverages">Getränke</option>
+              <option value="oesterreichisch">Österreichisch</option>
+            </select>
+          </div>
+          <div id="foodDatabaseList" class="food-list"></div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Firebase Status</h3>
+          <div id="firebaseStatus" class="status status--info">Verbunden</div>
+        </div>
+      </div>
     </div>
 
-    <!-- APP CONTENT (WRAPPER) -->
-    <div id="appContent" style="display: none;">
-        <div class="app-container">
-            <div class="app-header">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); flex-wrap: wrap;">
-                <div style="flex: 1;">
-                    <h1>⛨ Auf Kurs - Health</h1>
-                    <p>Professionelles Gesundheits-Tracking-System | Start: 01.11.2025</p>
-                </div>
-                <div id="syncStatus" style="padding: var(--space-12); border-radius: var(--radius-base); background: var(--color-background); border: 1px solid var(--color-border); min-width: 200px; text-align: center;">
-                    <div style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">Sync-Status</div>
-                    <div id="syncStatusText" style="font-weight: 600; font-size: 14px; color: var(--color-text);">⏳ Verbinde...</div>
-                    <div id="syncStatusTime" style="font-size: 12px; color: var(--color-text-secondary); margin-top: var(--space-4);"></div>
-                </div>
-            </div>
-        </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item" data-tab="add">
+        <span class="nav-icon">➕</span>
+        <span class="nav-label">Hinzufügen</span>
+      </button>
+      <button class="nav-item active" data-tab="day">
+        <span class="nav-icon">📅</span>
+        <span class="nav-label">Tag</span>
+      </button>
+      <button class="nav-item" data-tab="week">
+        <span class="nav-icon">📈</span>
+        <span class="nav-label">Woche</span>
+      </button>
+      <button class="nav-item" data-tab="development">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Entwicklung</span>
+      </button>
+      <button class="nav-item" data-tab="settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Einstellungen</span>
+      </button>
+    </nav>
+  </div>
 
-        <nav class="tab-navigation">
-            <button class="tab-button active" data-tab="eintrag">📝 Eintrag</button>
-            <button class="tab-button" data-tab="tagesanalyse">📅 Tagesanalyse</button>
-            <button class="tab-button" data-tab="wochenanalyse">📊 Wochenanalyse</button>
-            <button class="tab-button" data-tab="monatsanalyse">📈 Monatsanalyse</button>
-            <button class="tab-button" data-tab="bonusprogramm">🎯 Bonusprogramm</button>
-<button class="tab-button" data-tab="loeschen">🗑️ Einträge löschen</button>
-
-        </nav>
-
-        <!-- Eintrag Tab -->
-        <div id="tab-eintrag" class="tab-content active">
-            <div id="alertContainer"></div>
-            
-            <div class="form-section">
-                <h3>Kategorie auswählen</h3>
-                <div class="form-group">
-                    <select id="categorySelect">
-                        <option value="">-- Bitte wählen --</option>
-                        <option value="ernaehrung">🥘 Ernährung</option>
-                        <option value="trinken">💧 Trinken</option>
-                        <option value="sport">⚽ Sport</option>
-                        <option value="schlaf">😴 Schlaf</option>
-                        <option value="rauchstatus">🚭 Rauchstatus</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Ernährung Form -->
-            <div id="form-ernaehrung" class="form-section hidden">
-                <h3>🥘 Ernährung erfassen</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Datum*</label>
-                        <input type="date" id="ern-datum" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Zeit*</label>
-                        <input type="time" id="ern-zeit" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Ort*</label>
-                        <select id="ern-ort" required>
-                            <option value="">-- Bitte wählen --</option>
-                            <option value="Arbeit">Arbeit</option>
-                            <option value="Freizeit">Freizeit</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Gericht*</label>
-                        <input type="text" id="ern-gericht" placeholder="z.B. Kebap Huhn" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Portion (g)*</label>
-                        <input type="number" id="ern-portion" placeholder="z.B. 450" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Kalorien (kcal)*</label>
-                        <input type="number" id="ern-kcal" placeholder="z.B. 550" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Fett (g)*</label>
-                        <input type="number" step="0.1" id="ern-fett" placeholder="z.B. 18" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Kohlenhydrate (g)*</label>
-                        <input type="number" step="0.1" id="ern-kh" placeholder="z.B. 60" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Eiweiß (g)*</label>
-                        <input type="number" step="0.1" id="ern-eiweiss" placeholder="z.B. 35" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Preis (€)*</label>
-                        <input type="number" step="0.1" id="ern-preis" placeholder="z.B. 8.30" required>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveEntry('ernaehrung')">💾 Speichern</button>
-            </div>
-
-            <!-- Trinken Form -->
-            <div id="form-trinken" class="form-section hidden">
-                <h3>💧 Trinken erfassen</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Datum*</label>
-                        <input type="date" id="trink-datum" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Zeit*</label>
-                        <input type="time" id="trink-zeit" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Getränk*</label>
-                        <input type="text" id="trink-getraenk" placeholder="z.B. Wasser" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Kategorie*</label>
-                        <select id="trink-kategorie" required>
-                            <option value="">-- Bitte wählen --</option>
-                            <option value="Wasser">Wasser</option>
-                            <option value="Kaffee">Kaffee (schwarz)</option>
-                            <option value="Cola">Cola</option>
-                            <option value="Bier">Bier (0,5l)</option>
-                            <option value="Eistee">Eistee Zero</option>
-                            <option value="Saft">Orangensaft</option>
-                            <option value="Wasser_Zitrone">Wasser mit Zitrone</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Menge (Liter)*</label>
-                        <input type="number" step="0.1" id="trink-menge" placeholder="z.B. 0.5" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Zucker (g)</label>
-                        <input type="number" step="0.1" id="trink-zucker" placeholder="Auto-berechnet">
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveEntry('trinken')">💾 Speichern</button>
-            </div>
-
-            <!-- Sport Form -->
-            <div id="form-sport" class="form-section hidden">
-                <h3>⚽ Sport erfassen</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Datum*</label>
-                        <input type="date" id="sport-datum" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Aktivität*</label>
-                        <select id="sport-aktivitaet">
-                            <option value="">-- Bitte wählen (oder nur Schritte/Liegezeit) --</option>
-                            <option value="Joggen">Joggen</option>
-                            <option value="Krafttraining">Krafttraining</option>
-                            <option value="Holz Schlichten">Holz Schlichten</option>
-                            <option value="Gartenarbeit">Gartenarbeit</option>
-                            <option value="Cardio (HIIT)">Cardio (HIIT)</option>
-                            <option value="Liegestütze/Kniebeugen">Liegestütze/Kniebeugen</option>
-                            <option value="Yoga">Yoga</option>
-                            <option value="Spinning">Spinning</option>
-                            <option value="Schwimmen">Schwimmen</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Dauer (Minuten)</label>
-                        <input type="number" id="sport-dauer" placeholder="z.B. 30">
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label style="margin-bottom: var(--space-12); font-size: 15px; font-weight: 600;">Intensität (WIE ANSTRENGEND WAR ES?)</label>
-                        <div style="display: flex; flex-direction: column; gap: var(--space-12);">
-                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
-                                <input type="radio" name="sport-intensitaet" value="leicht" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
-                                <div>
-                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Leicht</div>
-                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "ruhiger Spaziergang", "normales Tempo" → Score: 1,5-2,5/10</div>
-                                </div>
-                            </label>
-                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
-                                <input type="radio" name="sport-intensitaet" value="moderat" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
-                                <div>
-                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Moderat</div>
-                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "anstrengend aber machbar", "habe geschwitzt" → Score: 4,0-5,5/10</div>
-                                </div>
-                            </label>
-                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
-                                <input type="radio" name="sport-intensitaet" value="schwer" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
-                                <div>
-                                    <div style="font-weight: 600; margin-bottom: 4px;">⦿ Schwer</div>
-                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "komplett kaputt", "bin erschöpft" → Score: 6,5-7,5/10 ⭐</div>
-                                </div>
-                            </label>
-                            <label style="display: flex; align-items: flex-start; padding: var(--space-12); border: 2px solid var(--color-border); border-radius: var(--radius-base); cursor: pointer; transition: all 0.2s;" class="intensity-option">
-                                <input type="radio" name="sport-intensitaet" value="extrem" style="margin-top: 2px; margin-right: var(--space-8); cursor: pointer;">
-                                <div>
-                                    <div style="font-weight: 600; margin-bottom: 4px;">○ Extrem</div>
-                                    <div style="font-size: 13px; color: var(--color-text-secondary);">z.B. "am Ende meiner Kräfte", "maximal ausgepowert" → Score: 8,0-9,0/10</div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Schritte heute (NEUER EINTRAG)</label>
-                        <input type="number" id="sport-schritte" placeholder="z.B. 10000 → +6,0 Pkt">
-                        <small style="color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; display: block;">Pro 500 Schritte = +0,3 Punkte | Beispiel: 10000 Schritte = +6,0 Pkt</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Liegezeit / TV (Minuten, NEUER EINTRAG)</label>
-                        <input type="number" id="sport-liegezeit" placeholder="z.B. 120 (für 2h) → -1,2 Pkt">
-                        <small style="color: var(--color-text-secondary); font-size: 12px; margin-top: 4px; display: block;">Pro 30 Min = -0,3 Punkte | Beispiel: 120min = -1,2 Pkt</small>
-                    </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>Kommentar (optional)</label>
-                        <textarea id="sport-kommentar" rows="2" placeholder="z.B. 'War total k.o. danach'" style="resize: vertical;"></textarea>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveEntry('sport')">💾 Speichern</button>
-            </div>
-
-            <!-- Schlaf Form -->
-            <div id="form-schlaf" class="form-section hidden">
-                <h3>😴 Schlaf erfassen</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Datum (Aufwachen)*</label>
-                        <input type="date" id="schlaf-datum" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Dauer (Stunden)*</label>
-                        <input type="number" step="0.5" id="schlaf-dauer" placeholder="z.B. 8.5" required>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveEntry('schlaf')">💾 Speichern</button>
-            </div>
-
-            <!-- Rauchstatus Form -->
-            <div id="form-rauchstatus" class="form-section hidden">
-                <h3>🚭 Rauchstatus erfassen</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Datum*</label>
-                        <input type="date" id="rauch-datum" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Rauchfrei heute?*</label>
-                        <select id="rauch-status" required>
-                            <option value="">-- Bitte wählen --</option>
-                            <option value="ja">✅ Ja, rauchfrei</option>
-                            <option value="nein">❌ Nein, geraucht</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveEntry('rauchstatus')">💾 Speichern</button>
-            </div>
-        </div>
-
-        <!-- Tagesanalyse Tab -->
-        <div id="tab-tagesanalyse" class="tab-content">
-            <div id="tagesanalyseContent"></div>
-        </div>
-
-        <!-- Wochenanalyse Tab -->
-        <div id="tab-wochenanalyse" class="tab-content">
-            <div id="wochenanalyseContent">
-                <div class="analysis-section">
-                    <p style="text-align: center; padding: 40px; color: var(--color-text-secondary);">
-                        <span style="font-size: 18px; font-weight: 600;">⏳ Lade Wochenanalyse...</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monatsanalyse Tab -->
-        <div id="tab-monatsanalyse" class="tab-content">
-            <div id="monatsanalyseContent"></div>
-        </div>
-
-        <!-- Bonus Tab -->
-        <div id="tab-bonusprogramm" class="tab-content">
-            <div id="bonusContent"></div>
-        </div>
-          <!-- 🗑️ EINTRÄGE LÖSCHEN TAB -->
-        <div id="tab-loeschen" class="tab-content">
-            <div class="analysis-section">
-                <h2>🗑️ Einträge löschen</h2>
-                <p>Wähle Einträge aus, die du löschen möchtest:</p>
-                
-                <div style="margin: var(--space-16) 0; display: flex; gap: var(--space-12); flex-wrap: wrap;">
-                    <button class="btn btn-secondary" onclick="selectAllEntries()">
-                        ✅ Alle auswählen
-                    </button>
-                    <button class="btn btn-secondary" onclick="deselectAllEntries()">
-                        ❌ Alle abwählen
-                    </button>
-                    <button class="btn" onclick="deleteSelectedEntries()" style="background: var(--color-error); color: white;">
-                        🗑️ Ausgewählte löschen
-                    </button>
-                </div>
-                
-                <div id="deleteEntriesList"></div>
-            </div>
-        </div>
-
-
-     <!-- Firebase SDK - COMPAT Version -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-    
-    <!-- Chart.js & App -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="app.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
