@@ -690,6 +690,32 @@ async function handleAuthSubmit(e) {
     }
   }
 }
+
+// Firebase Auth State Listener - Auto-Login bei Reload
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    // User ist eingeloggt
+    console.log('✅ User bereits eingeloggt:', user.email);
+    currentUser = user;
+    
+    // Daten aus Firestore laden
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      appState.cholesterinBaseline = userData.baseline || { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
+    }
+    
+    const entriesSnapshot = await db.collection('users').doc(user.uid).collection('entries').get();
+    appState.entries = entriesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+    setAuthStatus(true);
+  } else {
+    // User ist ausgeloggt
+    console.log('ℹ️ Kein User eingeloggt');
+    setAuthStatus(false);
+  }
+});
+
 // Initial auth render - WARTE auf Firebase
 function initAuth() {
   if (window.firebaseReady) {
