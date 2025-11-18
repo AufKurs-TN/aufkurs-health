@@ -716,11 +716,35 @@ if (logoutBtn) {
 }
 // End authentication
 
-// Overwrite saveUserData
-function saveUserData() {
-  if (!currentUser) return;
-  saveEntriesForUser(currentUser.userId, appState.entries);
-  saveBaselineForUser(currentUser.userId, appState.cholesterinBaseline);
+async function saveUserData() {
+  if (currentUser) {
+    try {
+      // Speichere Baseline in Firestore
+      await db.collection('users').doc(currentUser.uid).set({
+        baseline: appState.cholesterinBaseline
+      }, { merge: true });
+      
+      // Speichere alle Einträge in Firestore
+      // Lösche alte Einträge
+      const entriesRef = db.collection('users').doc(currentUser.uid).collection('entries');
+      const oldEntries = await entriesRef.get();
+      const batch = db.batch();
+      oldEntries.forEach(doc => batch.delete(doc.ref));
+      
+      // Füge neue Einträge hinzu
+      appState.entries.forEach(entry => {
+        const entryRef = entriesRef.doc(entry.id);
+        batch.set(entryRef, entry);
+      });
+      
+      await batch.commit();
+      console.log('✅ Daten in Firebase gespeichert');
+    } catch (error) {
+      console.error('❌ Fehler beim Speichern:', error);
+    }
+  }
+}
+
   // Status (simulate success)
   const statusEl = document.getElementById('firebaseStatus');
   if (statusEl) {
