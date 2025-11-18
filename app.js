@@ -2028,29 +2028,6 @@ document.getElementById('saveBaselineBtn').addEventListener('click', () => {
   alert('Basiswerte gespeichert!');
 });
 
-// Auto-login for demo (check if user was logged in)
-window.addEventListener('DOMContentLoaded', () => {
-  const localUser = getLocalUser();
-  if (localUser) {
-    currentUser = localUser;
-    appState.entries = loadEntriesForUser(localUser.userId);
-    appState.cholesterinBaseline = loadBaselineForUser(localUser.userId);
-    setAuthStatus(true);
-  }
-});
-
-// Create demo user for testing
-if (Object.keys(userDatabase).length === 0) {
-  const demoUser = {
-    email: 'demo@test.de',
-    password: 'demo123',
-    userId: 'demo-user-id',
-    entries: [],
-    baseline: { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' }
-  };
-  userDatabase['demo@test.de'] = demoUser;
-}
-
 function renderFoodDatabase(searchTerm = '', category = '') {
   let filtered = foodDatabase;
   
