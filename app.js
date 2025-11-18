@@ -2086,7 +2086,20 @@ function refreshAllViews() {
     if (tabId === 'settings') renderSettingsView();
   }
 }
-
+// Initialize - Warte auf DOM UND Firebase
+document.addEventListener('DOMContentLoaded', () => {
+  function initAuth() {
+    if (window.firebaseReady) {
+      console.log('✅ Starting auth initialization');
+      renderAuthForm();
+    } else {
+      console.log('⏳ Waiting for Firebase...');
+      setTimeout(initAuth, 100);
+    }
+  }
+  
+  initAuth();
+});
 function initializeApp() {
   appState.viewedDate = getCurrentDate();
   appState.viewedWeek = getWeekNumber(getCurrentDate());
