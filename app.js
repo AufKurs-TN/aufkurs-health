@@ -1308,33 +1308,33 @@ function renderLDLChart() {
       labels: labels,
       datasets: [
         {
-  label: 'Zielwert <100 (Gut)',
-  data: Array(labels.length).fill(100),
-  borderColor: '#FFD93D',
-  borderDash: [10, 5],  // ✅ Längere Striche
-  borderWidth: 2,       // ✅ Dicker (war 3, jetzt 2)
-  pointRadius: 0,
-  fill: false
-},
-{
-  label: 'Optimal <70',
-  data: Array(labels.length).fill(70),
-  borderColor: '#2ECC71',
-  borderDash: [10, 5],  // ✅ Längere Striche
-  borderWidth: 2,       // ✅ Dicker
-  pointRadius: 0,
-  fill: false
-},
-{
-  label: 'Hoch >160',
-  data: Array(labels.length).fill(160),
-  borderColor: '#E74C3C',
-  borderDash: [10, 5],  // ✅ Längere Striche
-  borderWidth: 2,       // ✅ Dicker
-  pointRadius: 0,
-  fill: false
-}
-
+         {
+          label: 'Zielwert <100 (Gut)',
+          data: Array(labels.length).fill(100),
+          borderColor: '#FFD93D',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Optimal <70',
+          data: Array(labels.length).fill(70),
+          borderColor: '#2ECC71',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Hoch >160',
+          data: Array(labels.length).fill(160),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
       ]
     },
     options: {
