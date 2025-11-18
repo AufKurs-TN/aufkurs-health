@@ -2268,6 +2268,7 @@ function bindStressForm() {
     switchTab('day');
   });
 }
+
 // Initial auth render - WARTE auf Firebase
 function initAuth() {
   if (window.firebaseReady) {
@@ -2278,3 +2279,5 @@ function initAuth() {
     setTimeout(initAuth, 100);
   }
 }
+
+initAuth();
