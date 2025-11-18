@@ -27,52 +27,6 @@
     </div>
   </div>
 
-
-async function loginUser() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const errorDiv = document.getElementById('loginError');
-    
-    errorDiv.innerText = '';
-    if (!email || !password) {
-        errorDiv.innerText = '❌ Email und Passwort erforderlich!';
-        return;
-    }
-    
-    try {
-        errorDiv.innerText = '⏳ Anmelden...';
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        console.log('✅ Benutzer angemeldet:', userCredential.user.uid);
-        
-        // 🆕 Session Persistence NACH erfolgreicher Anmeldung!
-        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .then(() => {
-                console.log('✅ Session Persistence aktiviert');
-            })
-            .catch((error) => {
-                console.error('❌ Persistence Fehler:', error);
-            });
-        
-        localStorage.setItem('userId', userCredential.user.uid);
-        
-        // 🆕 Cloud Sync starten!
-        await loadAppStateFromCloud();
-        setupRealtimeSync(userCredential.user.uid);
-        
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('appContent').style.display = 'block';
-    } catch (error) {
-        console.error('❌ Fehler:', error.message);
-        if (error.code === 'auth/user-not-found') {
-            errorDiv.innerText = '❌ Benutzer nicht gefunden!';
-        } else if (error.code === 'auth/wrong-password') {
-            errorDiv.innerText = '❌ Falsches Passwort!';
-        } else {
-            errorDiv.innerText = '❌ ' + error.message;
-        }
-    }
-}
-
   <!-- Main App Screen -->
   <div id="appScreen" class="screen" style="display: none;">
     <!-- Header -->
@@ -545,6 +499,7 @@ async function loginUser() {
   <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
