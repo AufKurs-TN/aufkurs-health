@@ -1140,19 +1140,14 @@ function setupEssenPortionListener() {
   
   if (!essenNameInput || !essenGrammInput) {
     console.warn('⚠️ Essen-Felder noch nicht geladen');
+    setTimeout(setupEssenPortionListener, 500);
     return;
   }
   
-  // Überwache das Feld kontinuierlich
-  let lastValue = '';
-  
-  setInterval(() => {
-    const currentValue = essenNameInput.value.toLowerCase();
+  function setPortionSize() {
+    const currentValue = essenNameInput.value.toLowerCase().trim();
     
-    // Nur wenn sich der Wert geändert hat
-    if (currentValue !== lastValue && currentValue.length > 0) {
-      lastValue = currentValue;
-      
+    if (currentValue.length > 0) {
       const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
       const food = allFoods.find(f => f.name === currentValue);
       
@@ -1179,18 +1174,34 @@ function setupEssenPortionListener() {
         const defaultPortion = food.portionSize || portionSizes[food.kategorie] || 100;
         console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
         essenGrammInput.value = defaultPortion;
-        updateEssenPreview();
+        
+        // Trigger Preview-Update
+        if (typeof updateEssenPreview === 'function') {
+          updateEssenPreview();
+        }
       }
     }
-  }, 200); // Prüfe alle 200ms
+  }
   
-  console.log('✅ Portionsgrößen-Überwachung aktiviert (Polling)');
+  // Lausche auf ALLE Events
+  essenNameInput.addEventListener('input', setPortionSize);
+  essenNameInput.addEventListener('change', setPortionSize);
+  essenNameInput.addEventListener('blur', setPortionSize);
+  
+  // ZUSÄTZLICH: Polling als Backup (falls Events nicht triggern)
+  let lastValue = '';
+  setInterval(() => {
+    const currentValue = essenNameInput.value.toLowerCase().trim();
+    if (currentValue !== lastValue && currentValue.length > 0) {
+      lastValue = currentValue;
+      setPortionSize();
+    }
+  }, 300);
+  
+  console.log('✅ Portionsgrößen-Listener aktiviert (Events + Polling)');
 }
 
 setTimeout(setupEssenPortionListener, 500);
-
-
-
 
 document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
 
