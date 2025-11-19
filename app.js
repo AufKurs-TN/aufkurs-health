@@ -1046,10 +1046,10 @@ essenGrammInput.addEventListener('input', updateEssenPreview);
 document.getElementById('saveEssenBtn').addEventListener('click', () => {
   console.log('🔵 Essen-Button geklickt!');
   
-  const foodName = essenNameInput.value.toLowerCase();
+  const foodName = document.getElementById('essenName').value.toLowerCase();
   console.log('🟡 foodName:', foodName);
   
-  const gramm = parseInt(essenGrammInput.value) || 100;
+  const gramm = parseInt(document.getElementById('essenGramm').value) || 100;
   
   // Suche in BEIDEN Datenbanken (Standard + Custom)
   const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
@@ -1087,8 +1087,8 @@ document.getElementById('saveEssenBtn').addEventListener('click', () => {
   appState.entries.push(entry);
   saveUserData();
   
-  essenNameInput.value = '';
-  essenGrammInput.value = '100';
+  document.getElementById('essenName').value = '';
+  document.getElementById('essenGramm').value = '100';
   document.getElementById('essenNutrition').innerHTML = '';
   document.getElementById('essenEffect').innerHTML = '';
   document.getElementById('essenScoreDisplay').innerHTML = '';
@@ -1097,6 +1097,7 @@ document.getElementById('saveEssenBtn').addEventListener('click', () => {
   
   switchTab('day');
 });
+
 
 // Sport Form Logic
 function updateSportPreview() {
