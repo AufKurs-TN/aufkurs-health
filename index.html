@@ -339,6 +339,22 @@
         </div>
 
         <div class="chart-section">
+                  <div class="chart-section">
+                    
+          <h3>Triglyzeride Entwicklung</h3>
+          <div class="time-range-selector">
+            <button class="time-btn active" data-chart="trig" data-range="week">Woche</button>
+            <button class="time-btn" data-chart="trig" data-range="month">Monat</button>
+            <button class="time-btn" data-chart="trig" data-range="3months">3 Monate</button>
+            <button class="time-btn" data-chart="trig" data-range="6months">6 Monate</button>
+            <button class="time-btn" data-chart="trig" data-range="year">1 Jahr</button>
+            <button class="time-btn" data-chart="trig" data-range="2years">2 Jahre</button>
+            <button class="time-btn" data-chart="trig" data-range="5years">5 Jahre</button>
+            <button class="time-btn" data-chart="trig" data-range="all">Beginn</button>
+          </div>
+          <div class="chart-container" style="height: 250px;"><canvas id="trigChart"></canvas></div>
+        </div>
+
           <h3>Gesamtcholesterin Entwicklung</h3>
           <div class="time-range-selector">
             <button class="time-btn active" data-chart="total" data-range="week">Woche</button>
@@ -529,6 +545,7 @@ console.log('✅ Firebase initialized');
   <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
