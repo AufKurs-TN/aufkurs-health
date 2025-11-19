@@ -1070,57 +1070,59 @@ function updateEssenPreview() {
 // Setup food input listener with automatic portion sizing
 function setupEssenPortionListener() {
   const essenNameInput = document.getElementById('essenName');
+  const essenGrammInput = document.getElementById('essenGramm');
   
-  if (!essenNameInput) {
-    console.warn('⚠️ essenName Feld noch nicht geladen');
+  if (!essenNameInput || !essenGrammInput) {
+    console.warn('⚠️ Essen-Felder noch nicht geladen');
     return;
   }
   
-  // Funktion um Portion zu setzen
-  function setPortionSize() {
-    const foodName = essenNameInput.value.toLowerCase();
-    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
-    const food = allFoods.find(f => f.name === foodName);
+  // Überwache das Feld kontinuierlich
+  let lastValue = '';
+  
+  setInterval(() => {
+    const currentValue = essenNameInput.value.toLowerCase();
     
-    // ✅ NEU: Setze automatisch die typische Portionsgröße
-    if (food) {
-      // Portionsgrößen nach Kategorie (INLINE!)
-      const portionSizes = {
-        'fruits': 130,
-        'vegetables': 100,
-        'bread': 50,
-        'meat': 150,
-        'fish': 150,
-        'fastfood': 200,
-        'grains': 150,
-        'dairy': 200,
-        'nuts': 30,
-        'desserts': 100,
-        'beverages': 250,
-        'snacks': 50,
-        'oils': 10,
-        'legumes': 150,
-        'oesterreichisch': 250,
-        'custom': 100
-      };
+    // Nur wenn sich der Wert geändert hat
+    if (currentValue !== lastValue && currentValue.length > 0) {
+      lastValue = currentValue;
       
-      const defaultPortion = food.portionSize || portionSizes[food.kategorie] || 100;
-      console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
-      document.getElementById('essenGramm').value = defaultPortion;
-      updateEssenPreview();
+      const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+      const food = allFoods.find(f => f.name === currentValue);
+      
+      if (food) {
+        const portionSizes = {
+          'fruits': 130,
+          'vegetables': 100,
+          'bread': 50,
+          'meat': 150,
+          'fish': 150,
+          'fastfood': 200,
+          'grains': 150,
+          'dairy': 200,
+          'nuts': 30,
+          'desserts': 100,
+          'beverages': 250,
+          'snacks': 50,
+          'oils': 10,
+          'legumes': 150,
+          'oesterreichisch': 250,
+          'custom': 100
+        };
+        
+        const defaultPortion = food.portionSize || portionSizes[food.kategorie] || 100;
+        console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
+        essenGrammInput.value = defaultPortion;
+        updateEssenPreview();
+      }
     }
-  }
+  }, 200); // Prüfe alle 200ms
   
-  // Lausche auf ALLE relevanten Events
-  essenNameInput.addEventListener('input', setPortionSize);
-  essenNameInput.addEventListener('change', setPortionSize);
-  essenNameInput.addEventListener('blur', setPortionSize);
-  
-  console.log('✅ Portionsgrößen-Listener aktiviert (input, change, blur)');
+  console.log('✅ Portionsgrößen-Überwachung aktiviert (Polling)');
 }
 
-// Call this when page is ready
 setTimeout(setupEssenPortionListener, 500);
+
 
 
 
