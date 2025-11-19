@@ -2105,43 +2105,6 @@ document.getElementById('saveBaselineBtn').addEventListener('click', () => {
   alert('Basiswerte gespeichert!');
 });
 
-function renderFoodDatabase(searchTerm = '', category = '') {
-  let filtered = foodDatabase;
-  
-  if (searchTerm) {
-    filtered = filtered.filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }
-  
-  if (category) {
-    filtered = filtered.filter(f => f.kategorie === category);
-  }
-  
-  const container = document.getElementById('foodDatabaseList');
-  container.innerHTML = filtered.map(food => `
-    <div class="food-item">
-      <div class="food-item-name">${food.name}</div>
-      <div class="food-item-category">${food.kategorie}</div>
-      <div class="food-item-nutrition">
-        <span>Kcal: ${food.kcal}</span>
-        <span>KH: ${food.kh}g</span>
-        <span>Fett: ${food.fett}g</span>
-        <span>Eiweiß: ${food.eiweiss}g</span>
-        <span>Chol: ${food.chol}mg</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-document.getElementById('foodSearch').addEventListener('input', (e) => {
-  const category = document.getElementById('categoryFilter').value;
-  renderFoodDatabase(e.target.value, category);
-});
-
-document.getElementById('categoryFilter').addEventListener('change', (e) => {
-  const search = document.getElementById('foodSearch').value;
-  renderFoodDatabase(search, e.target.value);
-});
-
 function refreshAllViews() {
   const activeTab = document.querySelector('.tab-content.active');
   if (activeTab) {
