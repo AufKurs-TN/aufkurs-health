@@ -746,6 +746,7 @@ initAuth();
 function clearAppState() {
   appState.entries = [];
   appState.cholesterinBaseline = { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
+  appState.customFoods = [];
 }
 
 // ✅ NEUE VERSION mit Firebase:
