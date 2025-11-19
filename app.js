@@ -16,11 +16,13 @@ let navItems = null;
 let tabContents = null;
 let ldlChart = null;
 let hdlChart = null;
+let trigChart = null;
 let totalChart = null;
 let scoreChart = null;
 const chartTimeRanges = {
   ldl: 'week',
   hdl: 'week',
+  trig: 'week',
   total: 'week',
   score: 'week'
 };
