@@ -1462,10 +1462,10 @@ function renderTriglyceridesChart() {
     labels.push(formatChartLabel(date, 'trig'));
   });
   
-  const ctx = document.getElementById('trigChart');
-  if (window.trigChart) window.trigChart.destroy();
+    const ctx = document.getElementById('trigChart');
+  if (trigChart) trigChart.destroy();
   
-  window.trigChart = new Chart(ctx, {
+  trigChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
