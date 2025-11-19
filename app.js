@@ -1064,20 +1064,36 @@ function updateEssenPreview() {
   }
 }
 
-// Update preview when food is selected
-document.getElementById('essenName').addEventListener('input', (e) => {
-  const foodName = e.target.value.toLowerCase();
-  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
-  const food = allFoods.find(f => f.name === foodName);
+// Setup food input listener with automatic portion sizing
+function setupEssenPortionListener() {
+  const essenNameInput = document.getElementById('essenName');
   
-  // ✅ NEU: Setze automatisch die typische Portionsgröße
-  if (food) {
-    const defaultPortion = getDefaultPortionSize(food);
-    document.getElementById('essenGramm').value = defaultPortion;
+  if (!essenNameInput) {
+    console.warn('⚠️ essenName Feld noch nicht geladen');
+    return;
   }
   
-  updateEssenPreview();
-});
+  essenNameInput.addEventListener('input', (e) => {
+    const foodName = e.target.value.toLowerCase();
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    const food = allFoods.find(f => f.name === foodName);
+    
+    // ✅ NEU: Setze automatisch die typische Portionsgröße
+    if (food) {
+      const defaultPortion = getDefaultPortionSize(food);
+      console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name);
+      document.getElementById('essenGramm').value = defaultPortion;
+    }
+    
+    updateEssenPreview();
+  });
+  
+  console.log('✅ Portionsgrößen-Listener aktiviert');
+}
+
+// Call this when page is ready - ADD THIS LINE AT THE VERY END OF YOUR app.js FILE
+setTimeout(setupEssenPortionListener, 500);
+
 
 document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
 
