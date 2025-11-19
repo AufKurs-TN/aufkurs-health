@@ -141,32 +141,26 @@
           <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
         </div>
 
-      <!-- Trinken Form -->
-        <div id="trinkenForm" class="entry-form" style="display: none;">
-          <h3>💧 Trinken hinzufügen</h3>
-          <div class="form-group">
-            <label class="form-label">Getränk</label>
-            <select id="trinkenType" class="form-control">
-              <option value="wasser">Wasser</option>
-              <option value="orangensaft">Orangensaft</option>
-              <option value="kaffee">Kaffee</option>
-              <option value="tee">Tee</option>
-              <option value="cola">Cola</option>
-              <option value="bier">Bier</option>
-              <option value="wein">Wein</option>
-              <option value="kaffee-mit-zucker">Kaffee mit Zucker</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Menge (ml)</label>
-            <input type="number" id="trinkenMenge" class="form-control" value="250" min="1">
-          </div>
-          <div id="trinkenEffect" class="effect-display"></div>
-          <div id="trinkenScoreDisplay" class="score-preview"></div>
-          <button id="saveTrinkenBtn" class="btn btn--primary btn--full-width">Speichern</button>
-          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
-        </div>
-        
+    <!-- Trinken Form -->
+<div id="trinkenForm" class="entry-form" style="display: none;">
+  <h3>💧 Trinken hinzufügen</h3>
+  <div class="form-group">
+    <label class="form-label">Getränk</label>
+    <input type="text" id="trinkenType" class="form-control" list="drinkList" placeholder="z.B. Cola Zero">
+    <datalist id="drinkList">
+      <!-- Wird dynamisch befüllt -->
+    </datalist>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Menge (ml)</label>
+    <input type="number" id="trinkenMenge" class="form-control" value="250" min="1">
+  </div>
+  <div id="trinkenEffect" class="effect-display"></div>
+  <div id="trinkenScoreDisplay" class="score-preview"></div>
+  <button id="saveTrinkenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+  <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+</div>
+
         <!-- Schlaf Form -->
         <div id="schlafForm" class="entry-form" style="display: none;">
           <h3>😴 Schlaf hinzufügen</h3>
@@ -517,6 +511,7 @@ console.log('✅ Firebase initialized');
   <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
