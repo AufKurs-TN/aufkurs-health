@@ -1442,7 +1442,7 @@ function renderHDLChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 0, max: 100 },
+        y: { beginAtZero: false, min: 10, max: 80 },
         x: { display: true }
       }
     }
@@ -1539,7 +1539,7 @@ function renderTotalCholesterolChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 0, max: 400 },
+        y: { beginAtZero: false, min: 100, max: 350 },
         x: { display: true }
       }
     }
