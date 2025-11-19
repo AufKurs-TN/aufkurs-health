@@ -1229,6 +1229,7 @@ function renderDevelopmentView() {
   
   renderLDLChart();
   renderHDLChart();
+  renderTriglyceridesChart();
   renderTotalCholesterolChart();
   renderScoreChart();
   
@@ -1248,6 +1249,7 @@ function renderDevelopmentView() {
       
       if (chart === 'ldl') renderLDLChart();
       if (chart === 'hdl') renderHDLChart();
+      if (chart === 'trig') renderTriglyceridesChart();
       if (chart === 'total') renderTotalCholesterolChart();
       if (chart === 'score') renderScoreChart();
     });
@@ -1310,15 +1312,24 @@ function renderLDLChart() {
         {
           label: 'LDL',
           data: ldlValues,
-          borderColor: '#E74C3C',
-          backgroundColor: 'rgba(231, 76, 60, 0.1)',
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
           tension: 0.3,
           fill: true,
           pointRadius: 4,
-          pointBackgroundColor: '#E74C3C'
+          pointBackgroundColor: '#000000'
         },
         {
-          label: 'Zielwert <100 (Gut)',
+          label: 'Optimal <70',
+          data: Array(labels.length).fill(70),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Gut <100',
           data: Array(labels.length).fill(100),
           borderColor: '#FFD93D',
           borderDash: [5, 5],
@@ -1327,18 +1338,9 @@ function renderLDLChart() {
           fill: false
         },
         {
-          label: 'Optimal <70',
-          data: Array(labels.length).fill(70),
-          borderColor: '#2ECC71',
-          borderDash: [5, 5],
-          borderWidth: 3,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Hoch >160',
+          label: 'Grenzwertig >160',
           data: Array(labels.length).fill(160),
-          borderColor: '#E74C3C',
+          borderColor: '#2ECC71',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
@@ -1399,17 +1401,17 @@ function renderHDLChart() {
         {
           label: 'HDL',
           data: hdlValues,
-          borderColor: '#2ECC71',
-          backgroundColor: 'rgba(46, 204, 113, 0.1)',
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
           tension: 0.3,
           fill: true,
           pointRadius: 4,
-          pointBackgroundColor: '#2ECC71'
+          pointBackgroundColor: '#000000'
         },
         {
           label: 'Optimal >60',
           data: Array(labels.length).fill(60),
-          borderColor: '#2ECC71',
+          borderColor: '#3498DB',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
@@ -1425,9 +1427,9 @@ function renderHDLChart() {
           fill: false
         },
         {
-          label: 'Minimum >40',
+          label: 'Grenzwertig <40',
           data: Array(labels.length).fill(40),
-          borderColor: '#E74C3C',
+          borderColor: '#2ECC71',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
@@ -1443,6 +1445,94 @@ function renderHDLChart() {
       },
       scales: {
         y: { beginAtZero: false, min: 10, max: 80 },
+        x: { display: true }
+      }
+    }
+  });
+}
+
+function renderTriglyceridesChart() {
+  const range = getDateRange(chartTimeRanges.trig || 'week');
+  const baseline = appState.cholesterinBaseline;
+  const relevantEntries = appState.entries.filter(e => {
+    const date = new Date(e.datum);
+    return date >= range.start && date <= range.end;
+  });
+  
+  const dateMap = {};
+  relevantEntries.forEach(e => {
+    if (!dateMap[e.datum]) dateMap[e.datum] = [];
+    dateMap[e.datum].push(e);
+  });
+  
+  const dates = Object.keys(dateMap).sort();
+  let currentTrig = baseline.triglyzeride;
+  const trigValues = [];
+  const labels = [];
+  
+  dates.forEach(date => {
+    const dayEntries = dateMap[date];
+    const totalEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.trig || 0), 0);
+    currentTrig += totalEffect;
+    trigValues.push(Math.round(currentTrig * 10) / 10);
+    labels.push(formatChartLabel(date, 'trig'));
+  });
+  
+  const ctx = document.getElementById('trigChart');
+  if (window.trigChart) window.trigChart.destroy();
+  
+  window.trigChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Triglyzeride',
+          data: trigValues,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#000000'
+        },
+        {
+          label: 'Optimal <100',
+          data: Array(labels.length).fill(100),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Gut <150',
+          data: Array(labels.length).fill(150),
+          borderColor: '#FFD93D',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Grenzwertig >200',
+          data: Array(labels.length).fill(200),
+          borderColor: '#2ECC71',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' }
+      },
+      scales: {
+        y: { beginAtZero: false, min: 0, max: 300 },
         x: { display: true }
       }
     }
@@ -1496,24 +1586,24 @@ function renderTotalCholesterolChart() {
         {
           label: 'Gesamtcholesterin',
           data: totalValues,
-          borderColor: '#3498DB',
-          backgroundColor: 'rgba(52, 152, 219, 0.1)',
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
           tension: 0.3,
           fill: true,
           pointRadius: 4,
-          pointBackgroundColor: '#3498DB'
+          pointBackgroundColor: '#000000'
         },
         {
-          label: 'Ideal <200',
+          label: 'Optimal <200',
           data: Array(labels.length).fill(200),
-          borderColor: '#2ECC71',
+          borderColor: '#3498DB',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
           fill: false
         },
         {
-          label: 'Grenzwertig <239',
+          label: 'Gut <239',
           data: Array(labels.length).fill(239),
           borderColor: '#FFD93D',
           borderDash: [5, 5],
@@ -1522,9 +1612,9 @@ function renderTotalCholesterolChart() {
           fill: false
         },
         {
-          label: 'Hoch >240',
+          label: 'Grenzwertig >240',
           data: Array(labels.length).fill(240),
-          borderColor: '#E74C3C',
+          borderColor: '#2ECC71',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
@@ -1581,24 +1671,24 @@ function renderScoreChart() {
         {
           label: 'Gesundheitsscore',
           data: scoreValues,
-          borderColor: '#9B59B6',
-          backgroundColor: 'rgba(155, 89, 182, 0.1)',
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
           tension: 0.3,
           fill: true,
           pointRadius: 4,
-          pointBackgroundColor: '#9B59B6'
+          pointBackgroundColor: '#000000'
         },
         {
-          label: 'Gut >7.0',
+          label: 'Optimal >7.0',
           data: Array(labels.length).fill(7.0),
-          borderColor: '#2ECC71',
+          borderColor: '#3498DB',
           borderDash: [5, 5],
           borderWidth: 3,
           pointRadius: 0,
           fill: false
         },
         {
-          label: 'Moderat 5.0',
+          label: 'Gut >5.0',
           data: Array(labels.length).fill(5.0),
           borderColor: '#FFD93D',
           borderDash: [5, 5],
@@ -1621,6 +1711,7 @@ function renderScoreChart() {
     }
   });
 }
+
 
 function renderEntriesList(entries, containerId) {
   const container = document.getElementById(containerId);
