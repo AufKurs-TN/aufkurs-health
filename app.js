@@ -362,6 +362,29 @@ window.foodDatabase = [
 
 // Shorthand reference for internal use
 const foodDatabase = window.foodDatabase;
+// Dynamisch die Drink-Datalist befüllen
+function populateDrinkList() {
+  const drinkList = document.getElementById('drinkList');
+  
+  if (drinkList) {
+    drinkList.innerHTML = '';
+    // Nur Getränke (beverages + dairy)
+    const drinks = [...foodDatabase, ...(appState.customFoods || [])].filter(f => 
+      f.kategorie === 'beverages' || f.kategorie === 'dairy'
+    );
+    
+    drinks.forEach(drink => {
+      const option = document.createElement('option');
+      option.value = drink.name;
+      drinkList.appendChild(option);
+    });
+    
+    console.log('✅ DrinkList befüllt mit', drinks.length, 'Getränken');
+  }
+}
+
+// Nach Page-Load ausführen
+setTimeout(populateDrinkList, 500);
 
 // Get default portion size based on food category
 function getDefaultPortionSize(food) {
