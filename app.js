@@ -320,6 +320,30 @@ window.foodDatabase = [
 // Shorthand reference for internal use
 const foodDatabase = window.foodDatabase;
 
+// Get default portion size based on food category
+function getDefaultPortionSize(food) {
+  const portionSizes = {
+    'fruits': 130,        // Durchschnittlicher Apfel/Orange
+    'vegetables': 100,    // Portion Gemüse
+    'bread': 50,          // 1 Scheibe Brot
+    'meat': 150,          // Portion Fleisch
+    'fish': 150,          // Portion Fisch
+    'fastfood': 200,      // Pizza-Stück, Burger
+    'grains': 150,        // Gekochte Nudeln/Reis
+    'dairy': 200,         // Glas Milch, Portion Käse
+    'nuts': 30,           // Handvoll Nüsse
+    'desserts': 100,      // Portion Kuchen
+    'beverages': 250,     // Glas
+    'snacks': 50,         // Portion Chips
+    'oils': 10,           // 1 EL Öl
+    'legumes': 150,       // Gekochte Portion
+    'oesterreichisch': 250, // Schnitzel, Gulasch etc.
+    'custom': 100         // Custom Foods Standard
+  };
+  
+  return food.portionSize || portionSizes[food.kategorie] || 100;
+}
+
 // Helper Functions
 function formatDate(dateStr) {
   const date = new Date(dateStr);
