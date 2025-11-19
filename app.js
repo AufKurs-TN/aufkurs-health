@@ -27,8 +27,8 @@ const chartTimeRanges = {
   score: 'week'
 };
 
-// Application State
-const appState = {
+// Application State - Make globally accessible for debugging
+window.appState = {
   entries: [],
   cholesterinBaseline: {
     ldl: 160,
@@ -41,6 +41,10 @@ const appState = {
   viewedWeek: { year: 2025, week: 47 },
   viewedMonth: { year: 2025, month: 10 }
 };
+
+// Shorthand reference for internal use
+const appState = window.appState;
+
 // Comprehensive Food Database (500+ foods)
 const foodDatabase = [
   // Desserts
