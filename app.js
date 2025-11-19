@@ -832,9 +832,10 @@ if (logoutBtn) {
 async function saveUserData() {
   if (currentUser) {
     try {
-      // Speichere Baseline in Firestore
+      // Speichere Baseline + customFoods in Firestore
       await db.collection('users').doc(currentUser.uid).set({
-        baseline: appState.cholesterinBaseline
+        baseline: appState.cholesterinBaseline,
+        customFoods: appState.customFoods || []  // ← NEU: Custom Foods speichern
       }, { merge: true });
       
       // Speichere alle Einträge in Firestore
@@ -851,19 +852,19 @@ async function saveUserData() {
       });
       
       await batch.commit();
-      console.log('✅ Daten in Firebase gespeichert');
+      console.log('✅ Daten in Firebase gespeichert (inkl.', appState.customFoods?.length || 0, 'Custom Foods)');
     } catch (error) {
       console.error('❌ Fehler beim Speichern:', error);
     }
   }
 }
 
-  // Status (simulate success)
-  const statusEl = document.getElementById('firebaseStatus');
-  if (statusEl) {
-    statusEl.textContent = 'Verbunden';
-    statusEl.className = 'status status--success';
-  }
+// Status (simulate success)
+const statusEl = document.getElementById('firebaseStatus');
+if (statusEl) {
+  statusEl.textContent = 'Verbunden';
+  statusEl.className = 'status status--success';
+}
 
 // Navigation
 function initNavigation() {
