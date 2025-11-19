@@ -1355,7 +1355,6 @@ function renderLDLChart() {
   });
 }
 
-
 function renderHDLChart() {
   const range = getDateRange(chartTimeRanges.hdl);
   const baseline = appState.cholesterinBaseline;
@@ -1377,21 +1376,306 @@ function renderHDLChart() {
   
   dates.forEach(date => {
     const dayEntries = dateMap[date];
-    const totalEffect = dayEntries.reduce((sum
-
-function renderEntriesList(entries, containerId) {
-  const container = document.getElementById(containerId);
-  
-  if (entries.length === 0) {
-    container.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary); padding: 20px;">Keine Einträge</p>';
-    return;
-  }
-  
-  const sorted = [...entries].sort((a, b) => {
-    const timeA = a.zeit || '00:00';
-    const timeB = b.zeit || '00:00';
-    return timeB.localeCompare(timeA);
+    const totalEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.hdl || 0), 0);
+    currentHDL += totalEffect;
+    hdlValues.push(Math.round(currentHDL * 10) / 10);
+    labels.push(formatChartLabel(date, 'hdl'));
   });
+  
+  const ctx = document.getElementById('hdlChart');
+  if (hdlChart) hdlChart.destroy();
+  
+  hdlChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'HDL',
+          data: hdlValues,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#000000'
+        },
+        {
+          label: 'Optimal >40',
+          data: Array(labels.length).fill(40),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'zu hoch <35',
+          data: Array(labels.length).fill(35),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' }
+      },
+      scales: {
+        y: { beginAtZero: false, min: 20, max: 50 },
+        x: { display: true }
+      }
+    }
+  });
+}
+
+function renderTriglyceridesChart() {
+  const range = getDateRange(chartTimeRanges.trig || 'week');
+  const baseline = appState.cholesterinBaseline;
+  const relevantEntries = appState.entries.filter(e => {
+    const date = new Date(e.datum);
+    return date >= range.start && date <= range.end;
+  });
+  
+  const dateMap = {};
+  relevantEntries.forEach(e => {
+    if (!dateMap[e.datum]) dateMap[e.datum] = [];
+    dateMap[e.datum].push(e);
+  });
+  
+  const dates = Object.keys(dateMap).sort();
+  let currentTrig = baseline.triglyzeride;
+  const trigValues = [];
+  const labels = [];
+  
+  dates.forEach(date => {
+    const dayEntries = dateMap[date];
+    const totalEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.trig || 0), 0);
+    currentTrig += totalEffect;
+    trigValues.push(Math.round(currentTrig * 10) / 10);
+    labels.push(formatChartLabel(date, 'trig'));
+  });
+  
+  const ctx = document.getElementById('trigChart');
+  if (trigChart) trigChart.destroy();
+  
+  trigChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Triglyzeride',
+          data: trigValues,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#000000'
+        },
+        {
+          label: 'Optimal <150',
+          data: Array(labels.length).fill(150),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'zu hoch >200',
+          data: Array(labels.length).fill(200),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' }
+      },
+      scales: {
+        y: { beginAtZero: false, min: 50, max: 250 },
+        x: { display: true }
+      }
+    }
+  });
+}
+
+function renderTotalCholesterolChart() {
+  const range = getDateRange(chartTimeRanges.total);
+  const baseline = appState.cholesterinBaseline;
+  const relevantEntries = appState.entries.filter(e => {
+    const date = new Date(e.datum);
+    return date >= range.start && date <= range.end;
+  });
+  
+  const dateMap = {};
+  relevantEntries.forEach(e => {
+    if (!dateMap[e.datum]) dateMap[e.datum] = [];
+    dateMap[e.datum].push(e);
+  });
+  
+  const dates = Object.keys(dateMap).sort();
+  let currentLDL = baseline.ldl;
+  let currentHDL = baseline.hdl;
+  let currentTrig = baseline.triglyzeride;
+  const totalValues = [];
+  const labels = [];
+  
+  dates.forEach(date => {
+    const dayEntries = dateMap[date];
+    const ldlEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.ldl || 0), 0);
+    const hdlEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.hdl || 0), 0);
+    const trigEffect = dayEntries.reduce((sum, e) => sum + (e.cholesterinEffekt.trig || 0), 0);
+    
+    currentLDL += ldlEffect;
+    currentHDL += hdlEffect;
+    currentTrig += trigEffect;
+    
+    const total = calculateTotalCholesterol(currentLDL, currentHDL, currentTrig);
+    totalValues.push(Math.round(total * 10) / 10);
+    labels.push(formatChartLabel(date, 'total'));
+  });
+  
+  const ctx = document.getElementById('totalChart');
+  if (totalChart) totalChart.destroy();
+  
+  totalChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Gesamtcholesterin',
+          data: totalValues,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#000000'
+        },
+        {
+          label: 'Optimal <200',
+          data: Array(labels.length).fill(200),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'zu hoch >240',
+          data: Array(labels.length).fill(240),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' }
+      },
+      scales: {
+        y: { beginAtZero: false, min: 150, max: 300 },
+        x: { display: true }
+      }
+    }
+  });
+}
+
+function renderScoreChart() {
+  const range = getDateRange(chartTimeRanges.score);
+  const relevantEntries = appState.entries.filter(e => {
+    const date = new Date(e.datum);
+    return date >= range.start && date <= range.end;
+  });
+  
+  const dateMap = {};
+  relevantEntries.forEach(e => {
+    if (!dateMap[e.datum]) dateMap[e.datum] = [];
+    dateMap[e.datum].push(e);
+  });
+  
+  const dates = Object.keys(dateMap).sort();
+  const scoreValues = [];
+  const labels = [];
+  
+  dates.forEach(date => {
+    const dayEntries = dateMap[date];
+    const avgScore = dayEntries.reduce((sum, e) => sum + e.healthScore, 0) / dayEntries.length;
+    scoreValues.push(Math.round(avgScore * 10) / 10);
+    labels.push(formatChartLabel(date, 'score'));
+  });
+  
+  const ctx = document.getElementById('scoreChart');
+  if (scoreChart) scoreChart.destroy();
+  
+  scoreChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Gesundheitsscore',
+          data: scoreValues,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#000000'
+        },
+        {
+          label: 'Optimal >7.0',
+          data: Array(labels.length).fill(7.0),
+          borderColor: '#3498DB',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'zu niedrig <5.0',
+          data: Array(labels.length).fill(5.0),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'bottom' }
+      },
+      scales: {
+        y: { beginAtZero: true, min: 0, max: 10 },
+        x: { display: true }
+      }
+    }
+  });
+}
   
   container.innerHTML = sorted.map(entry => {
     const emojiMap = {
