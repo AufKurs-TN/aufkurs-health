@@ -1000,8 +1000,8 @@ const essenNameInput = document.getElementById('essenName');
 const essenGrammInput = document.getElementById('essenGramm');
 
 function updateEssenPreview() {
-  const foodName = essenNameInput.value.toLowerCase();
-  const gramm = parseInt(essenGrammInput.value) || 100;
+  const foodName = document.getElementById('essenName').value.toLowerCase();
+  const gramm = parseInt(document.getElementById('essenGramm').value) || 100;
   
   // Suche in BEIDEN Datenbanken
   const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
@@ -1064,8 +1064,22 @@ function updateEssenPreview() {
   }
 }
 
-essenNameInput.addEventListener('input', updateEssenPreview);
-essenGrammInput.addEventListener('input', updateEssenPreview);
+// Update preview when food is selected
+document.getElementById('essenName').addEventListener('input', (e) => {
+  const foodName = e.target.value.toLowerCase();
+  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+  const food = allFoods.find(f => f.name === foodName);
+  
+  // ✅ NEU: Setze automatisch die typische Portionsgröße
+  if (food) {
+    const defaultPortion = getDefaultPortionSize(food);
+    document.getElementById('essenGramm').value = defaultPortion;
+  }
+  
+  updateEssenPreview();
+});
+
+document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
 
 document.getElementById('saveEssenBtn').addEventListener('click', () => {
   console.log('🔵 Essen-Button geklickt!');
@@ -1121,7 +1135,6 @@ document.getElementById('saveEssenBtn').addEventListener('click', () => {
   
   switchTab('day');
 });
-
 
 // Sport Form Logic
 function updateSportPreview() {
