@@ -1320,7 +1320,7 @@ function renderLDLChart() {
           pointBackgroundColor: '#000000'
         },
         {
-          label: 'Optimal <70',
+          label: 'Optimal <115',
           data: Array(labels.length).fill(70),
           borderColor: '#3498DB',
           borderDash: [5, 5],
@@ -1329,16 +1329,7 @@ function renderLDLChart() {
           fill: false
         },
         {
-          label: 'Gut <100',
-          data: Array(labels.length).fill(100),
-          borderColor: '#FFD93D',
-          borderDash: [5, 5],
-          borderWidth: 3,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Grenzwertig >160',
+          label: 'zu hoch >160',
           data: Array(labels.length).fill(160),
           borderColor: '#2ECC71',
           borderDash: [5, 5],
@@ -1355,7 +1346,7 @@ function renderLDLChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 0, max: 250 },
+        y: { beginAtZero: false, min: 50, max: 250 },
         x: { display: true }
       }
     }
@@ -1409,7 +1400,7 @@ function renderHDLChart() {
           pointBackgroundColor: '#000000'
         },
         {
-          label: 'Optimal >60',
+          label: 'Optimal >40',
           data: Array(labels.length).fill(60),
           borderColor: '#3498DB',
           borderDash: [5, 5],
@@ -1418,16 +1409,7 @@ function renderHDLChart() {
           fill: false
         },
         {
-          label: 'Gut >50',
-          data: Array(labels.length).fill(50),
-          borderColor: '#FFD93D',
-          borderDash: [5, 5],
-          borderWidth: 3,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Grenzwertig <40',
+          label: 'zu hoch <35',
           data: Array(labels.length).fill(40),
           borderColor: '#2ECC71',
           borderDash: [5, 5],
@@ -1444,7 +1426,7 @@ function renderHDLChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 10, max: 80 },
+        y: { beginAtZero: false, min: 20, max: 50 },
         x: { display: true }
       }
     }
@@ -1497,7 +1479,7 @@ function renderTriglyceridesChart() {
           pointBackgroundColor: '#000000'
         },
         {
-          label: 'Optimal <100',
+          label: 'Optimal <150',
           data: Array(labels.length).fill(100),
           borderColor: '#3498DB',
           borderDash: [5, 5],
@@ -1506,16 +1488,7 @@ function renderTriglyceridesChart() {
           fill: false
         },
         {
-          label: 'Gut <150',
-          data: Array(labels.length).fill(150),
-          borderColor: '#FFD93D',
-          borderDash: [5, 5],
-          borderWidth: 3,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Grenzwertig >200',
+          label: 'zu hoch >200',
           data: Array(labels.length).fill(200),
           borderColor: '#2ECC71',
           borderDash: [5, 5],
@@ -1532,7 +1505,7 @@ function renderTriglyceridesChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 0, max: 300 },
+        y: { beginAtZero: false, min: 50, max: 250 },
         x: { display: true }
       }
     }
@@ -1603,16 +1576,7 @@ function renderTotalCholesterolChart() {
           fill: false
         },
         {
-          label: 'Gut <239',
-          data: Array(labels.length).fill(239),
-          borderColor: '#FFD93D',
-          borderDash: [5, 5],
-          borderWidth: 3,
-          pointRadius: 0,
-          fill: false
-        },
-        {
-          label: 'Grenzwertig >240',
+          label: 'zu hoch >240',
           data: Array(labels.length).fill(240),
           borderColor: '#2ECC71',
           borderDash: [5, 5],
@@ -1629,7 +1593,7 @@ function renderTotalCholesterolChart() {
         legend: { display: true, position: 'bottom' }
       },
       scales: {
-        y: { beginAtZero: false, min: 100, max: 350 },
+        y: { beginAtZero: false, min: 150, max: 300 },
         x: { display: true }
       }
     }
