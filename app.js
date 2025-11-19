@@ -2051,67 +2051,70 @@ function bindCustomFoodListeners() {
 const addCustomFoodBtn = document.getElementById('addCustomFoodBtn');
 if (addCustomFoodBtn) {
   addCustomFoodBtn.addEventListener('click', () => {
-  const name = document.getElementById('customFoodName').value.trim().toLowerCase();
-  const kcal = parseFloat(document.getElementById('customFoodKcal').value) || 0;
-  const kh = parseFloat(document.getElementById('customFoodKh').value) || 0;
-  const fett = parseFloat(document.getElementById('customFoodFett').value) || 0;
-  const saturatedFat = parseFloat(document.getElementById('customFoodSaturatedFat').value) || 0;
-  const unsaturatedFat = parseFloat(document.getElementById('customFoodUnsaturatedFat').value) || 0;
-  const transFat = parseFloat(document.getElementById('customFoodTransFat').value) || 0;
-  const eiweiss = parseFloat(document.getElementById('customFoodEiweiss').value) || 0;
-  let chol = parseFloat(document.getElementById('customFoodChol').value);
-  
-  // Auto-estimate if not provided
-  if (!chol) {
-    chol = estimateCholesterol(name, saturatedFat, unsaturatedFat, fett);
-  }
-  
-  if (!name || kcal === 0) {
-    alert('Bitte Name und Kalorien eingeben.');
-    return;
-  }
-  
-  const existingFood = foodDatabase.find(f => f.name === name);
-  if (existingFood) {
-    alert('Dieses Lebensmittel existiert bereits in der Datenbank.');
-    return;
-  }
-  
-  foodDatabase.push({
-    name: name,
-    kcal: kcal,
-    kh: kh,
-    fett: fett,
-    saturatedFat: saturatedFat,
-    unsaturatedFat: unsaturatedFat,
-    transFat: transFat,
-    eiweiss: eiweiss,
-    chol: chol,
-    kategorie: 'oesterreichisch'
-  });
-  
-  // Add to datalist
-  const option = document.createElement('option');
-  option.value = name.charAt(0).toUpperCase() + name.slice(1);
-  document.getElementById('foodList').appendChild(option);
-  
+    const name = document.getElementById('customFoodName').value.trim().toLowerCase();
+    const kcal = parseFloat(document.getElementById('customFoodKcal').value) || 0;
+    const kh = parseFloat(document.getElementById('customFoodKh').value) || 0;
+    const fett = parseFloat(document.getElementById('customFoodFett').value) || 0;
+    const saturatedFat = parseFloat(document.getElementById('customFoodSaturatedFat').value) || 0;
+    const unsaturatedFat = parseFloat(document.getElementById('customFoodUnsaturatedFat').value) || 0;
+    const transFat = parseFloat(document.getElementById('customFoodTransFat').value) || 0;
+    const eiweiss = parseFloat(document.getElementById('customFoodEiweiss').value) || 0;
+    let chol = parseFloat(document.getElementById('customFoodChol').value);
+    
+    // Auto-estimate if not provided
+    if (!chol) {
+      chol = estimateCholesterol(name, saturatedFat, unsaturatedFat, fett);
+    }
+    
+    if (!name || kcal === 0) {
+      alert('Bitte Name und Kalorien eingeben.');
+      return;
+    }
+    
+    // Check if exists in BOTH databases
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    const existingFood = allFoods.find(f => f.name === name);
+    if (existingFood) {
+      alert('Dieses Lebensmittel existiert bereits in der Datenbank.');
+      return;
+    }
+    
+    // ✅ WICHTIG: Füge zu appState.customFoods hinzu (wird in Firebase gespeichert)
+    const newFood = {
+      name: name,
+      kcal: kcal,
+      kh: kh,
+      fett: fett,
+      saturatedFat: saturatedFat,
+      unsaturatedFat: unsaturatedFat,
+      transFat: transFat,
+      eiweiss: eiweiss,
+      chol: chol,
+      kategorie: 'custom'
+    };
+    
+    appState.customFoods.push(newFood);
+    
+    // ✅ WICHTIG: Speichere in Firebase
+    saveUserData();
+    
     // Clear form
-  document.getElementById('customFoodName').value = '';
-  document.getElementById('customFoodKcal').value = '';
-  document.getElementById('customFoodKh').value = '';
-  document.getElementById('customFoodFett').value = '';
-  document.getElementById('customFoodSaturatedFat').value = '';
-  document.getElementById('customFoodUnsaturatedFat').value = '';
-  document.getElementById('customFoodTransFat').value = '';
-  document.getElementById('customFoodEiweiss').value = '';
-  document.getElementById('customFoodChol').value = '';
-  document.getElementById('cholesterolEstimate').textContent = '';
-  document.getElementById('customFoodLiveEffect').style.display = 'none';
-  
-  alert('Lebensmittel erfolgreich hinzugefügt!');
-  
-  // Refresh food datalist for autocomplete
-  populateFoodDatalist();  // ← NEU: Aktualisiert die Autocomplete-Liste
+    document.getElementById('customFoodName').value = '';
+    document.getElementById('customFoodKcal').value = '';
+    document.getElementById('customFoodKh').value = '';
+    document.getElementById('customFoodFett').value = '';
+    document.getElementById('customFoodSaturatedFat').value = '';
+    document.getElementById('customFoodUnsaturatedFat').value = '';
+    document.getElementById('customFoodTransFat').value = '';
+    document.getElementById('customFoodEiweiss').value = '';
+    document.getElementById('customFoodChol').value = '';
+    document.getElementById('cholesterolEstimate').textContent = '';
+    document.getElementById('customFoodLiveEffect').style.display = 'none';
+    
+    alert('Lebensmittel erfolgreich hinzugefügt!');
+    
+    // Refresh food datalist for autocomplete
+    populateFoodDatalist();
   });
 }
 
