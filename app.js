@@ -1144,10 +1144,14 @@ function setupEssenPortionListener() {
     return;
   }
   
-  function setPortionSize() {
+  let lastValue = '';
+  
+  function checkAndSetPortion() {
     const currentValue = essenNameInput.value.toLowerCase().trim();
     
-    if (currentValue.length > 0) {
+    if (currentValue !== lastValue && currentValue.length > 2) {
+      lastValue = currentValue;
+      
       const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
       const food = allFoods.find(f => f.name === currentValue);
       
@@ -1175,7 +1179,6 @@ function setupEssenPortionListener() {
         console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
         essenGrammInput.value = defaultPortion;
         
-        // Trigger Preview-Update
         if (typeof updateEssenPreview === 'function') {
           updateEssenPreview();
         }
@@ -1183,25 +1186,14 @@ function setupEssenPortionListener() {
     }
   }
   
-  // Lausche auf ALLE Events
-  essenNameInput.addEventListener('input', setPortionSize);
-  essenNameInput.addEventListener('change', setPortionSize);
-  essenNameInput.addEventListener('blur', setPortionSize);
-  
-  // ZUSÄTZLICH: Polling als Backup (falls Events nicht triggern)
-  let lastValue = '';
-  setInterval(() => {
-    const currentValue = essenNameInput.value.toLowerCase().trim();
-    if (currentValue !== lastValue && currentValue.length > 0) {
-      lastValue = currentValue;
-      setPortionSize();
-    }
-  }, 300);
+  // AGGRESSIVES Polling - prüfe alle 100ms
+  setInterval(checkAndSetPortion, 100);
   
   console.log('✅ Portionsgrößen-Listener aktiviert (Events + Polling)');
 }
 
 setTimeout(setupEssenPortionListener, 500);
+
 
 document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
 
