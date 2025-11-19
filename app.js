@@ -36,6 +36,7 @@ const appState = {
     triglyzeride: 180,
     datum: '2025-01-15'
   },
+  customFoods: [],  // ← DIESE ZEILE HINZUFÜGEN
   viewedDate: '2025-11-17',
   viewedWeek: { year: 2025, week: 47 },
   viewedMonth: { year: 2025, month: 10 }
