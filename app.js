@@ -1084,8 +1084,28 @@ function setupEssenPortionListener() {
     
     // ✅ NEU: Setze automatisch die typische Portionsgröße
     if (food) {
-      const defaultPortion = getDefaultPortionSize(food);
-      console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name);
+      // Portionsgrößen nach Kategorie (INLINE!)
+      const portionSizes = {
+        'fruits': 130,
+        'vegetables': 100,
+        'bread': 50,
+        'meat': 150,
+        'fish': 150,
+        'fastfood': 200,
+        'grains': 150,
+        'dairy': 200,
+        'nuts': 30,
+        'desserts': 100,
+        'beverages': 250,
+        'snacks': 50,
+        'oils': 10,
+        'legumes': 150,
+        'oesterreichisch': 250,
+        'custom': 100
+      };
+      
+      const defaultPortion = food.portionSize || portionSizes[food.kategorie] || 100;
+      console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
       document.getElementById('essenGramm').value = defaultPortion;
       updateEssenPreview();
     }
@@ -1101,6 +1121,7 @@ function setupEssenPortionListener() {
 
 // Call this when page is ready
 setTimeout(setupEssenPortionListener, 500);
+
 
 
 document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
