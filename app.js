@@ -1316,6 +1316,33 @@ function renderLDLChart() {
           fill: true,
           pointRadius: 4,
           pointBackgroundColor: '#E74C3C'
+        },
+        {
+          label: 'Zielwert <100 (Gut)',
+          data: Array(labels.length).fill(100),
+          borderColor: '#FFD93D',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Optimal <70',
+          data: Array(labels.length).fill(70),
+          borderColor: '#2ECC71',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: 'Hoch >160',
+          data: Array(labels.length).fill(160),
+          borderColor: '#E74C3C',
+          borderDash: [5, 5],
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
         }
       ]
     },
@@ -1323,50 +1350,7 @@ function renderLDLChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'bottom' },
-        annotation: {
-          annotations: {
-            line1: {
-              type: 'line',
-              yMin: 100,
-              yMax: 100,
-              borderColor: '#FFD93D',
-              borderWidth: 3,
-              borderDash: [10, 5],
-              label: {
-                content: 'Zielwert <100 (Gut)',
-                enabled: true,
-                position: 'end'
-              }
-            },
-            line2: {
-              type: 'line',
-              yMin: 70,
-              yMax: 70,
-              borderColor: '#2ECC71',
-              borderWidth: 3,
-              borderDash: [10, 5],
-              label: {
-                content: 'Optimal <70',
-                enabled: true,
-                position: 'end'
-              }
-            },
-            line3: {
-              type: 'line',
-              yMin: 160,
-              yMax: 160,
-              borderColor: '#E74C3C',
-              borderWidth: 3,
-              borderDash: [10, 5],
-              label: {
-                content: 'Hoch >160',
-                enabled: true,
-                position: 'end'
-              }
-            }
-          }
-        }
+        legend: { display: true, position: 'bottom' }
       },
       scales: {
         y: { beginAtZero: false, min: 0, max: 250 },
@@ -1375,6 +1359,7 @@ function renderLDLChart() {
     }
   });
 }
+
 
 function renderHDLChart() {
   const range = getDateRange(chartTimeRanges.hdl);
