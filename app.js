@@ -1676,7 +1676,20 @@ function renderScoreChart() {
     }
   });
 }
+  function renderEntriesList(entries, containerId) {
+  const container = document.getElementById(containerId);
   
+  if (entries.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary); padding: 20px;">Keine Einträge</p>';
+    return;
+  }
+  
+  const sorted = [...entries].sort((a, b) => {
+    const timeA = a.zeit || '00:00';
+    const timeB = b.zeit || '00:00';
+    return timeB.localeCompare(timeA);
+  });
+    
   container.innerHTML = sorted.map(entry => {
     const emojiMap = {
       ernaehrung: '🍽️',
