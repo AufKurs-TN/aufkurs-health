@@ -968,7 +968,11 @@ const essenGrammInput = document.getElementById('essenGramm');
 function updateEssenPreview() {
   const foodName = essenNameInput.value.toLowerCase();
   const gramm = parseInt(essenGrammInput.value) || 100;
-  const food = foodDatabase.find(f => f.name === foodName);
+  
+  // Suche in BEIDEN Datenbanken
+  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+  const food = allFoods.find(f => f.name === foodName);
+
   
   if (food) {
     const factor = gramm / 100;
@@ -1032,12 +1036,16 @@ essenGrammInput.addEventListener('input', updateEssenPreview);
 document.getElementById('saveEssenBtn').addEventListener('click', () => {
   const foodName = essenNameInput.value.toLowerCase();
   const gramm = parseInt(essenGrammInput.value) || 100;
-  const food = foodDatabase.find(f => f.name === foodName);
+  
+  // Suche in BEIDEN Datenbanken (Standard + Custom)
+  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+  const food = allFoods.find(f => f.name === foodName);
   
   if (!food) {
     alert('Bitte wählen Sie ein Lebensmittel aus der Datenbank.');
     return;
   }
+
   
   const factor = gramm / 100;
   const entry = {
