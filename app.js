@@ -1073,9 +1073,9 @@ function setupEssenPortionListener() {
     return;
   }
   
-  essenNameInput.addEventListener('change', (e) => {
-
-    const foodName = e.target.value.toLowerCase();
+  // Funktion um Portion zu setzen
+  function setPortionSize() {
+    const foodName = essenNameInput.value.toLowerCase();
     const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
     const food = allFoods.find(f => f.name === foodName);
     
@@ -1084,15 +1084,19 @@ function setupEssenPortionListener() {
       const defaultPortion = getDefaultPortionSize(food);
       console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name);
       document.getElementById('essenGramm').value = defaultPortion;
+      updateEssenPreview();
     }
-    
-    updateEssenPreview();
-  });
+  }
   
-  console.log('✅ Portionsgrößen-Listener aktiviert');
+  // Lausche auf ALLE relevanten Events
+  essenNameInput.addEventListener('input', setPortionSize);
+  essenNameInput.addEventListener('change', setPortionSize);
+  essenNameInput.addEventListener('blur', setPortionSize);
+  
+  console.log('✅ Portionsgrößen-Listener aktiviert (input, change, blur)');
 }
 
-// Call this when page is ready - ADD THIS LINE AT THE VERY END OF YOUR app.js FILE
+// Call this when page is ready
 setTimeout(setupEssenPortionListener, 500);
 
 
