@@ -2104,7 +2104,7 @@ document.getElementById('saveBaselineBtn').addEventListener('click', () => {
   saveUserData();
   alert('Basiswerte gespeichert!');
 });
-
+}
 function refreshAllViews() {
   const activeTab = document.querySelector('.tab-content.active');
   if (activeTab) {
