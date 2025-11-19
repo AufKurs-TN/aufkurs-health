@@ -2081,7 +2081,7 @@ if (addCustomFoodBtn) {
   option.value = name.charAt(0).toUpperCase() + name.slice(1);
   document.getElementById('foodList').appendChild(option);
   
-  // Clear form
+    // Clear form
   document.getElementById('customFoodName').value = '';
   document.getElementById('customFoodKcal').value = '';
   document.getElementById('customFoodKh').value = '';
@@ -2095,9 +2095,12 @@ if (addCustomFoodBtn) {
   document.getElementById('customFoodLiveEffect').style.display = 'none';
   
   alert('Lebensmittel erfolgreich hinzugefügt!');
-  renderFoodDatabase();
+  
+  // Refresh food datalist for autocomplete
+  populateFoodDatalist();  // ← NEU: Aktualisiert die Autocomplete-Liste
   });
 }
+
 
 function renderMonthView() {
   const { year, month } = appState.viewedMonth;
