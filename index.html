@@ -46,17 +46,13 @@
             <span class="add-type-emoji">🍽️</span>
             <span class="add-type-label">Essen</span>
           </button>
-          <button class="add-type-btn" data-type="sport">
-            <span class="add-type-emoji">🏃</span>
-            <span class="add-type-label">Sport</span>
-          </button>
-          <button class="add-type-btn" data-type="rauchen">
-            <span class="add-type-emoji">🚬</span>
-            <span class="add-type-label">Rauchen</span>
-          </button>
           <button class="add-type-btn" data-type="trinken">
             <span class="add-type-emoji">💧</span>
             <span class="add-type-label">Trinken</span>
+          </button>
+          <button class="add-type-btn" data-type="sport">
+            <span class="add-type-emoji">🏃</span>
+            <span class="add-type-label">Sport</span>
           </button>
           <button class="add-type-btn" data-type="schlaf">
             <span class="add-type-emoji">😴</span>
@@ -73,6 +69,10 @@
           <button class="add-type-btn" data-type="stress">
             <span class="add-type-emoji">⚠️</span>
             <span class="add-type-label">Stress</span>
+          </button>
+          <button class="add-type-btn" data-type="rauchen">
+            <span class="add-type-emoji">🚬</span>
+            <span class="add-type-label">Rauchen</span>
           </button>
         </div>
 
@@ -94,7 +94,27 @@
           <button id="saveEssenBtn" class="btn btn--primary btn--full-width">Speichern</button>
           <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
         </div>
-
+   
+        <!-- Trinken Form -->
+<div id="trinkenForm" class="entry-form" style="display: none;">
+  <h3>💧 Trinken hinzufügen</h3>
+  <div class="form-group">
+    <label class="form-label">Getränk</label>
+    <input type="text" id="trinkenType" class="form-control" list="drinkList" placeholder="z.B. Cola Zero">
+    <datalist id="drinkList">
+      <!-- Wird dynamisch befüllt -->
+    </datalist>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Menge (ml)</label>
+    <input type="number" id="trinkenMenge" class="form-control" value="250" min="1">
+  </div>
+  <div id="trinkenEffect" class="effect-display"></div>
+  <div id="trinkenScoreDisplay" class="score-preview"></div>
+  <button id="saveTrinkenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+  <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+</div>
+        
         <!-- Sport Form -->
         <div id="sportForm" class="entry-form" style="display: none;">
           <h3>🏃 Sport hinzufügen</h3>
@@ -127,39 +147,6 @@
           <button id="saveSportBtn" class="btn btn--primary btn--full-width">Speichern</button>
           <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
         </div>
-
-        <!-- Rauchen Form -->
-        <div id="rauchenForm" class="entry-form" style="display: none;">
-          <h3>🚬 Rauchstatus hinzufügen</h3>
-          <div class="form-group">
-            <label class="form-label">Anzahl Zigaretten</label>
-            <input type="number" id="rauchenAnzahl" class="form-control" value="1" min="1">
-          </div>
-          <div id="rauchenEffect" class="effect-display"></div>
-          <div id="rauchenScoreDisplay" class="score-preview"></div>
-          <button id="saveRauchenBtn" class="btn btn--primary btn--full-width">Speichern</button>
-          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
-        </div>
-
-    <!-- Trinken Form -->
-<div id="trinkenForm" class="entry-form" style="display: none;">
-  <h3>💧 Trinken hinzufügen</h3>
-  <div class="form-group">
-    <label class="form-label">Getränk</label>
-    <input type="text" id="trinkenType" class="form-control" list="drinkList" placeholder="z.B. Cola Zero">
-    <datalist id="drinkList">
-      <!-- Wird dynamisch befüllt -->
-    </datalist>
-  </div>
-  <div class="form-group">
-    <label class="form-label">Menge (ml)</label>
-    <input type="number" id="trinkenMenge" class="form-control" value="250" min="1">
-  </div>
-  <div id="trinkenEffect" class="effect-display"></div>
-  <div id="trinkenScoreDisplay" class="score-preview"></div>
-  <button id="saveTrinkenBtn" class="btn btn--primary btn--full-width">Speichern</button>
-  <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
-</div>
 
         <!-- Schlaf Form -->
         <div id="schlafForm" class="entry-form" style="display: none;">
@@ -234,6 +221,19 @@
           <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
         </div>
       </div>
+
+             <!-- Rauchen Form -->
+        <div id="rauchenForm" class="entry-form" style="display: none;">
+          <h3>🚬 Rauchstatus hinzufügen</h3>
+          <div class="form-group">
+            <label class="form-label">Anzahl Zigaretten</label>
+            <input type="number" id="rauchenAnzahl" class="form-control" value="1" min="1">
+          </div>
+          <div id="rauchenEffect" class="effect-display"></div>
+          <div id="rauchenScoreDisplay" class="score-preview"></div>
+          <button id="saveRauchenBtn" class="btn btn--primary btn--full-width">Speichern</button>
+          <button class="btn btn--secondary btn--full-width cancel-btn" style="margin-top: 10px;">Abbrechen</button>
+        </div>
 
       <!-- DAY VIEW TAB -->
       <div id="dayTab" class="tab-content">
@@ -511,6 +511,7 @@ console.log('✅ Firebase initialized');
   <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
