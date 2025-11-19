@@ -1073,7 +1073,8 @@ function setupEssenPortionListener() {
     return;
   }
   
-  essenNameInput.addEventListener('input', (e) => {
+  essenNameInput.addEventListener('change', (e) => {
+
     const foodName = e.target.value.toLowerCase();
     const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
     const food = allFoods.find(f => f.name === foodName);
