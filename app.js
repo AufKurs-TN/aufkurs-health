@@ -1064,77 +1064,100 @@ function updateEssenPreview() {
   }
 }
 
-// Update preview when food is selected
-document.getElementById('essenName').addEventListener('input', (e) => {
-  const foodName = e.target.value.toLowerCase();
-  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
-  const food = allFoods.find(f => f.name === foodName);
+// Wait for DOM to be fully loaded before attaching event listeners
+function attachEssenEventListeners() {
+  const essenNameInput = document.getElementById('essenName');
+  const essenGrammInput = document.getElementById('essenGramm');
+  const saveEssenBtn = document.getElementById('saveEssenBtn');
   
-  // ✅ NEU: Setze automatisch die typische Portionsgröße
-  if (food) {
-    const defaultPortion = getDefaultPortionSize(food);
-    document.getElementById('essenGramm').value = defaultPortion;
-  }
-  
-  updateEssenPreview();
-});
-
-document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
-
-document.getElementById('saveEssenBtn').addEventListener('click', () => {
-  console.log('🔵 Essen-Button geklickt!');
-  
-  const foodName = document.getElementById('essenName').value.toLowerCase();
-  console.log('🟡 foodName:', foodName);
-  
-  const gramm = parseInt(document.getElementById('essenGramm').value) || 100;
-  
-  // Suche in BEIDEN Datenbanken (Standard + Custom)
-  const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
-  console.log('🟢 allFoods Anzahl:', allFoods.length);
-  
-  const food = allFoods.find(f => f.name === foodName);
-  console.log('🟣 food gefunden?', food);
-  
-  if (!food) {
-    console.log('❌ FEHLER: Kein Food gefunden!');
-    alert('Bitte wählen Sie ein Lebensmittel aus der Datenbank.');
+  if (!essenNameInput || !essenGrammInput || !saveEssenBtn) {
+    console.warn('⚠️ Essen-Felder noch nicht geladen, warte...');
+    setTimeout(attachEssenEventListeners, 100);
     return;
   }
   
-  console.log('✅ Food OK, speichere...');
+  console.log('✅ Essen Event-Listeners werden gebunden...');
   
-  const factor = gramm / 100;
-  const entry = {
-    id: generateId(),
-    datum: getCurrentDate(),
-    zeit: getCurrentTime(),
-    type: 'ernaehrung',
-    gericht: foodName,
-    gramm: gramm,
-    kcal: Math.round(food.kcal * factor),
-    kh: Math.round(food.kh * factor),
-    fett: Math.round(food.fett * factor),
-    eiweiss: Math.round(food.eiweiss * factor),
-    chol: Math.round(food.chol * factor)
-  };
-  
-  entry.cholesterinEffekt = calculateCholesterinEffect(entry);
-  entry.healthScore = calculateHealthScore(entry);
-  
-  appState.entries.push(entry);
-  saveUserData();
-  
-  document.getElementById('essenName').value = '';
-  document.getElementById('essenGramm').value = '100';
-  document.getElementById('essenNutrition').innerHTML = '';
-  document.getElementById('essenEffect').innerHTML = '';
-  document.getElementById('essenScoreDisplay').innerHTML = '';
-  document.getElementById('essenForm').style.display = 'none';
-  document.querySelector('.add-type-selector').style.display = 'grid';
-  
-  switchTab('day');
-});
+  // Update preview when food is selected
+  essenNameInput.addEventListener('input', (e) => {
+    console.log('🟡 Input Event ausgelöst!');
+    const foodName = e.target.value.toLowerCase();
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    const food = allFoods.find(f => f.name === foodName);
+    
+    console.log('🟢 Food gefunden?', food);
+    
+    // ✅ NEU: Setze automatisch die typische Portionsgröße
+    if (food) {
+      const defaultPortion = getDefaultPortionSize(food);
+      console.log('🔵 Setze Portion auf:', defaultPortion);
+      essenGrammInput.value = defaultPortion;
+    }
+    
+    updateEssenPreview();
+  });
+
+  essenGrammInput.addEventListener('input', updateEssenPreview);
+
+  saveEssenBtn.addEventListener('click', () => {
+    console.log('🔵 Essen-Button geklickt!');
+    
+    const foodName = essenNameInput.value.toLowerCase();
+    console.log('🟡 foodName:', foodName);
+    
+    const gramm = parseInt(essenGrammInput.value) || 100;
+    
+    // Suche in BEIDEN Datenbanken (Standard + Custom)
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    console.log('🟢 allFoods Anzahl:', allFoods.length);
+    
+    const food = allFoods.find(f => f.name === foodName);
+    console.log('🟣 food gefunden?', food);
+    
+    if (!food) {
+      console.log('❌ FEHLER: Kein Food gefunden!');
+      alert('Bitte wählen Sie ein Lebensmittel aus der Datenbank.');
+      return;
+    }
+    
+    console.log('✅ Food OK, speichere...');
+    
+    const factor = gramm / 100;
+    const entry = {
+      id: generateId(),
+      datum: getCurrentDate(),
+      zeit: getCurrentTime(),
+      type: 'ernaehrung',
+      gericht: foodName,
+      gramm: gramm,
+      kcal: Math.round(food.kcal * factor),
+      kh: Math.round(food.kh * factor),
+      fett: Math.round(food.fett * factor),
+      eiweiss: Math.round(food.eiweiss * factor),
+      chol: Math.round(food.chol * factor)
+    };
+    
+    entry.cholesterinEffekt = calculateCholesterinEffect(entry);
+    entry.healthScore = calculateHealthScore(entry);
+    
+    appState.entries.push(entry);
+    saveUserData();
+    
+    essenNameInput.value = '';
+    essenGrammInput.value = '100';
+    document.getElementById('essenNutrition').innerHTML = '';
+    document.getElementById('essenEffect').innerHTML = '';
+    document.getElementById('essenScoreDisplay').innerHTML = '';
+    document.getElementById('essenForm').style.display = 'none';
+    document.querySelector('.add-type-selector').style.display = 'grid';
+    
+    switchTab('day');
+  });
+}
+
+// Call this function after DOM is loaded
+attachEssenEventListeners();
+
 
 // Sport Form Logic
 function updateSportPreview() {
