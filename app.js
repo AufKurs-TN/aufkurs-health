@@ -2093,9 +2093,6 @@ function renderSettingsView() {
   document.getElementById('settingsHdl').value = appState.cholesterinBaseline.hdl;
   document.getElementById('settingsTrig').value = appState.cholesterinBaseline.triglyzeride;
   document.getElementById('settingsDate').value = appState.cholesterinBaseline.datum;
-  
-  renderFoodDatabase();
-}
 
 document.getElementById('saveBaselineBtn').addEventListener('click', () => {
   appState.cholesterinBaseline = {
