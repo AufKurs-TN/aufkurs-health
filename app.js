@@ -1044,18 +1044,27 @@ essenNameInput.addEventListener('input', updateEssenPreview);
 essenGrammInput.addEventListener('input', updateEssenPreview);
 
 document.getElementById('saveEssenBtn').addEventListener('click', () => {
+  console.log('🔵 Essen-Button geklickt!');
+  
   const foodName = essenNameInput.value.toLowerCase();
+  console.log('🟡 foodName:', foodName);
+  
   const gramm = parseInt(essenGrammInput.value) || 100;
   
   // Suche in BEIDEN Datenbanken (Standard + Custom)
   const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+  console.log('🟢 allFoods Anzahl:', allFoods.length);
+  
   const food = allFoods.find(f => f.name === foodName);
+  console.log('🟣 food gefunden?', food);
   
   if (!food) {
+    console.log('❌ FEHLER: Kein Food gefunden!');
     alert('Bitte wählen Sie ein Lebensmittel aus der Datenbank.');
     return;
   }
-
+  
+  console.log('✅ Food OK, speichere...');
   
   const factor = gramm / 100;
   const entry = {
