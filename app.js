@@ -801,6 +801,8 @@ async function saveUserData() {
     }
   }
 }
+// Make saveUserData globally accessible for debugging
+window.saveUserData = saveUserData;
 
 // Status (simulate success)
 const statusEl = document.getElementById('firebaseStatus');
