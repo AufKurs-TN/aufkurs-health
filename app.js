@@ -36,7 +36,7 @@ const appState = {
     triglyzeride: 180,
     datum: '2025-01-15'
   },
-  customFoods: [],  // ← DIESE ZEILE HINZUFÜGEN
+  customFoods: [],
   viewedDate: '2025-11-17',
   viewedWeek: { year: 2025, week: 47 },
   viewedMonth: { year: 2025, month: 10 }
@@ -714,6 +714,8 @@ auth.onAuthStateChanged(async (user) => {
     if (userDoc.exists) {
       const userData = userDoc.data();
       appState.cholesterinBaseline = userData.baseline || { ldl: 160, hdl: 35, triglyzeride: 180, datum: '2025-01-15' };
+      appState.customFoods = userData.customFoods || [];  // ← NEU: Custom Foods laden
+      console.log('✅ Custom Foods geladen:', appState.customFoods.length);
     }
     
     const entriesSnapshot = await db.collection('users').doc(user.uid).collection('entries').get();
@@ -726,6 +728,7 @@ auth.onAuthStateChanged(async (user) => {
     setAuthStatus(false);
   }
 });
+
 
 // Initial auth render - WARTE auf Firebase
 function initAuth() {
