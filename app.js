@@ -310,6 +310,72 @@ const foodDatabase = [
   { name: 'erdnussbutter', kcal: 588, kh: 20, fett: 50, eiweiss: 25, chol: 0, kategorie: 'nuts' },
   { name: 'tahini', kcal: 595, kh: 21, fett: 54, eiweiss: 17, chol: 0, kategorie: 'nuts' }
 ];
+// ========== NEUE FUNKTIONEN FÜR AUTOCOMPLETE ==========
+
+// Populate food datalist with alphabetically sorted entries
+function populateFoodDatalist() {
+  const datalist = document.getElementById('foodList');
+  if (!datalist) return;
+  
+  // Kombiniere Standard-Datenbank + Custom Foods
+  const customFoods = appState.customFoods || [];
+  const allFoods = [...foodDatabase, ...customFoods];
+  
+  // Sort alphabetically by name
+  const sortedFoods = allFoods.sort((a, b) => 
+    a.name.localeCompare(b.name, 'de-DE')
+  );
+  
+  // Populate datalist
+  datalist.innerHTML = sortedFoods.map(food => 
+    `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
+  ).join('');
+}
+
+// Initialize food input with live autocomplete
+function initializeFoodInput() {
+  const input = document.getElementById('essenName');
+  if (!input) return;
+  
+  // Populate datalist on initialization
+  populateFoodDatalist();
+  
+  // Real-time filtering as user types
+  input.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const datalist = document.getElementById('foodList');
+    
+    if (searchTerm.length === 0) {
+      // Show all foods alphabetically if input is empty
+      populateFoodDatalist();
+      return;
+    }
+    
+    // Kombiniere beide Datenbanken
+    const customFoods = appState.customFoods || [];
+    const allFoods = [...foodDatabase, ...customFoods];
+    
+    // Filter foods that contain the search term
+    const filtered = allFoods
+      .filter(food => food.name.toLowerCase().includes(searchTerm))
+      .sort((a, b) => {
+        // Prioritize foods that START with search term
+        const aStarts = a.name.toLowerCase().startsWith(searchTerm);
+        const bStarts = b.name.toLowerCase().startsWith(searchTerm);
+        
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        
+        // Then alphabetical
+        return a.name.localeCompare(b.name, 'de-DE');
+      })
+      .slice(0, 50); // Limit to 50 results for performance
+    
+    datalist.innerHTML = filtered.map(food => 
+      `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
+    ).join('');
+  });
+}
 
 // Helper Functions
 function formatDate(dateStr) {
@@ -862,6 +928,11 @@ addTypeBtns.forEach(btn => {
     document.querySelector('.add-type-selector').style.display = 'none';
     entryForms.forEach(form => form.style.display = 'none');
     document.getElementById(type + 'Form').style.display = 'block';
+    
+    // Initialize food autocomplete when opening Essen form
+    if (type === 'essen') {
+      initializeFoodInput();
+    }
   });
 });
 
@@ -872,13 +943,83 @@ document.querySelectorAll('.cancel-btn').forEach(btn => {
   });
 });
 
-// Populate Food List
-const foodListDatalist = document.getElementById('foodList');
-foodDatabase.forEach(food => {
-  const option = document.createElement('option');
-  option.value = food.name.charAt(0).toUpperCase() + food.name.slice(1);
-  foodListDatalist.appendChild(option);
-});
+// ========== NEUE FUNKTIONEN FÜR AUTOCOMPLETE ==========
+
+// Populate food datalist with alphabetically sorted entries
+function populateFoodDatalist() {
+  const datalist = document.getElementById('foodList');
+  if (!datalist) return;
+  
+  // Kombiniere Standard-Datenbank + Custom Foods
+  const customFoods = appState.customFoods || [];
+  const allFoods = [...foodDatabase, ...customFoods];
+  
+  // Sort alphabetically by name
+  const sortedFoods = allFoods.sort((a, b) => 
+    a.name.localeCompare(b.name, 'de-DE')
+  );
+  
+  // Populate datalist
+  datalist.innerHTML = sortedFoods.map(food => 
+    `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
+  ).join('');
+}
+
+// Initialize food input with live autocomplete
+function initializeFoodInput() {
+  const input = document.getElementById('essenName');
+  if (!input) return;
+  
+  // Populate datalist on initialization
+  populateFoodDatalist();
+  
+  // Remove old listener if exists (prevent duplicates)
+  const newInput = input.cloneNode(true);
+  input.parentNode.replaceChild(newInput, input);
+  
+  // Real-time filtering as user types
+  newInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const datalist = document.getElementById('foodList');
+    
+    if (searchTerm.length === 0) {
+      // Show all foods alphabetically if input is empty
+      populateFoodDatalist();
+      return;
+    }
+    
+    // Kombiniere beide Datenbanken
+    const customFoods = appState.customFoods || [];
+    const allFoods = [...foodDatabase, ...customFoods];
+    
+    // Filter foods that contain the search term
+    const filtered = allFoods
+      .filter(food => food.name.toLowerCase().includes(searchTerm))
+      .sort((a, b) => {
+        // Prioritize foods that START with search term
+        const aStarts = a.name.toLowerCase().startsWith(searchTerm);
+        const bStarts = b.name.toLowerCase().startsWith(searchTerm);
+        
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        
+        // Then alphabetical
+        return a.name.localeCompare(b.name, 'de-DE');
+      })
+      .slice(0, 50); // Limit to 50 results for performance
+    
+    datalist.innerHTML = filtered.map(food => 
+      `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
+    ).join('');
+    
+    // Trigger preview update
+    updateEssenPreview();
+  });
+  
+  // Re-bind gramm input listener
+  const grammInput = document.getElementById('essenGramm');
+  grammInput.addEventListener('input', updateEssenPreview);
+}
 
 // Essen Form Logic
 const essenNameInput = document.getElementById('essenName');
