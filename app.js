@@ -46,7 +46,8 @@ window.appState = {
 const appState = window.appState;
 
 // Comprehensive Food Database (500+ foods)
-const foodDatabase = [
+// Make foodDatabase globally accessible
+window.foodDatabase = [
   // Desserts
   { name: 'malakovtorte', kcal: 320, kh: 42, fett: 15, eiweiss: 5, chol: 65, kategorie: 'desserts' },
   { name: 'sachertorte', kcal: 380, kh: 45, fett: 18, eiweiss: 4, chol: 70, kategorie: 'desserts' },
@@ -315,6 +316,9 @@ const foodDatabase = [
   { name: 'erdnussbutter', kcal: 588, kh: 20, fett: 50, eiweiss: 25, chol: 0, kategorie: 'nuts' },
   { name: 'tahini', kcal: 595, kh: 21, fett: 54, eiweiss: 17, chol: 0, kategorie: 'nuts' }
 ];
+
+// Shorthand reference for internal use
+const foodDatabase = window.foodDatabase;
 
 // Helper Functions
 function formatDate(dateStr) {
