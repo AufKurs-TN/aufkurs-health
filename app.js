@@ -362,6 +362,43 @@ window.foodDatabase = [
 
 // Shorthand reference for internal use
 const foodDatabase = window.foodDatabase;
+
+// ========== SPORT DATABASE ==========
+const sportDatabase = [
+  // Krafttraining (ALLES moderat)
+  { name: 'liegestütze', kategorie: 'kraft', ldlPerMin: -0.02, hdlPerMin: 0.025, trigPerMin: -0.1 },
+  { name: 'kniebeugen', kategorie: 'kraft', ldlPerMin: -0.02, hdlPerMin: 0.025, trigPerMin: -0.1 },
+  { name: 'situps', kategorie: 'kraft', ldlPerMin: -0.02, hdlPerMin: 0.025, trigPerMin: -0.1 },
+  { name: 'gewichtheben', kategorie: 'kraft', ldlPerMin: -0.02, hdlPerMin: 0.025, trigPerMin: -0.1 },
+  { name: 'krafttraining', kategorie: 'kraft', ldlPerMin: -0.02, hdlPerMin: 0.025, trigPerMin: -0.1 },
+  
+  // Cardio (ALLES schwer)
+  { name: 'joggen', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'laufen', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'radfahren', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'hometrainer', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'fahrradfahren', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'schwimmen', kategorie: 'cardio', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  
+  // Sport (ALLES schwer)
+  { name: 'fußball', kategorie: 'sport', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  { name: 'tennis', kategorie: 'sport', ldlPerMin: -0.04, hdlPerMin: 0.05, trigPerMin: -0.2 },
+  
+  // Leichte Aktivität
+  { name: 'spazieren', kategorie: 'leicht', ldlPerMin: -0.008, hdlPerMin: 0.01, trigPerMin: -0.04 },
+  { name: 'gehen', kategorie: 'leicht', ldlPerMin: -0.008, hdlPerMin: 0.01, trigPerMin: -0.04 },
+  { name: 'yoga', kategorie: 'leicht', ldlPerMin: -0.005, hdlPerMin: 0.015, trigPerMin: -0.03 },
+  { name: 'dehnen', kategorie: 'leicht', ldlPerMin: -0.003, hdlPerMin: 0.01, trigPerMin: -0.02 },
+  
+  // Ruhe (NEGATIV - verschlechtert Cholesterin!)
+  { name: 'liegen', kategorie: 'ruhe', ldlPerMin: 0.005, hdlPerMin: -0.003, trigPerMin: 0.01 },
+  { name: 'sitzen', kategorie: 'ruhe', ldlPerMin: 0.003, hdlPerMin: -0.002, trigPerMin: 0.008 },
+  { name: 'ruhen', kategorie: 'ruhe', ldlPerMin: 0.005, hdlPerMin: -0.003, trigPerMin: 0.01 }
+];
+
+// Make globally accessible
+window.sportDatabase = sportDatabase;
+
 // Dynamisch die Drink-Datalist befüllen
 // Populate drink datalist - LAZY LOADING für Performance
 function populateDrinkList() {
@@ -587,26 +624,32 @@ function calculateCholesterinEffect(entry) {
     }
   }
 
-  else if (entry.type === 'sport') {
-    const intensityMap = {
-      leicht: { ldl: -0.5, hdl: 0.4, trig: -2 },
-      moderat: { ldl: -0.8, hdl: 0.7, trig: -3 },
-      schwer: { ldl: -1.5, hdl: 1.2, trig: -6 }
-    };
-    const effect = intensityMap[entry.intensitaet] || intensityMap.moderat;
-    const durationFactor = entry.dauer / 30;
-    ldl = effect.ldl * durationFactor;
-    hdl = effect.hdl * durationFactor;
-    trig = effect.trig * durationFactor;
+else if (entry.type === 'sport') {
+    // ✅ NEU: Suche Sport in Datenbank
+    const sport = sportDatabase.find(s => s.name.toLowerCase() === entry.aktivitaet.toLowerCase());
     
-    // Add rest/sleep time effect
-    if (entry.ruhezeit && entry.ruhezeit > 0) {
-      ldl -= 0.1 * entry.ruhezeit;
-      hdl += 0.05 * entry.ruhezeit;
-      trig -= 0.2 * entry.ruhezeit;
+    if (sport) {
+      // Berechne basierend auf Datenbank-Werten (pro Minute)
+      ldl = sport.ldlPerMin * entry.dauer;
+      hdl = sport.hdlPerMin * entry.dauer;
+      trig = sport.trigPerMin * entry.dauer;
+    } else {
+      // Fallback: Alte Berechnung mit Intensität
+      const intensityMap = {
+        leicht: { ldl: -0.5, hdl: 0.4, trig: -2 },
+        moderat: { ldl: -0.8, hdl: 0.7, trig: -3 },
+        schwer: { ldl: -1.5, hdl: 1.2, trig: -6 }
+      };
+      const effect = intensityMap[entry.intensitaet] || intensityMap.moderat;
+      const durationFactor = entry.dauer / 30;
+      ldl = effect.ldl * durationFactor;
+      hdl = effect.hdl * durationFactor;
+      trig = effect.trig * durationFactor;
     }
     
-    // Add steps effect
+    // ❌ RUHEZEIT ENTFERNT - wird jetzt als separate "liegen" Aktivität erfasst
+    
+    // Add steps effect (bleibt gleich)
     if (entry.schritte && entry.schritte > 0) {
       const stepFactor = entry.schritte / 1000;
       ldl -= 0.05 * stepFactor;
