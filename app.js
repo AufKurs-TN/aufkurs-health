@@ -440,23 +440,41 @@ function generateId() {
 function calculateCholesterinEffect(entry) {
   let ldl = 0, hdl = 0, trig = 0;
   
-  if (entry.type === 'trinken') {
-    const typeMap = {
-      wasser: { ldl: 0, hdl: 0, trig: 0 },
-      orangensaft: { ldl: 0, hdl: 0.2, trig: 0 },
-      cola: { ldl: 0, hdl: -0.2, trig: 2 },
-      bier: { ldl: 0.2, hdl: 0.8, trig: 2 },
-      wein: { ldl: -0.5, hdl: 1, trig: -1 },
-      kaffee: { ldl: 0, hdl: 0, trig: 0 },
-      tee: { ldl: 0, hdl: 0, trig: 0 },
-      'kaffee-mit-zucker': { ldl: 0.1, hdl: -0.1, trig: 0.5 }
-    };
-    const base = typeMap[entry.trinkenType] || { ldl: 0, hdl: 0, trig: 0 };
-    const factor = entry.menge / 250;
-    ldl = base.ldl * factor;
-    hdl = base.hdl * factor;
-    trig = base.trig * factor;
+ if (entry.type === 'trinken') {
+    // ✅ NEU: Suche Getränk in der Datenbank (wie bei Essen!)
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    const drink = allFoods.find(f => f.name.toLowerCase() === entry.trinkenType.toLowerCase());
+    
+    if (drink && (drink.kategorie === 'beverages' || drink.kategorie === 'dairy')) {
+      const gramFactor = entry.menge / 100;
+      const cholValue = drink.chol * gramFactor;
+      const fettValue = drink.fett * gramFactor;
+      
+      // Berechne basierend auf Nährwerten
+      if (fettValue > 5) ldl += 0.5;
+      if (cholValue > 10) ldl += 0.3;
+      if (drink.eiweiss > 2) hdl += 0.2;
+      if (drink.kh > 10) trig += 1.0;
+    } else {
+      // Fallback für alte Werte
+      const typeMap = {
+        wasser: { ldl: 0, hdl: 0, trig: 0 },
+        orangensaft: { ldl: 0, hdl: 0.2, trig: 0 },
+        cola: { ldl: 0, hdl: -0.2, trig: 2 },
+        bier: { ldl: 0.2, hdl: 0.8, trig: 2 },
+        wein: { ldl: -0.5, hdl: 1, trig: -1 },
+        kaffee: { ldl: 0, hdl: 0, trig: 0 },
+        tee: { ldl: 0, hdl: 0, trig: 0 },
+        'kaffee-mit-zucker': { ldl: 0.1, hdl: -0.1, trig: 0.5 }
+      };
+      const base = typeMap[entry.trinkenType] || { ldl: 0, hdl: 0, trig: 0 };
+      const factor = entry.menge / 250;
+      ldl = base.ldl * factor;
+      hdl = base.hdl * factor;
+      trig = base.trig * factor;
+    }
   }
+
   else if (entry.type === 'schlaf') {
     const hours = entry.stunden;
     if (hours < 5) {
@@ -505,7 +523,10 @@ function calculateCholesterinEffect(entry) {
     }
   }
   else if (entry.type === 'ernaehrung') {
-    const food = foodDatabase.find(f => f.name.toLowerCase() === entry.gericht.toLowerCase());
+    // ✅ NEU: Suche in BEIDEN Datenbanken (Standard + Custom)
+    const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+    const food = allFoods.find(f => f.name.toLowerCase() === entry.gericht.toLowerCase());
+    
     if (food) {
       const gramFactor = entry.gramm / 100;
       const cholValue = food.chol * gramFactor;
@@ -546,6 +567,7 @@ function calculateCholesterinEffect(entry) {
       }
     }
   }
+
   else if (entry.type === 'sport') {
     const intensityMap = {
       leicht: { ldl: -0.5, hdl: 0.4, trig: -2 },
