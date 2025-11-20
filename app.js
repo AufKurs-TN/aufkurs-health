@@ -1155,67 +1155,8 @@ function updateEssenPreview() {
   }
 }
 
-// Setup food input listener with automatic portion sizing
-function setupEssenPortionListener() {
-  const essenNameInput = document.getElementById('essenName');
-  const essenGrammInput = document.getElementById('essenGramm');
-  
-  if (!essenNameInput || !essenGrammInput) {
-    console.warn('⚠️ Essen-Felder noch nicht geladen');
-    setTimeout(setupEssenPortionListener, 500);
-    return;
-  }
-  
-  let lastValue = '';
-  
-  function checkAndSetPortion() {
-    const currentValue = essenNameInput.value.toLowerCase().trim();
-    
-    if (currentValue !== lastValue && currentValue.length > 2) {
-      lastValue = currentValue;
-      
-      const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
-      const food = allFoods.find(f => f.name === currentValue);
-      
-      if (food) {
-        const portionSizes = {
-          'fruits': 130,
-          'vegetables': 100,
-          'bread': 50,
-          'meat': 150,
-          'fish': 150,
-          'fastfood': 200,
-          'grains': 150,
-          'dairy': 200,
-          'nuts': 30,
-          'desserts': 100,
-          'beverages': 250,
-          'snacks': 50,
-          'oils': 10,
-          'legumes': 150,
-          'oesterreichisch': 250,
-          'custom': 100
-        };
-        
-        const defaultPortion = food.portionSize || portionSizes[food.kategorie] || 100;
-        console.log('🍎 Setze Portion auf:', defaultPortion, 'für', food.name, 'Kategorie:', food.kategorie);
-        essenGrammInput.value = defaultPortion;
-        
-        if (typeof updateEssenPreview === 'function') {
-          updateEssenPreview();
-        }
-      }
-    }
-  }
-  
-  // AGGRESSIVES Polling - prüfe alle 100ms
-  setInterval(checkAndSetPortion, 100);
-  
-  console.log('✅ Portionsgrößen-Listener aktiviert (Events + Polling)');
-}
-
-setTimeout(setupEssenPortionListener, 500);
-
+// ⚠️ Portionsgrößen-Auto-Fill DEAKTIVIERT (Performance-Probleme auf Handy)
+// Die Funktion wurde entfernt - User gibt Gramm manuell ein
 
 document.getElementById('essenGramm').addEventListener('input', updateEssenPreview);
 
@@ -1273,7 +1214,6 @@ document.getElementById('saveEssenBtn').addEventListener('click', () => {
   
   switchTab('day');
 });
-
 
 // Sport Form Logic
 function updateSportPreview() {
