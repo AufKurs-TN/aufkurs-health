@@ -1066,15 +1066,15 @@ function populateFoodDatalist() {
   console.log('✅ Lazy-Loading Food List aktiviert');
 }
 
-// Re-bind gramm input listener
+// Initialize both autocomplete and preview listeners
 setTimeout(() => {
+  populateFoodDatalist();
+  
   const grammInput = document.getElementById('essenGramm');
   if (grammInput) {
     grammInput.addEventListener('input', updateEssenPreview);
   }
 }, 500);
-
-setTimeout(populateFoodDatalist, 500);
 
 // Essen Form Logic
 const essenNameInput = document.getElementById('essenName');
