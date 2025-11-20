@@ -1969,10 +1969,25 @@ function renderDayView() {
   document.getElementById('dayEntriesCount').textContent = entries.length;
   
   if (entries.length > 0) {
-    const avgScore = entries.reduce((sum, e) => sum + e.healthScore, 0) / entries.length;
+    // ✅ NEU: Summiere Cholesterin-Effekte, dann berechne Score
+    const totalEffect = entries.reduce((sum, e) => ({
+      ldl: sum.ldl + (e.cholesterinEffekt?.ldl || 0),
+      hdl: sum.hdl + (e.cholesterinEffekt?.hdl || 0),
+      trig: sum.trig + (e.cholesterinEffekt?.trig || 0)
+    }), { ldl: 0, hdl: 0, trig: 0 });
+    
+    // Berechne Score aus GESAMT-Effekt
+    let dayScore = 5.0;
+    dayScore += totalEffect.ldl * -0.5;
+    dayScore += totalEffect.hdl * 0.5;
+    dayScore += totalEffect.trig * -0.1;
+    
+    // Begrenze auf 0-10
+    dayScore = Math.max(0, Math.min(10, Math.round(dayScore * 10) / 10));
+    
     const scoreEl = document.getElementById('dayScoreAvg');
-    scoreEl.textContent = avgScore.toFixed(1);
-    scoreEl.className = 'summary-value score-badge ' + getScoreClass(avgScore);
+    scoreEl.textContent = dayScore.toFixed(1);
+    scoreEl.className = 'summary-value score-badge ' + getScoreClass(dayScore);
   } else {
     document.getElementById('dayScoreAvg').textContent = '-';
     document.getElementById('dayScoreAvg').className = 'summary-value score-badge';
@@ -2014,9 +2029,23 @@ function renderWeekView() {
   
   weekDaysContainer.innerHTML = weekDates.map((date, index) => {
     const entries = appState.entries.filter(e => e.datum === date);
-    const avgScore = entries.length > 0 
-      ? (entries.reduce((sum, e) => sum + e.healthScore, 0) / entries.length).toFixed(1)
-      : '-';
+    
+    let avgScore = '-';
+    if (entries.length > 0) {
+      // ✅ NEU: Summiere Cholesterin-Effekte des Tages
+      const totalEffect = entries.reduce((sum, e) => ({
+        ldl: sum.ldl + (e.cholesterinEffekt?.ldl || 0),
+        hdl: sum.hdl + (e.cholesterinEffekt?.hdl || 0),
+        trig: sum.trig + (e.cholesterinEffekt?.trig || 0)
+      }), { ldl: 0, hdl: 0, trig: 0 });
+      
+      let dayScore = 5.0;
+      dayScore += totalEffect.ldl * -0.5;
+      dayScore += totalEffect.hdl * 0.5;
+      dayScore += totalEffect.trig * -0.1;
+      dayScore = Math.max(0, Math.min(10, dayScore));
+      avgScore = dayScore.toFixed(1);
+    }
     
     return `
       <div class="week-day-item">
@@ -2036,9 +2065,9 @@ function renderWeekView() {
   // Calculate week summary with total cholesterol
   const weekEntries = appState.entries.filter(e => weekDates.includes(e.datum));
   const totalEffect = weekEntries.reduce((sum, e) => ({
-    ldl: sum.ldl + e.cholesterinEffekt.ldl,
-    hdl: sum.hdl + e.cholesterinEffekt.hdl,
-    trig: sum.trig + e.cholesterinEffekt.trig
+    ldl: sum.ldl + (e.cholesterinEffekt?.ldl || 0),
+    hdl: sum.hdl + (e.cholesterinEffekt?.hdl || 0),
+    trig: sum.trig + (e.cholesterinEffekt?.trig || 0)
   }), { ldl: 0, hdl: 0, trig: 0 });
   
   const baseline = appState.cholesterinBaseline;
