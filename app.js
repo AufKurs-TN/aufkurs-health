@@ -363,25 +363,48 @@ window.foodDatabase = [
 // Shorthand reference for internal use
 const foodDatabase = window.foodDatabase;
 // Dynamisch die Drink-Datalist befüllen
+// Populate drink datalist - LAZY LOADING für Performance
 function populateDrinkList() {
   const drinkList = document.getElementById('drinkList');
+  const trinkenTypeInput = document.getElementById('trinkenType');
   
-  if (drinkList) {
-    drinkList.innerHTML = '';
-    // Nur Getränke (beverages + dairy)
-    const drinks = [...foodDatabase, ...(appState.customFoods || [])].filter(f => 
-      f.kategorie === 'beverages' || f.kategorie === 'dairy'
-    );
+  if (!drinkList || !trinkenTypeInput) return;
+  
+  let debounceTimer;
+  
+  trinkenTypeInput.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
     
-    drinks.forEach(drink => {
-      const option = document.createElement('option');
-      option.value = drink.name;
-      drinkList.appendChild(option);
-    });
-    
-    console.log('✅ DrinkList befüllt mit', drinks.length, 'Getränken');
-  }
+    debounceTimer = setTimeout(() => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      drinkList.innerHTML = '';
+      
+      if (searchTerm.length < 2) return;
+      
+      const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+      const drinks = allFoods.filter(f => 
+        f.kategorie === 'beverages' || f.kategorie === 'dairy'
+      );
+      
+      const matches = drinks
+        .filter(f => f.name.toLowerCase().includes(searchTerm))
+        .slice(0, 50);
+      
+      matches.forEach(drink => {
+        const option = document.createElement('option');
+        option.value = drink.name;
+        drinkList.appendChild(option);
+      });
+      
+      console.log(`💧 ${matches.length} Getränke für "${searchTerm}"`);
+    }, 300);
+  });
+  
+  console.log('✅ Lazy-Loading Drink List aktiviert');
 }
+
+setTimeout(populateDrinkList, 500);
+
 
 // Nach Page-Load ausführen
 setTimeout(populateDrinkList, 500);
