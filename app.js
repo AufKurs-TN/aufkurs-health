@@ -1055,14 +1055,16 @@ addTypeBtns.forEach(btn => {
     document.querySelector('.add-type-selector').style.display = 'none';
     entryForms.forEach(form => form.style.display = 'none');
     document.getElementById(type + 'Form').style.display = 'block';
-    
- 
+  });
+});
+
 document.querySelectorAll('.cancel-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     entryForms.forEach(form => form.style.display = 'none');
     document.querySelector('.add-type-selector').style.display = 'grid';
   });
 });
+
 
 // ========== NEUE FUNKTIONEN FÜR AUTOCOMPLETE ==========
 
