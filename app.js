@@ -625,10 +625,11 @@ function calculateCholesterinEffect(entry) {
   }
 
 else if (entry.type === 'sport') {
-    // ✅ NEU: Suche Sport in Datenbank
-    const sport = sportDatabase.find(s => s.name.toLowerCase() === entry.aktivitaet.toLowerCase());
+    // ✅ SICHER: Check ob aktivitaet existiert
+    const aktivitaet = entry.aktivitaet?.toLowerCase() || '';
+    const sport = sportDatabase.find(s => s.name.toLowerCase() === aktivitaet);
     
-    if (sport) {
+    if (sport && aktivitaet) {
       // Berechne basierend auf Datenbank-Werten (pro Minute)
       ldl = sport.ldlPerMin * entry.dauer;
       hdl = sport.hdlPerMin * entry.dauer;
@@ -647,8 +648,6 @@ else if (entry.type === 'sport') {
       trig = effect.trig * durationFactor;
     }
     
-    // ❌ RUHEZEIT ENTFERNT - wird jetzt als separate "liegen" Aktivität erfasst
-    
     // Add steps effect (bleibt gleich)
     if (entry.schritte && entry.schritte > 0) {
       const stepFactor = entry.schritte / 1000;
@@ -657,6 +656,7 @@ else if (entry.type === 'sport') {
       trig -= 0.1 * stepFactor;
     }
   }
+
   else if (entry.type === 'rauchen') {
     ldl = 0.5 * entry.anzahl;
     hdl = -0.5 * entry.anzahl;
