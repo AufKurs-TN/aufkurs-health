@@ -1061,10 +1061,19 @@ addTypeBtns.forEach(btn => {
 
 document.querySelectorAll('.cancel-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    entryForms.forEach(form => form.style.display = 'none');
+    entryForms.forEach(form => {
+      form.style.display = 'none';
+      form.reset(); // ✅ Formular zurücksetzen
+    });
+    
+    // ✅ Preview zurücksetzen
+    const previews = document.querySelectorAll('.preview-box');
+    previews.forEach(p => p.innerHTML = '');
+    
     document.querySelector('.add-type-selector').style.display = 'grid';
   });
 });
+
 
 
 // ========== NEUE FUNKTIONEN FÜR AUTOCOMPLETE ==========
