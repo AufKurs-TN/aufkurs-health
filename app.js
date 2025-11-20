@@ -1056,13 +1056,7 @@ addTypeBtns.forEach(btn => {
     entryForms.forEach(form => form.style.display = 'none');
     document.getElementById(type + 'Form').style.display = 'block';
     
-    // Initialize food autocomplete when opening Essen form
-    if (type === 'essen') {
-      initializeFoodInput();
-    }
-  });
-});
-
+ 
 document.querySelectorAll('.cancel-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     entryForms.forEach(form => form.style.display = 'none');
