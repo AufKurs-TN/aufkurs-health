@@ -405,10 +405,6 @@ function populateDrinkList() {
 
 setTimeout(populateDrinkList, 500);
 
-
-// Nach Page-Load ausführen
-setTimeout(populateDrinkList, 500);
-
 // Get default portion size based on food category
 function getDefaultPortionSize(food) {
   const portionSizes = {
