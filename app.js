@@ -1074,6 +1074,8 @@ setTimeout(() => {
   }
 }, 500);
 
+setTimeout(populateFoodDatalist, 500);
+
 // Essen Form Logic
 const essenNameInput = document.getElementById('essenName');
 const essenGrammInput = document.getElementById('essenGramm');
