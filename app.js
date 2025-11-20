@@ -1033,81 +1033,50 @@ document.querySelectorAll('.cancel-btn').forEach(btn => {
 
 // ========== NEUE FUNKTIONEN FÜR AUTOCOMPLETE ==========
 
-// Populate food datalist with alphabetically sorted entries
+// Populate food datalist - LAZY LOADING für Performance
 function populateFoodDatalist() {
-  const datalist = document.getElementById('foodList');
-  if (!datalist) return;
+  const foodList = document.getElementById('foodList');
+  const essenNameInput = document.getElementById('essenName');
   
-  // Kombiniere Standard-Datenbank + Custom Foods
-  const customFoods = appState.customFoods || [];
-  const allFoods = [...foodDatabase, ...customFoods];
+  if (!foodList || !essenNameInput) return;
   
-  // Sort alphabetically by name
-  const sortedFoods = allFoods.sort((a, b) => 
-    a.name.localeCompare(b.name, 'de-DE')
-  );
+  let debounceTimer;
   
-  // Populate datalist
-  datalist.innerHTML = sortedFoods.map(food => 
-    `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
-  ).join('');
-}
-
-// Initialize food input with live autocomplete
-function initializeFoodInput() {
-  const input = document.getElementById('essenName');
-  if (!input) return;
-  
-  // Populate datalist on initialization
-  populateFoodDatalist();
-  
-  // Remove old listener if exists (prevent duplicates)
-  const newInput = input.cloneNode(true);
-  input.parentNode.replaceChild(newInput, input);
-  
-  // Real-time filtering as user types
-  newInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const datalist = document.getElementById('foodList');
+  essenNameInput.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
     
-    if (searchTerm.length === 0) {
-      // Show all foods alphabetically if input is empty
-      populateFoodDatalist();
-      return;
-    }
-    
-    // Kombiniere beide Datenbanken
-    const customFoods = appState.customFoods || [];
-    const allFoods = [...foodDatabase, ...customFoods];
-    
-    // Filter foods that contain the search term
-    const filtered = allFoods
-      .filter(food => food.name.toLowerCase().includes(searchTerm))
-      .sort((a, b) => {
-        // Prioritize foods that START with search term
-        const aStarts = a.name.toLowerCase().startsWith(searchTerm);
-        const bStarts = b.name.toLowerCase().startsWith(searchTerm);
-        
-        if (aStarts && !bStarts) return -1;
-        if (!aStarts && bStarts) return 1;
-        
-        // Then alphabetical
-        return a.name.localeCompare(b.name, 'de-DE');
-      })
-      .slice(0, 50); // Limit to 50 results for performance
-    
-    datalist.innerHTML = filtered.map(food => 
-      `<option value="${food.name}">${food.name} (${food.kcal} kcal)</option>`
-    ).join('');
-    
-    // Trigger preview update
-    updateEssenPreview();
+    debounceTimer = setTimeout(() => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      foodList.innerHTML = '';
+      
+      if (searchTerm.length < 2) return;
+      
+      const allFoods = [...foodDatabase, ...(appState.customFoods || [])];
+      
+      const matches = allFoods
+        .filter(f => f.name.toLowerCase().includes(searchTerm))
+        .slice(0, 50);
+      
+      matches.forEach(food => {
+        const option = document.createElement('option');
+        option.value = food.name;
+        foodList.appendChild(option);
+      });
+      
+      console.log(`📝 ${matches.length} Matches für "${searchTerm}"`);
+    }, 300);
   });
   
-  // Re-bind gramm input listener
-  const grammInput = document.getElementById('essenGramm');
-  grammInput.addEventListener('input', updateEssenPreview);
+  console.log('✅ Lazy-Loading Food List aktiviert');
 }
+
+// Re-bind gramm input listener
+setTimeout(() => {
+  const grammInput = document.getElementById('essenGramm');
+  if (grammInput) {
+    grammInput.addEventListener('input', updateEssenPreview);
+  }
+}, 500);
 
 // Essen Form Logic
 const essenNameInput = document.getElementById('essenName');
