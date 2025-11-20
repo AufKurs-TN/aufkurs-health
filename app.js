@@ -1835,8 +1835,21 @@ function renderScoreChart() {
   
   dates.forEach(date => {
     const dayEntries = dateMap[date];
-    const avgScore = dayEntries.reduce((sum, e) => sum + e.healthScore, 0) / dayEntries.length;
-    scoreValues.push(Math.round(avgScore * 10) / 10);
+    
+    // ✅ NEU: Summiere Cholesterin-Effekte des Tages, dann berechne Score
+    const totalEffect = dayEntries.reduce((sum, e) => ({
+      ldl: sum.ldl + (e.cholesterinEffekt?.ldl || 0),
+      hdl: sum.hdl + (e.cholesterinEffekt?.hdl || 0),
+      trig: sum.trig + (e.cholesterinEffekt?.trig || 0)
+    }), { ldl: 0, hdl: 0, trig: 0 });
+    
+    let dayScore = 5.0;
+    dayScore += totalEffect.ldl * -0.5;
+    dayScore += totalEffect.hdl * 0.5;
+    dayScore += totalEffect.trig * -0.1;
+    dayScore = Math.max(0, Math.min(10, dayScore));
+    
+    scoreValues.push(Math.round(dayScore * 10) / 10);
     labels.push(formatChartLabel(date, 'score'));
   });
   
@@ -1891,6 +1904,7 @@ function renderScoreChart() {
     }
   });
 }
+
   function renderEntriesList(entries, containerId) {
   const container = document.getElementById(containerId);
   
